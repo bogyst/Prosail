@@ -1,0 +1,95 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  @apply bg-deep-950 text-brine-50 font-sans antialiased;
+  background-image: var(--tw-sea, none);
+}
+
+@layer components {
+  .card {
+    @apply rounded-2xl border border-white/10 bg-white/[0.03] backdrop-blur-sm shadow-card;
+  }
+
+  .btn {
+    @apply inline-flex items-center gap-2 rounded-xl px-4 py-2 text-sm font-medium
+      transition-colors duration-150 focus:outline-none focus-visible:ring-2
+      focus-visible:ring-brine-400/70;
+  }
+
+  .btn-primary {
+    @apply btn bg-brine-500 hover:bg-brine-400 text-white;
+  }
+
+  .btn-ghost {
+    @apply btn bg-white/5 hover:bg-white/10 text-brine-100;
+  }
+
+  .chip {
+    @apply inline-flex items-center gap-1.5 rounded-full border border-white/10
+      bg-white/5 px-3 py-1 text-xs font-medium text-brine-100;
+  }
+
+  .section-title {
+    @apply font-display text-3xl sm:text-4xl font-700 tracking-tight text-white;
+  }
+
+  .lead {
+    @apply text-brine-100/80 leading-relaxed;
+  }
+}
+
+/* Suwaki (range) w stylu żeglarskim */
+input[type='range'] {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 6px;
+  border-radius: 9999px;
+  background: linear-gradient(90deg, #22658d, #7bbcd9);
+  outline: none;
+}
+input[type='range']::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 22px;
+  height: 22px;
+  border-radius: 9999px;
+  background: #f7f1e3;
+  border: 3px solid #2b7fab;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+}
+input[type='range']::-moz-range-thumb {
+  width: 22px;
+  height: 22px;
+  border-radius: 9999px;
+  background: #f7f1e3;
+  border: 3px solid #2b7fab;
+  cursor: pointer;
+}
+
+.font-700 {
+  font-weight: 700;
+}
+
+/* Delikatne "fale" tła */
+.sea-bg {
+  background-image: radial-gradient(
+      1200px 800px at 15% -10%,
+      rgba(43, 127, 171, 0.25),
+      transparent 60%
+    ),
+    radial-gradient(1000px 700px at 100% 0%, rgba(15, 43, 63, 0.5), transparent 55%),
+    linear-gradient(180deg, #050f1a, #081a28);
+}

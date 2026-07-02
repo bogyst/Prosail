@@ -1,0 +1,17 @@
+# Caddy automatycznie uzyska i odnowi certyfikat Let's Encrypt dla {$DOMAIN}.
+# Zmienne DOMAIN i EMAIL przekazuje docker-compose (profil "tls").
+
+{
+	email {$EMAIL}
+}
+
+{$DOMAIN} {
+	encode zstd gzip
+	reverse_proxy web:80
+
+	header {
+		Strict-Transport-Security "max-age=31536000; includeSubDomains"
+		X-Content-Type-Options "nosniff"
+		Referrer-Policy "strict-origin-when-cross-origin"
+	}
+}

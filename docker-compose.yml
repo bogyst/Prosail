@@ -1,0 +1,47 @@
+# ProSail — produkcyjny compose z automatycznym HTTPS (Caddy + Let's Encrypt).
+#
+# Szybki start (bez domeny, tylko HTTP na porcie 8080):
+#   docker compose up -d --build web
+#
+# Pełny start z HTTPS (wymaga domeny wskazującej na IP serwera):
+#   DOMAIN=twojadomena.pl EMAIL=ty@example.com docker compose --profile tls up -d --build
+
+services:
+  # Aplikacja: statyczny build serwowany przez nginx
+  web:
+    build: .
+    image: prosail:latest
+    restart: unless-stopped
+    # Wystaw port 8080 na hoście, gdy używasz samego 'web' (bez Caddy).
+    # Przy profilu 'tls' ruch idzie przez Caddy, więc ten port jest opcjonalny.
+    ports:
+      - "8080:80"
+    expose:
+      - "80"
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1/healthz"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+
+  # Reverse proxy z automatycznym certyfikatem TLS (uruchamiane profilem 'tls')
+  caddy:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    profiles: ["tls"]
+    depends_on:
+      - web
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      DOMAIN: ${DOMAIN:-localhost}
+      EMAIL: ${EMAIL:-}
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+
+volumes:
+  caddy_data:
+  caddy_config:
