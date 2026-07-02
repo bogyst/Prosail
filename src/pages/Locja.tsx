@@ -197,8 +197,10 @@ export default function Locja() {
                       sel.id === m.id ? 'ring-2 ring-brine-400' : ''
                     }`}
                   >
-                    <Buoy shape={m.shape} bands={m.bands} topmark={m.topmark} topColor={m.topColor} size={82} />
-                    <span className="mt-1 text-center text-xs leading-tight text-brine-100/80">
+                    <div className="rounded-xl bg-gradient-to-b from-[#eaf3fb] to-[#c2dcef] px-2 pt-2">
+                      <Buoy shape={m.shape} bands={m.bands} topmark={m.topmark} topColor={m.topColor} size={82} />
+                    </div>
+                    <span className="mt-2 text-center text-xs leading-tight text-brine-100/80">
                       {m.name}
                     </span>
                   </button>
@@ -212,7 +214,9 @@ export default function Locja() {
         <div className="lg:sticky lg:top-24 lg:self-start">
           <motion.div key={sel.id} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="card p-6">
             <div className="flex items-center gap-5">
-              <Buoy shape={sel.shape} bands={sel.bands} topmark={sel.topmark} topColor={sel.topColor} size={100} />
+              <div className="shrink-0 rounded-xl bg-gradient-to-b from-[#eaf3fb] to-[#c2dcef] px-2 pt-2">
+                <Buoy shape={sel.shape} bands={sel.bands} topmark={sel.topmark} topColor={sel.topColor} size={100} />
+              </div>
               <div>
                 <div className="chip mb-2">{sel.group}</div>
                 <h3 className="font-display text-xl font-700 text-white">{sel.name}</h3>

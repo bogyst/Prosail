@@ -3,7 +3,6 @@ import { motion } from 'framer-motion'
 import {
   angleOffBow,
   boomAngle,
-  compassName,
   computeForces,
   normalizeDeg,
   pointOfSail,
@@ -11,28 +10,28 @@ import {
   apparentWind,
 } from '../../lib/sailing'
 import { Term, StatBar } from '../ui'
-import { Wind, RotateCcw } from 'lucide-react'
+import { RotateCcw } from 'lucide-react'
 
 const CX = 200
 const CY = 200
 const R = 155
 
-// kąt (0 = dziób/góra, zgodnie ze wskazówkami) -> wektor SVG (y w dół)
+// kąt (0 = góra sceny, zgodnie ze wskazówkami) -> wektor SVG (y w dół)
 function polar(deg: number, len: number) {
   const r = (deg * Math.PI) / 180
   return { x: Math.sin(r) * len, y: -Math.cos(r) * len }
 }
 
-// łuk „banana” żagla od (x1,y1) do (x2,y2); brzuch wygina się w stronę (refx,refy)
-function sailBanana(
-  x1: number,
-  y1: number,
-  x2: number,
-  y2: number,
-  belly: number,
-  refx: number,
-  refy: number,
-) {
+// obrót punktu wokół środka sceny (zgodnie z SVG rotate)
+function rot(x: number, y: number, deg: number) {
+  const r = (deg * Math.PI) / 180
+  const dx = x - CX
+  const dy = y - CY
+  return { x: CX + dx * Math.cos(r) - dy * Math.sin(r), y: CY + dx * Math.sin(r) + dy * Math.cos(r) }
+}
+
+// łuk „banana” żagla; brzuch wygina się w stronę wektora (refx,refy) — zawsze na zawietrzną
+function sailBanana(x1: number, y1: number, x2: number, y2: number, belly: number, refx: number, refy: number) {
   const mx = (x1 + x2) / 2
   const my = (y1 + y2) / 2
   const dx = x2 - x1
@@ -54,10 +53,9 @@ function luffPath(x1: number, y1: number, x2: number, y2: number, amp: number, p
   const len = Math.hypot(dx, dy) || 1
   const nx = -dy / len
   const ny = dx / len
-  const steps = 8
   let d = `M ${x1} ${y1}`
-  for (let i = 1; i <= steps; i++) {
-    const t = i / steps
+  for (let i = 1; i <= 8; i++) {
+    const t = i / 8
     const off = Math.sin(t * Math.PI * 2.2 + phase) * amp * Math.sin(t * Math.PI)
     d += ` L ${(x1 + dx * t + nx * off).toFixed(1)} ${(y1 + dy * t + ny * off).toFixed(1)}`
   }
@@ -104,44 +102,45 @@ function Arrow({
 }
 
 export default function SailSimulator() {
-  const [heading, setHeading] = useState(20)
-  const [windFrom, setWindFrom] = useState(65)
+  // Wiatr wieje ZAWSZE z góry. Sterujemy tylko kursem jachtu (obrotem).
+  const [heading, setHeading] = useState(50)
   const [windKts, setWindKts] = useState(12)
 
   const trueStrength = 0.3 + Math.min(1, windKts / 25) * 0.9
 
-  const awa = angleOffBow(heading, windFrom)
-  const tack = tackOf(heading, windFrom)
+  const awa = angleOffBow(heading, 0) // wiatr z kierunku 0 (góra)
+  const tack = tackOf(heading, 0)
   const pos = pointOfSail(awa)
   const boom = boomAngle(awa)
   const forces = computeForces(awa, trueStrength)
   const app = apparentWind(awa, trueStrength)
   const isLuffing = awa < 32
+  const lee = tack === 'starboard' ? -1 : 1 // strona zawietrzna w osi X lokalnej (−x = lewa burta)
 
-  // Jacht jest NIERUCHOMY, zawsze dziobem do góry. Zmiana kursu lub wiatru
-  // zmienia tylko względny kierunek wiatru (rel) — jacht się nie obraca.
-  const rel = normalizeDeg(windFrom - heading) // skąd wieje wiatr, względem dziobu (0=z przodu)
-  const side = rel < 180 ? 1 : -1 // wiatr z prawej burty (+) czy z lewej (−)
-  const lee = tack === 'starboard' ? -1 : 1 // strona zawietrzna w osi X (−x = lewa)
+  // kierunek „z wiatrem” (zawietrzny) w układzie lokalnym jachtu — do wyginania żagli
+  const hr = (heading * Math.PI) / 180
+  const refx = Math.sin(hr)
+  const refy = Math.cos(hr)
 
-  // bearing wiatru pozornego względem dziobu (po tej samej burcie co rzeczywisty)
-  const appBearing = side > 0 ? app.awa : normalizeDeg(-app.awa)
+  // bearing wiatru pozornego na scenie (między górą=wiatr a dziobem=heading)
+  const appBearing = heading <= 180 ? normalizeDeg(heading - app.awa) : normalizeDeg(heading + app.awa)
 
   // geometria ożaglowania (układ lokalny, dziób = góra)
   const b = (boom * Math.PI) / 180
   const mast = { x: CX, y: CY - 30 }
-  const Lmain = 86
+  const Lmain = 88
   const mainClew = { x: mast.x + lee * Lmain * Math.sin(b), y: mast.y + Lmain * Math.cos(b) }
   const jibTack = { x: CX, y: CY - 86 }
-  const Ljib = 60
-  const jibClew = { x: jibTack.x + lee * Ljib * Math.sin(b), y: jibTack.y + Ljib * Math.cos(b) }
+  const Ljib = 58
+  const jb = b * 0.95
+  const jibClew = { x: jibTack.x + lee * Ljib * Math.sin(jb), y: jibTack.y + Ljib * Math.cos(jb) }
 
   const ceo = { x: CX, y: CY - 8 }
   const driveLen = 20 + forces.drive * 95
   const heelLen = 18 + forces.heel * 80
 
   function setRelative(targetAwa: number) {
-    setHeading(normalizeDeg(windFrom - targetAwa))
+    setHeading(targetAwa)
   }
 
   return (
@@ -165,50 +164,45 @@ export default function SailSimulator() {
             return <line key={i} x1={CX + a.x} y1={CY + a.y} x2={CX + c.x} y2={CY + c.y} stroke="rgba(255,255,255,0.16)" strokeWidth="1" />
           })}
 
-          {/* strefa martwego kąta — wokół kierunku wiatru (rel) */}
+          {/* strefa martwego kąta — na górze, wokół wiatru */}
           <path
-            d={`M ${CX} ${CY} L ${CX + polar(rel - 32, R).x} ${CY + polar(rel - 32, R).y} A ${R} ${R} 0 0 1 ${
-              CX + polar(rel + 32, R).x
-            } ${CY + polar(rel + 32, R).y} Z`}
-            fill="rgba(226,69,74,0.12)"
-            stroke="rgba(226,69,74,0.3)"
+            d={`M ${CX} ${CY} L ${CX + polar(-32, R).x} ${CY + polar(-32, R).y} A ${R} ${R} 0 0 1 ${CX + polar(32, R).x} ${CY + polar(32, R).y} Z`}
+            fill="rgba(226,69,74,0.1)"
+            stroke="rgba(226,69,74,0.28)"
             strokeDasharray="4 4"
           />
 
-          {/* WIATR RZECZYWISTY — z obwodu w stronę środka, w kierunku rel */}
-          <Arrow
-            x1={CX + polar(rel, R - 2).x}
-            y1={CY + polar(rel, R - 2).y}
-            x2={CX + polar(rel, R - 48).x}
-            y2={CY + polar(rel, R - 48).y}
-            color="#7bbcd9"
-            width={5}
-            head={13}
-          />
-          <text x={CX + polar(rel, R + 16).x} y={CY + polar(rel, R + 16).y + 4} textAnchor="middle" fontSize="10" fontWeight="700" fill="#7bbcd9">
-            wiatr rzecz.
+          {/* WIATR — małe strzałki u góry pokazujące, że wieje z góry */}
+          {[-46, 0, 46].map((dx) => (
+            <g key={dx}>
+              <line x1={CX + dx} y1={20} x2={CX + dx} y2={46} stroke="#7bbcd9" strokeWidth="3" strokeLinecap="round" />
+              <polygon points={`${CX + dx},${52} ${CX + dx - 5},${43} ${CX + dx + 5},${43}`} fill="#7bbcd9" />
+            </g>
+          ))}
+          <text x={CX} y={14} textAnchor="middle" fontSize="11" fontWeight="700" fill="#7bbcd9">
+            WIATR ({Math.round(windKts)} kn)
           </text>
 
-          {/* WIATR POZORNY — mniejsza, ruchoma strzałka bliżej dziobu */}
+          {/* WIATR POZORNY — ruchoma strzałka bliżej dziobu */}
           {!isLuffing && (
             <>
               <Arrow
-                x1={CX + polar(appBearing, R - 22).x}
-                y1={CY + polar(appBearing, R - 22).y}
-                x2={CX + polar(appBearing, R - 58).x}
-                y2={CY + polar(appBearing, R - 58).y}
+                x1={CX + polar(appBearing, R - 8).x}
+                y1={CY + polar(appBearing, R - 8).y}
+                x2={CX + polar(appBearing, R - 46).x}
+                y2={CY + polar(appBearing, R - 46).y}
                 color="#c9a15a"
-                width={3}
-                head={9}
+                width={3.5}
+                head={10}
               />
-              <text x={CX + polar(appBearing, R - 12).x} y={CY + polar(appBearing, R - 12).y + 3} textAnchor="middle" fontSize="9" fontWeight="700" fill="#c9a15a">
+              <text x={CX + polar(appBearing, R + 4).x} y={CY + polar(appBearing, R + 4).y + 3} textAnchor="middle" fontSize="9.5" fontWeight="700" fill="#c9a15a">
                 pozorny
               </text>
             </>
           )}
 
-          {/* JACHT — nieruchomy, dziób do góry */}
-          <g>
+          {/* JACHT — obraca się zgodnie z kursem, wiatr pozostaje z góry */}
+          <g transform={`rotate(${heading} ${CX} ${CY})`}>
             <line x1={CX} y1={CY + 95} x2={CX} y2={CY + 128} stroke="rgba(123,188,217,0.22)" strokeWidth="10" strokeLinecap="round" />
             <path
               d={`M ${CX} ${CY - 92} C ${CX + 17} ${CY - 60}, ${CX + 21} ${CY + 40}, ${CX + 11} ${CY + 88} L ${CX} ${CY + 98} L ${CX - 11} ${CY + 88} C ${CX - 21} ${CY + 40}, ${CX - 17} ${CY - 60}, ${CX} ${CY - 92} Z`}
@@ -224,7 +218,7 @@ export default function SailSimulator() {
 
             {isLuffing ? (
               <>
-                {/* ŁOPOT — żagle jako falujące linie */}
+                {/* ŁOPOT — same żagle jako falujące linie */}
                 <motion.path
                   d={luffPath(jibTack.x, jibTack.y, CX, CY - 28, 9, 0)}
                   fill="none"
@@ -246,44 +240,48 @@ export default function SailSimulator() {
               </>
             ) : (
               <>
-                {/* FOK — wychylony bom/szot, brzuch na zawietrzną */}
+                {/* FOK — sam żagiel, brzuch na zawietrzną */}
                 <motion.path
-                  d={sailBanana(jibTack.x, jibTack.y, jibClew.x, jibClew.y, 12, lee, 0.5)}
+                  d={sailBanana(jibTack.x, jibTack.y, jibClew.x, jibClew.y, 11, refx, refy)}
                   fill="none"
                   stroke="rgba(247,241,227,0.95)"
-                  strokeWidth="4"
+                  strokeWidth="4.5"
                   strokeLinecap="round"
-                  animate={{ d: sailBanana(jibTack.x, jibTack.y, jibClew.x, jibClew.y, 12, lee, 0.5) }}
+                  animate={{ d: sailBanana(jibTack.x, jibTack.y, jibClew.x, jibClew.y, 11, refx, refy) }}
                   transition={{ type: 'spring', stiffness: 120, damping: 18 }}
                 />
-                {/* bom foka */}
-                <line x1={jibTack.x} y1={jibTack.y} x2={jibClew.x} y2={jibClew.y} stroke="#6b5124" strokeWidth="2.5" strokeLinecap="round" opacity="0.7" />
-
-                {/* GROT — bom wychyla się od osi (fordewind: prostopadle) */}
-                <line x1={mast.x} y1={mast.y} x2={mainClew.x} y2={mainClew.y} stroke="#3a2c14" strokeWidth="4" strokeLinecap="round" />
+                {/* GROT — sam żagiel */}
                 <motion.path
-                  d={sailBanana(mast.x, mast.y, mainClew.x, mainClew.y, 16, lee, 0.5)}
+                  d={sailBanana(mast.x, mast.y, mainClew.x, mainClew.y, 15, refx, refy)}
                   fill="none"
                   stroke="rgba(238,247,251,1)"
-                  strokeWidth="5"
+                  strokeWidth="5.5"
                   strokeLinecap="round"
-                  animate={{ d: sailBanana(mast.x, mast.y, mainClew.x, mainClew.y, 16, lee, 0.5) }}
+                  animate={{ d: sailBanana(mast.x, mast.y, mainClew.x, mainClew.y, 15, refx, refy) }}
                   transition={{ type: 'spring', stiffness: 120, damping: 18 }}
                 />
               </>
             )}
             {/* maszt */}
-            <circle cx={mast.x} cy={mast.y} r="4" fill="#3a2c14" />
-
-            {/* SIŁY */}
-            {!isLuffing && (
-              <>
-                <Arrow x1={ceo.x} y1={ceo.y} x2={ceo.x} y2={ceo.y - driveLen} color="#1fa463" width={5} label="ciąg" />
-                <Arrow x1={ceo.x} y1={ceo.y} x2={ceo.x + lee * heelLen} y2={ceo.y} color="#f4952b" width={5} label="przechył" />
-                <Arrow x1={CX} y1={CY + 44} x2={CX - lee * (14 + forces.heel * 40)} y2={CY + 44} color="#489cc4" width={4} dashed />
-              </>
-            )}
+            <circle cx={mast.x} cy={mast.y} r="3.5" fill="#3a2c14" />
           </g>
+
+          {/* SIŁY — poza obracaną grupą, aby etykiety pozostały czytelne */}
+          {!isLuffing &&
+            (() => {
+              const dOrigin = rot(ceo.x, ceo.y, heading)
+              const dTip = rot(ceo.x, ceo.y - driveLen, heading)
+              const hTip = rot(ceo.x + lee * heelLen, ceo.y, heading)
+              const kO = rot(CX, CY + 44, heading)
+              const kTip = rot(CX - lee * (14 + forces.heel * 40), CY + 44, heading)
+              return (
+                <>
+                  <Arrow x1={dOrigin.x} y1={dOrigin.y} x2={dTip.x} y2={dTip.y} color="#1fa463" width={5} label="ciąg" />
+                  <Arrow x1={dOrigin.x} y1={dOrigin.y} x2={hTip.x} y2={hTip.y} color="#f4952b" width={5} label="przechył" />
+                  <Arrow x1={kO.x} y1={kO.y} x2={kTip.x} y2={kTip.y} color="#489cc4" width={4} dashed />
+                </>
+              )
+            })()}
         </svg>
 
         {/* legenda sił */}
@@ -297,9 +295,9 @@ export default function SailSimulator() {
           <Term label={<span className="text-[#489cc4]">● opór kilu</span>} title="Opór boczny (kil / miecz)">
             <p>Kil lub miecz pod wodą stawia opór ruchowi w bok i równoważy siłę przechylającą. Różnica kątów to <b>dryf</b> (leeway).</p>
           </Term>
-          <Term label={<span className="text-[#7bbcd9]">● wiatr rzecz.</span>} title="Wiatr rzeczywisty vs pozorny">
+          <Term label={<span className="text-[#c9a15a]">● wiatr pozorny</span>} title="Wiatr rzeczywisty vs pozorny">
             <p>
-              <b>Rzeczywisty</b> (niebieska strzałka na obwodzie) — wiatr wiejący nad wodą. <b>Pozorny</b> (złota, mniejsza) — wiatr odczuwany na płynącym jachcie; zawsze przesunięty ku dziobowi. Żagle trymuje się do <b>pozornego</b>.
+              Wiatr <b>rzeczywisty</b> wieje z góry (małe niebieskie strzałki). Wiatr <b>pozorny</b> (złota strzałka) — odczuwany na płynącym jachcie — jest zawsze przesunięty ku dziobowi. Żagle trymuje się do <b>pozornego</b>.
             </p>
           </Term>
         </div>
@@ -318,8 +316,7 @@ export default function SailSimulator() {
         </div>
 
         <div className="card p-5 space-y-5">
-          <Control icon={<RotateCcw className="h-4 w-4" />} label="Kurs jachtu" value={`${Math.round(heading)}° ${compassName(heading)}`} min={0} max={359} v={heading} onChange={setHeading} />
-          <Control icon={<Wind className="h-4 w-4" />} label="Wiatr wieje z kierunku" value={`${Math.round(windFrom)}° ${compassName(windFrom)}`} min={0} max={359} v={windFrom} onChange={setWindFrom} />
+          <Control icon={<RotateCcw className="h-4 w-4" />} label="Kurs jachtu (obrót)" value={`${Math.round(heading)}°`} min={0} max={359} v={heading} onChange={setHeading} />
           <Control label="Siła wiatru" value={`${Math.round(windKts)} kn`} min={2} max={30} v={windKts} onChange={setWindKts} />
           <div>
             <div className="mb-2 text-xs text-brine-100/70">Szybko ustaw kurs względem wiatru:</div>
@@ -328,7 +325,7 @@ export default function SailSimulator() {
                 ['Bajdewind', 45],
                 ['Półwiatr', 90],
                 ['Baksztag', 135],
-                ['Fordewind', 178],
+                ['Fordewind', 180],
               ].map(([name, a]) => (
                 <button key={name as string} onClick={() => setRelative(a as number)} className="btn-ghost px-3 py-1.5 text-xs">
                   {name}
