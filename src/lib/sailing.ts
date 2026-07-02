@@ -81,8 +81,11 @@ export function pointOfSail(awa: number): PointOfSail {
  * w przybliżeniu połowa kąta wiatru pozornego, ograniczona do ok. 80°.
  */
 export function boomAngle(awa: number): number {
-  if (awa < 35) return Math.max(6, awa * 0.5) // martwy kąt: żagiel prawie w osi, łopocze
-  return Math.min(80, Math.max(8, awa * 0.55))
+  if (awa < 32) return 6 // martwy kąt: żagiel prawie w osi, łopocze
+  // Reguła kciuka: żagiel ustawiamy mniej więcej w połowie kąta wiatru
+  // pozornego od dziobu — od ~15° (bajdewind, wybrany) do 90°
+  // (fordewind, żagiel prostopadle do osi jachtu).
+  return clamp(awa / 2, 15, 90)
 }
 
 /**
