@@ -9,7 +9,9 @@ w motywie żeglarskim. Pięć modułów, między którymi przełączasz się w m
 | **Locja** | Interaktywna galeria oznakowania IALA (region A): znaki boczne, kardynalne, izolowanego niebezpieczeństwa, bezpiecznej wody i specjalne — z opisem, sposobem mijania i charakterystyką światła. |
 | **Meteorologia** | Interaktywna skala Beauforta (0–12) z animacją fal i flagi oraz przewodnik po rodzajach chmur i ich znaczeniu dla pogody. |
 | **Budowa jachtu** | Klikalny przekrój slupa — nazwy części kadłuba, takielunku, żagli i osprzętu. |
-| **Przepisy** | Prawo drogi z interaktywnymi scenariuszami (kto ustępuje, kto utrzymuje kurs) oraz światła nawigacyjne. |
+| **Przepisy** | Prawo drogi z interaktywnymi scenariuszami (kto ustępuje, kto utrzymuje kurs), kierunkiem wiatru i światłami nawigacyjnymi. |
+| **Węzły** | Sześć podstawowych węzłów żeglarskich — ilustracje, zastosowanie i wiązanie krok po kroku. |
+| **Quiz** | Interaktywny sprawdzian ze wszystkich działów, z natychmiastowym wyjaśnieniem i wynikiem. |
 
 ## 🧱 Stack technologiczny
 

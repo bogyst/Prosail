@@ -6,6 +6,8 @@ import {
   CloudSun,
   Wrench,
   Scale,
+  Link2,
+  GraduationCap,
   ArrowRight,
 } from 'lucide-react'
 
@@ -44,6 +46,20 @@ const CARDS = [
     title: 'Przepisy',
     desc: 'Prawo drogi, pierwszeństwo, światła nawigacyjne i sygnały — z interaktywnymi scenariuszami.',
     accent: 'from-buoyRed/30',
+  },
+  {
+    to: '/wezly',
+    icon: Link2,
+    title: 'Węzły',
+    desc: 'Sześć podstawowych węzłów żeglarskich — ilustracje, zastosowanie i wiązanie krok po kroku.',
+    accent: 'from-rope/30',
+  },
+  {
+    to: '/quiz',
+    icon: GraduationCap,
+    title: 'Quiz',
+    desc: 'Sprawdź wiedzę ze wszystkich działów. Pytania z wyjaśnieniami i wynikiem końcowym.',
+    accent: 'from-brine-400/30',
   },
 ]
 

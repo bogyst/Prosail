@@ -7,6 +7,8 @@ import {
   CloudSun,
   Wrench,
   Scale,
+  Link2,
+  GraduationCap,
   Menu,
   X,
   Anchor,
@@ -18,6 +20,8 @@ const NAV = [
   { to: '/meteorologia', label: 'Meteorologia', icon: CloudSun },
   { to: '/budowa', label: 'Budowa jachtu', icon: Wrench },
   { to: '/przepisy', label: 'Przepisy', icon: Scale },
+  { to: '/wezly', label: 'Węzły', icon: Link2 },
+  { to: '/quiz', label: 'Quiz', icon: GraduationCap },
 ]
 
 export default function Layout() {
@@ -36,23 +40,25 @@ export default function Layout() {
             </span>
           </Link>
 
-          <nav className="ml-auto hidden items-center gap-1 lg:flex">
+          <nav className="ml-auto hidden items-center gap-0.5 xl:flex">
             {NAV.map(({ to, label, icon: Icon }) => (
               <NavLink
                 key={to}
                 to={to}
                 className={({ isActive }) =>
-                  `btn ${isActive ? 'bg-white/10 text-white' : 'text-brine-100 hover:bg-white/5'}`
+                  `btn px-2.5 py-1.5 text-[13px] ${
+                    isActive ? 'bg-white/10 text-white' : 'text-brine-100 hover:bg-white/5'
+                  }`
                 }
               >
-                <Icon className="h-4 w-4" />
+                <Icon className="h-4 w-4 shrink-0" />
                 {label}
               </NavLink>
             ))}
           </nav>
 
           <button
-            className="btn-ghost ml-auto lg:hidden"
+            className="btn-ghost ml-auto xl:hidden"
             onClick={() => setMobileOpen((v) => !v)}
             aria-label="Menu"
           >
@@ -64,7 +70,7 @@ export default function Layout() {
           <motion.nav
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: 'auto', opacity: 1 }}
-            className="overflow-hidden border-t border-white/10 lg:hidden"
+            className="overflow-hidden border-t border-white/10 xl:hidden"
           >
             <div className="mx-auto max-w-7xl px-4 py-2">
               {NAV.map(({ to, label, icon: Icon }) => (
