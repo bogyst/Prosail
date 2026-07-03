@@ -6,7 +6,7 @@ w motywie żeglarskim. Pięć modułów, między którymi przełączasz się w m
 | Moduł | Co zawiera |
 |-------|------------|
 | **Teoria żeglowania** | Symulator trymu żagli — zmieniasz kierunek wiatru i kurs jachtu, żagle same ustawiają się optymalnie, a strzałki pokazują siły (ciąg, przechył, opór kilu, wiatr pozorny). Klikalne objaśnienia teorii. |
-| **Locja** | Interaktywna galeria oznakowania IALA (region A): znaki boczne, kardynalne, izolowanego niebezpieczeństwa, bezpiecznej wody i specjalne — z opisem, sposobem mijania i charakterystyką światła. |
+| **Locja** | Galeria oznakowania IALA (region A) oraz interaktywna mapa akwenu: szlak, mielizna otoczona znakami kardynalnymi (N/E/S/W), izolowane niebezpieczeństwo na skale, wejście do portu i wieża sygnalizacji sztormowej (Mazury: 0/40/90 błysków). |
 | **Meteorologia** | Interaktywna skala Beauforta (0–12) z animacją fal i flagi oraz przewodnik po rodzajach chmur i ich znaczeniu dla pogody. |
 | **Budowa jachtu** | Klikalny przekrój slupa — nazwy części kadłuba, takielunku, żagli i osprzętu. |
 | **Przepisy** | Prawo drogi z interaktywnymi scenariuszami (kto ustępuje, kto utrzymuje kurs), kierunkiem wiatru i światłami nawigacyjnymi. |

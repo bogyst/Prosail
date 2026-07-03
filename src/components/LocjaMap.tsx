@@ -7,7 +7,6 @@ const G = bandColor('green')
 const Y = bandColor('yellow')
 const B = bandColor('black')
 
-// szerokość/wysokość układu współrzędnych mapy
 const W = 900
 const H = 560
 
@@ -24,13 +23,13 @@ interface MapMark {
   topColor?: string
 }
 
-interface Zone {
+interface Info {
   id: string
   name: string
   desc: string
 }
 
-const ZONES: Record<string, Zone> = {
+const ZONES: Record<string, Info> = {
   szlak: {
     id: 'szlak',
     name: 'Szlak żeglowny (tor wodny)',
@@ -39,7 +38,7 @@ const ZONES: Record<string, Zone> = {
   mielizna: {
     id: 'mielizna',
     name: 'Mielizna (płycizna)',
-    desc: 'Obszar płytkiej wody — grozi wejściem na dno. Na mapie zaznaczona jaśniejszym, piaszczystym kolorem i izobatą (linią równej głębokości). Omijaj z dala.',
+    desc: 'Obszar płytkiej wody — grozi wejściem na dno. Otoczona czterema znakami kardynalnymi (N/E/S/W), które mówią, z której strony jest bezpieczna, głęboka woda. Na mapie zaznaczona jaśniejszym, piaszczystym kolorem i izobatą.',
   },
   port: {
     id: 'port',
@@ -47,6 +46,17 @@ const ZONES: Record<string, Zone> = {
     desc: 'Przejście między główkami falochronów. Zwolnij, ustąp większym jednostkom i wchodź zgodnie ze znakami oraz sygnałami portowymi.',
   },
 }
+
+// znaki kardynalne otaczające mieliznę
+const cardinal = (
+  id: string,
+  name: string,
+  desc: string,
+  x: number,
+  y: number,
+  bands: Band[],
+  topmark: TopMark,
+): MapMark => ({ id, name, desc, x, y, size: 48, shape: 'pillar', bands, topmark, topColor: B })
 
 const MARKS: MapMark[] = [
   {
@@ -82,7 +92,7 @@ const MARKS: MapMark[] = [
     name: 'Znak lewej strony szlaku',
     desc: 'Czerwona, walcowata pława — lewa krawędź toru. Wchodząc do portu zostaw ją po lewej burcie (bakburcie).',
     x: 388,
-    y: 285,
+    y: 288,
     size: 40,
     shape: 'can',
     bands: [{ color: R, from: 0, to: 1 }],
@@ -106,19 +116,70 @@ const MARKS: MapMark[] = [
     name: 'Znak prawej strony szlaku',
     desc: 'Zielona, stożkowa pława — prawa krawędź toru. Wchodząc do portu zostaw ją po prawej burcie (sterburcie).',
     x: 512,
-    y: 285,
+    y: 288,
     size: 40,
     shape: 'cone',
     bands: [{ color: G, from: 0, to: 1 }],
     topmark: 'cone-up',
     topColor: G,
   },
+  // 4 znaki kardynalne wokół mielizny
+  cardinal(
+    'cardN',
+    'Znak kardynalny N (północny)',
+    'Bezpieczna, głęboka woda jest na PÓŁNOC od znaku (u góry) — mijaj go od północy. Dwa czarne stożki wierzchołkami w górę, czarny pas u góry.',
+    712,
+    198,
+    [
+      { color: B, from: 0.5, to: 1 },
+      { color: Y, from: 0, to: 0.5 },
+    ],
+    'cones-up',
+  ),
+  cardinal(
+    'cardE',
+    'Znak kardynalny E (wschodni)',
+    'Bezpieczna woda jest na WSCHÓD od znaku — mijaj go od wschodu. Stożki podstawami do siebie; czarny-żółty-czarny.',
+    852,
+    322,
+    [
+      { color: B, from: 0.66, to: 1 },
+      { color: Y, from: 0.33, to: 0.66 },
+      { color: B, from: 0, to: 0.33 },
+    ],
+    'cones-base',
+  ),
+  cardinal(
+    'cardS',
+    'Znak kardynalny S (południowy)',
+    'Bezpieczna woda jest na POŁUDNIE od znaku — mijaj go od południa. Stożki wierzchołkami w dół; żółty u góry, czarny na dole.',
+    712,
+    458,
+    [
+      { color: Y, from: 0.5, to: 1 },
+      { color: B, from: 0, to: 0.5 },
+    ],
+    'cones-down',
+  ),
+  cardinal(
+    'cardW',
+    'Znak kardynalny W (zachodni)',
+    'Bezpieczna woda jest na ZACHÓD od znaku — mijaj go od zachodu. Stożki wierzchołkami do siebie; żółty-czarny-żółty.',
+    574,
+    322,
+    [
+      { color: Y, from: 0.66, to: 1 },
+      { color: B, from: 0.33, to: 0.66 },
+      { color: Y, from: 0, to: 0.33 },
+    ],
+    'cones-point',
+  ),
   {
     id: 'danger',
     name: 'Znak izolowanego niebezpieczeństwa',
-    desc: 'Postawiony NA odosobnionej przeszkodzie (skała, wrak). Czarny z czerwonym pasem i dwiema czarnymi kulami na topie. Omijaj z każdej strony.',
-    x: 712,
-    y: 300,
+    desc: 'Postawiony NA odosobnionej przeszkodzie w głębokiej wodzie (samotna skała, wrak). Czarny z czerwonym pasem i dwiema czarnymi kulami na topie. Omijaj z każdej strony.',
+    x: 205,
+    y: 430,
     size: 50,
     shape: 'pillar',
     bands: [
@@ -129,26 +190,34 @@ const MARKS: MapMark[] = [
     topmark: 'spheres',
     topColor: B,
   },
-  {
-    id: 'cardinalE',
-    name: 'Znak kardynalny E (wschodni)',
-    desc: 'Bezpieczna, głęboka woda jest na WSCHÓD od znaku — mijaj go od strony wschodniej. Czarny-żółty-czarny, stożki podstawami do siebie.',
-    x: 818,
-    y: 312,
-    size: 50,
-    shape: 'pillar',
-    bands: [
-      { color: B, from: 0.66, to: 1 },
-      { color: Y, from: 0.33, to: 0.66 },
-      { color: B, from: 0, to: 0.33 },
-    ],
-    topmark: 'cones-base',
-    topColor: B,
-  },
 ]
 
+type Storm = 0 | 40 | 90
+
+function stormInfo(level: Storm): Info {
+  const base =
+    ' Pulsujące światło widać z 8–9 km w dzień i w nocy. Kliknij wieżę, aby przełączyć poziom.'
+  const desc =
+    level === 0
+      ? 'Brak ostrzeżeń — światło nie miga, warunki w normie.'
+      : level === 40
+        ? 'OSTRZEŻENIE (40 błysków/min): spodziewane burze i silniejszy wiatr. Zachowaj czujność, rozważ powrót do portu.'
+        : 'ALARM — NIEBEZPIECZEŃSTWO (90 błysków/min): burza i silny wiatr w najbliższym czasie. Natychmiast schodź z wody / wracaj do portu.'
+  return { id: 'storm', name: 'Wieża sygnalizacji ostrzegawczej (Mazury)', desc: desc + base }
+}
+
 export default function LocjaMap() {
-  const [sel, setSel] = useState<{ id: string; name: string; desc: string } | null>(null)
+  const [sel, setSel] = useState<Info | null>(null)
+  const [storm, setStorm] = useState<Storm>(40)
+
+  const lampColor = storm === 0 ? '#5b6b76' : storm === 40 ? Y : R
+  const period = storm === 90 ? 0.667 : storm === 40 ? 1.5 : 0
+
+  function cycleStorm() {
+    const next: Storm = storm === 0 ? 40 : storm === 40 ? 90 : 0
+    setStorm(next)
+    setSel(stormInfo(next))
+  }
 
   return (
     <div className="grid gap-6 lg:grid-cols-[1fr_320px]">
@@ -166,11 +235,10 @@ export default function LocjaMap() {
               </pattern>
             </defs>
 
-            {/* morze */}
             <rect x="0" y="0" width={W} height={H} fill="url(#mapsea)" />
             <rect x="0" y="0" width={W} height={H} fill="url(#waves)" />
 
-            {/* SZLAK (tor wodny) */}
+            {/* SZLAK */}
             <g onClick={() => setSel(ZONES.szlak)} style={{ cursor: 'pointer' }}>
               <path
                 d={`M 402 ${H} L 498 ${H} L 470 150 L 430 150 Z`}
@@ -180,39 +248,38 @@ export default function LocjaMap() {
                 strokeDasharray="2 8"
               />
               <line x1="450" y1={H - 10} x2="450" y2="160" stroke="rgba(123,188,217,0.4)" strokeWidth="1.5" strokeDasharray="10 10" />
-              <text x="512" y="470" fill="rgba(207,230,240,0.8)" fontSize="16" fontWeight="600">
+              <text x="352" y="470" textAnchor="end" fill="rgba(207,230,240,0.8)" fontSize="16" fontWeight="600">
                 szlak
               </text>
             </g>
 
             {/* MIELIZNA */}
             <g onClick={() => setSel(ZONES.mielizna)} style={{ cursor: 'pointer' }}>
-              <ellipse cx="712" cy="315" rx="150" ry="105" fill="rgba(226,206,150,0.22)" />
-              <ellipse cx="712" cy="315" rx="150" ry="105" fill="none" stroke="rgba(226,206,150,0.5)" strokeWidth="2" strokeDasharray="7 7" />
-              <ellipse cx="712" cy="315" rx="92" ry="60" fill="rgba(226,206,150,0.28)" />
-              {/* skała pod znakiem izolowanego niebezpieczeństwa */}
-              <path d="M700 322 l7 -14 l7 14 l12 -8 l-6 16 l-26 0 l-6 -16 z" fill="#6b5a3a" opacity="0.9" />
-              <text x="712" y="250" textAnchor="middle" fill="rgba(233,220,192,0.9)" fontSize="15" fontWeight="600">
+              <ellipse cx="712" cy="322" rx="118" ry="86" fill="rgba(226,206,150,0.22)" />
+              <ellipse cx="712" cy="322" rx="118" ry="86" fill="none" stroke="rgba(226,206,150,0.5)" strokeWidth="2" strokeDasharray="7 7" />
+              <ellipse cx="712" cy="322" rx="72" ry="48" fill="rgba(226,206,150,0.3)" />
+              <text x="712" y="326" textAnchor="middle" fill="rgba(120,100,60,0.95)" fontSize="15" fontWeight="700">
                 mielizna
               </text>
             </g>
 
+            {/* SAMOTNA SKAŁA pod znakiem izolowanego niebezpieczeństwa */}
+            <g onClick={() => setSel(MARKS.find((m) => m.id === 'danger')!)} style={{ cursor: 'pointer' }}>
+              <ellipse cx="205" cy="452" rx="34" ry="16" fill="rgba(120,110,90,0.25)" />
+              <path d="M192 452 l7 -15 l6 12 l6 -18 l7 21 l-26 0 z" fill="#6b5a3a" />
+            </g>
+
             {/* LĄD / PORT */}
             <g onClick={() => setSel(ZONES.port)} style={{ cursor: 'pointer' }}>
-              {/* basen portu (spokojna woda) */}
               <rect x="150" y="0" width="600" height="120" fill="#0c2136" />
-              {/* ląd lewy i prawy z przerwą na wejście */}
               <path d="M0 0 H405 V70 Q405 96 380 100 L150 100 Q120 100 120 70 V0 Z" fill="#26402f" stroke="#3a5a44" strokeWidth="2" />
               <path d="M900 0 H495 V70 Q495 96 520 100 L760 100 Q790 100 790 70 V0 Z" fill="#26402f" stroke="#3a5a44" strokeWidth="2" />
-              {/* główki falochronów */}
               <rect x="398" y="96" width="10" height="60" rx="4" fill="#33513e" />
               <rect x="492" y="96" width="10" height="60" rx="4" fill="#33513e" />
               <circle cx="403" cy="156" r="7" fill={R} stroke="#0f2b3f" strokeWidth="2" />
               <circle cx="497" cy="156" r="7" fill={G} stroke="#0f2b3f" strokeWidth="2" />
-              {/* pomosty */}
-              <rect x="180" y="30" width="70" height="8" rx="3" fill="#3a5a44" />
-              <rect x="640" y="30" width="70" height="8" rx="3" fill="#3a5a44" />
-              <text x="250" y="60" fill="rgba(207,230,240,0.85)" fontSize="18" fontWeight="700">
+              <rect x="620" y="30" width="70" height="8" rx="3" fill="#3a5a44" />
+              <text x="300" y="52" fill="rgba(207,230,240,0.85)" fontSize="18" fontWeight="700">
                 PORT
               </text>
               <text x="450" y="132" textAnchor="middle" fill="rgba(207,230,240,0.8)" fontSize="13" fontWeight="600">
@@ -221,7 +288,7 @@ export default function LocjaMap() {
             </g>
           </svg>
 
-          {/* PŁAWY jako klikalne nakładki HTML */}
+          {/* PŁAWY jako klikalne nakładki */}
           {MARKS.map((m) => (
             <button
               key={m.id}
@@ -239,30 +306,88 @@ export default function LocjaMap() {
               </span>
             </button>
           ))}
+
+          {/* WIEŻA SYGNALIZACJI OSTRZEGAWCZEJ (interaktywna) */}
+          <button
+            onClick={cycleStorm}
+            className={`group absolute -translate-x-1/2 -translate-y-full outline-none ${
+              sel?.id === 'storm' ? 'ring-2 ring-white/80 rounded-lg' : ''
+            }`}
+            style={{ left: `${(128 / W) * 100}%`, top: `${(101 / H) * 100}%` }}
+            title="Wieża sygnalizacji ostrzegawczej — kliknij, aby zmienić poziom"
+          >
+            <svg width="46" height="92" viewBox="0 0 46 92" className="transition-transform group-hover:scale-105">
+              {/* światło / poświata */}
+              {storm !== 0 && (
+                <motion.circle
+                  cx="23"
+                  cy="16"
+                  r="15"
+                  fill={lampColor}
+                  animate={{ opacity: [0.35, 0, 0.35] }}
+                  transition={{ duration: period, repeat: Infinity, ease: 'easeInOut' }}
+                  opacity="0.2"
+                />
+              )}
+              {/* wieża kratownicowa */}
+              <polygon points="15,88 31,88 27,26 19,26" fill="#4a5a64" stroke="#2b3942" strokeWidth="1.5" />
+              <line x1="17" y1="70" x2="29" y2="70" stroke="#2b3942" strokeWidth="1.2" />
+              <line x1="18" y1="52" x2="28" y2="52" stroke="#2b3942" strokeWidth="1.2" />
+              <line x1="19" y1="38" x2="27" y2="38" stroke="#2b3942" strokeWidth="1.2" />
+              <line x1="15" y1="88" x2="27" y2="26" stroke="#2b3942" strokeWidth="1" opacity="0.6" />
+              <line x1="31" y1="88" x2="19" y2="26" stroke="#2b3942" strokeWidth="1" opacity="0.6" />
+              {/* lampa */}
+              <rect x="15" y="12" width="16" height="16" rx="3" fill="#37474f" stroke="#22303a" strokeWidth="1.5" />
+              <motion.circle
+                cx="23"
+                cy="20"
+                r="6"
+                fill={lampColor}
+                animate={storm !== 0 ? { opacity: [1, 0.12, 1] } : { opacity: 0.3 }}
+                transition={storm !== 0 ? { duration: period, repeat: Infinity, ease: 'easeInOut' } : { duration: 0.2 }}
+              />
+            </svg>
+            <span className="mt-0.5 block rounded bg-black/40 px-1 text-center text-[9px] font-bold text-white">
+              {storm === 0 ? 'spokój' : `${storm}/min`}
+            </span>
+          </button>
         </div>
       </div>
 
       {/* PANEL OPISU */}
       <div className="lg:sticky lg:top-24 lg:self-start">
-        <motion.div
-          key={sel?.name ?? 'hint'}
-          initial={{ opacity: 0, y: 8 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="card p-6"
-        >
+        <motion.div key={sel?.id ?? 'hint'} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} className="card p-6">
           {sel ? (
             <>
-              <div className="chip mb-2">Element mapy</div>
+              <div className="chip mb-2">{sel.id === 'storm' ? 'Sygnalizacja pogody' : 'Element mapy'}</div>
               <h3 className="font-display text-xl font-700 text-white">{sel.name}</h3>
               <p className="mt-2 text-sm leading-relaxed text-brine-100/90">{sel.desc}</p>
+              {sel.id === 'storm' && (
+                <div className="mt-4 flex gap-2">
+                  {([0, 40, 90] as Storm[]).map((lv) => (
+                    <button
+                      key={lv}
+                      onClick={() => {
+                        setStorm(lv)
+                        setSel(stormInfo(lv))
+                      }}
+                      className={`rounded-lg px-3 py-1 text-xs font-semibold ${
+                        storm === lv ? 'bg-brine-500 text-white' : 'bg-white/5 text-brine-100 hover:bg-white/10'
+                      }`}
+                    >
+                      {lv === 0 ? 'spokój' : `${lv}/min`}
+                    </button>
+                  ))}
+                </div>
+              )}
             </>
           ) : (
             <>
               <h3 className="font-display text-lg font-700 text-white">Interaktywna mapa akwenu 🗺️</h3>
               <p className="mt-2 text-sm leading-relaxed text-brine-100/80">
-                Klikaj pławy oraz obszary (szlak, mielizna, port), aby poznać ich znaczenie.
-                Jacht wchodzący z morza trzyma się osi toru — czerwone znaki po lewej, zielone
-                po prawej burcie.
+                Klikaj pławy, obszary (szlak, mielizna, port) oraz wieżę sygnalizacji, aby poznać
+                ich znaczenie. Mielizna jest otoczona czterema znakami kardynalnymi wskazującymi
+                bezpieczną wodę z każdej strony.
               </p>
             </>
           )}
@@ -271,10 +396,11 @@ export default function LocjaMap() {
         <div className="card mt-4 p-5 text-sm text-brine-100/80">
           <p className="font-semibold text-white">Legenda</p>
           <ul className="mt-2 space-y-1.5">
-            <li>🔴 znak lewej strony · 🟢 prawej strony</li>
-            <li>⚫ izolowane niebezpieczeństwo (na przeszkodzie)</li>
-            <li>⚫🟡 znak kardynalny (bezpieczna woda po danej stronie)</li>
+            <li>🔴 znak lewej strony · 🟢 prawej strony toru</li>
+            <li>⚫🟡 znaki kardynalne N/E/S/W (wokół mielizny)</li>
+            <li>⚫🔴 izolowane niebezpieczeństwo (na skale)</li>
             <li>🔴⚪ bezpieczna woda / oś toru</li>
+            <li>🗼 wieża sygnalizacji sztormowej (Mazury)</li>
           </ul>
         </div>
       </div>

@@ -107,14 +107,44 @@ export function apparentWind(awa: number, trueStrength: number) {
   return { awa: awaOut, strength }
 }
 
+// funkcja wygładzająca (Hermite) — ciągła i o ciągłej pochodnej
+export function smoothstep(a: number, b: number, x: number): number {
+  const t = clamp((x - a) / (b - a), 0, 1)
+  return t * t * (3 - 2 * t)
+}
+
+// gładka interpolacja krzywej zadanej węzłami (bez skoków)
+function smoothCurve(nodes: [number, number][], x: number): number {
+  if (x <= nodes[0][0]) return nodes[0][1]
+  for (let i = 0; i < nodes.length - 1; i++) {
+    const [x0, y0] = nodes[i]
+    const [x1, y1] = nodes[i + 1]
+    if (x <= x1) {
+      const t = smoothstep(x0, x1, x)
+      return y0 + (y1 - y0) * t
+    }
+  }
+  return nodes[nodes.length - 1][1]
+}
+
+// Poglądowy "wykres biegunowy" (polar) prędkości — węzły co kilkanaście stopni.
+// Wartości zmieniają się PŁYNNIE podczas ostrzenia i odpadania (bez progów).
+const POLAR: [number, number][] = [
+  [0, 0],
+  [30, 0.05],
+  [45, 0.5],
+  [60, 0.78],
+  [80, 0.95],
+  [100, 1.0],
+  [120, 0.96],
+  [140, 0.86],
+  [160, 0.74],
+  [180, 0.64],
+]
+
 /** Poglądowy współczynnik prędkości jachtu (0–1) w funkcji kąta do wiatru. */
 export function boatSpeedFactor(awa: number): number {
-  if (awa < 32) return 0.05 // martwy kąt — prawie stój
-  // krzywa zbliżona do "wykresu biegunowego" (polar): max ok. 90–110°
-  const x = (awa - 32) / (180 - 32)
-  const curve = Math.sin(Math.min(1, x * 1.35) * Math.PI) // szczyt ok. 100–110°
-  const downwindFloor = awa > 150 ? 0.35 : 0 // fordewind wolniejszy niż półwiatr
-  return Math.max(downwindFloor, Math.min(1, curve * 1.05))
+  return clamp01(smoothCurve(POLAR, awa))
 }
 
 export interface Forces {
@@ -126,11 +156,11 @@ export interface Forces {
 
 /** Rozkład wypadkowej siły aerodynamicznej na ciąg i przechył. */
 export function computeForces(awa: number, trueStrength: number): Forces {
-  const isLuffing = awa < 32
   const app = apparentWind(awa, trueStrength)
-  // Wypadkowa siła na żaglu — rośnie z siłą wiatru pozornego,
-  // ale przy łopocie (martwy kąt) praktycznie zanika.
-  const total = isLuffing ? 0.06 : Math.min(1, app.strength * 0.95)
+  // Przy wychodzeniu z martwego kąta żagle zaczynają pracować PŁYNNIE
+  // (0 przy ~26°, pełna siła ok. 42°) — bez skokowej zmiany.
+  const luff = smoothstep(26, 42, awa)
+  const total = clamp01(app.strength * 0.95) * luff
   const awaRad = (awa * Math.PI) / 180
   // Ostro na wiatr: większość siły to przechył; z wiatrem: większość to ciąg.
   const drive = total * Math.pow(Math.sin(awaRad / 2 + 0.15), 1.1)
@@ -139,7 +169,7 @@ export function computeForces(awa: number, trueStrength: number): Forces {
     drive: clamp01(drive),
     heel: clamp01(heel),
     total: clamp01(total),
-    speed: boatSpeedFactor(awa) * (0.6 + trueStrength * 0.4),
+    speed: boatSpeedFactor(awa) * luff * (0.6 + trueStrength * 0.4),
   }
 }
 
