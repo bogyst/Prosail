@@ -45,6 +45,11 @@ const ZONES: Record<string, Info> = {
     name: 'Wejście do portu',
     desc: 'Przejście między główkami falochronów. Zwolnij, ustąp większym jednostkom i wchodź zgodnie ze znakami oraz sygnałami portowymi.',
   },
+  most: {
+    id: 'most',
+    name: 'Most przy wejściu do portu',
+    desc: 'Nad wejściem jest most. Żółty romb wskazuje przęsło żeglowne (zalecane przejście), a tablica podaje prześwit — sprawdź, czy Twój maszt zmieści się pod mostem przy obecnym stanie wody. Szczegóły w zakładce „Przejście pod mostem”.',
+  },
 }
 
 // znaki kardynalne otaczające mieliznę
@@ -293,8 +298,22 @@ export default function LocjaMap() {
               <text x="300" y="52" fill="rgba(207,230,240,0.85)" fontSize="18" fontWeight="700">
                 PORT
               </text>
-              <text x="450" y="132" textAnchor="middle" fill="rgba(207,230,240,0.8)" fontSize="13" fontWeight="600">
+              <text x="450" y="46" textAnchor="middle" fill="rgba(207,230,240,0.8)" fontSize="13" fontWeight="600">
                 wejście do portu
+              </text>
+            </g>
+
+            {/* MOST przy wejściu do portu */}
+            <g onClick={() => setSel(ZONES.most)} style={{ cursor: 'pointer' }}>
+              <rect x="384" y="108" width="132" height="13" rx="2" fill="#4a5a64" />
+              <rect x="384" y="121" width="132" height="4" fill="#2b3942" />
+              {/* filary na główkach */}
+              <rect x="386" y="121" width="8" height="26" fill="#3a4a54" />
+              <rect x="506" y="121" width="8" height="26" fill="#3a4a54" />
+              {/* żółty romb — przęsło żeglowne */}
+              <polygon points="450,128 462,140 450,152 438,140" fill="#f4c430" stroke="#b8930f" strokeWidth="1.5" />
+              <text x="522" y="118" fill="#cfe6f0" fontSize="12" fontWeight="700">
+                most
               </text>
             </g>
           </svg>

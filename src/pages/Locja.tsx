@@ -2,8 +2,9 @@ import { useState } from 'react'
 import { motion } from 'framer-motion'
 import Buoy, { type BodyShape, type TopMark, type Band, bandColor } from '../components/Buoy'
 import LocjaMap from '../components/LocjaMap'
+import BridgePassage from '../components/BridgePassage'
 import { PageHeader, Term } from '../components/ui'
-import { LayoutGrid, Map } from 'lucide-react'
+import { LayoutGrid, Map, Construction } from 'lucide-react'
 
 interface Mark {
   id: string
@@ -169,7 +170,7 @@ const GROUPS = [...new Set(MARKS.map((m) => m.group))]
 
 export default function Locja() {
   const [sel, setSel] = useState<Mark>(MARKS[2])
-  const [view, setView] = useState<'gallery' | 'map'>('gallery')
+  const [view, setView] = useState<'gallery' | 'map' | 'bridge'>('gallery')
 
   return (
     <div>
@@ -207,11 +208,19 @@ export default function Locja() {
           <Map className="h-4 w-4" />
           Znaki na mapie
         </button>
+        <button
+          onClick={() => setView('bridge')}
+          className={`btn px-4 py-1.5 text-sm ${view === 'bridge' ? 'bg-brine-500 text-white' : 'text-brine-100'}`}
+        >
+          <Construction className="h-4 w-4" />
+          Przejście pod mostem
+        </button>
       </div>
 
       {view === 'map' && <LocjaMap />}
+      {view === 'bridge' && <BridgePassage />}
 
-      <div className={`grid gap-8 lg:grid-cols-[1fr_360px] ${view === 'map' ? 'hidden' : ''}`}>
+      <div className={`grid gap-8 lg:grid-cols-[1fr_360px] ${view !== 'gallery' ? 'hidden' : ''}`}>
         {/* GALERIA */}
         <div className="space-y-8">
           {GROUPS.map((grp) => (

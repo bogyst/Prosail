@@ -7,6 +7,7 @@ import {
   Wrench,
   Scale,
   Link2,
+  LifeBuoy,
   GraduationCap,
   ArrowRight,
 } from 'lucide-react'
@@ -53,6 +54,13 @@ const CARDS = [
     title: 'Węzły',
     desc: 'Sześć podstawowych węzłów żeglarskich — ilustracje, zastosowanie i wiązanie krok po kroku.',
     accent: 'from-rope/30',
+  },
+  {
+    to: '/ratownictwo',
+    icon: LifeBuoy,
+    title: 'Ratownictwo',
+    desc: 'Numery alarmowe (Mazury), podstawy pierwszej pomocy i manewr „człowiek za burtą” krok po kroku.',
+    accent: 'from-buoyRed/30',
   },
   {
     to: '/quiz',

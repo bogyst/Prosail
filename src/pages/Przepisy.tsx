@@ -317,28 +317,44 @@ function ZnakiRuchu() {
 /* ===================== SYGNAŁY ===================== */
 
 // pojedynczy sygnał dźwiękowy jako sekwencja kropek/kresek
-function Toots({ seq }: { seq: ('short' | 'long')[] }) {
+type Toot = 'short' | 'long' | 'vshort' | 'gap'
+function Toots({ seq, series }: { seq: Toot[]; series?: boolean }) {
   return (
     <span className="inline-flex items-center gap-1.5">
-      {seq.map((t, i) =>
-        t === 'short' ? (
-          <span key={i} className="h-3 w-3 rounded-full bg-brine-300" />
-        ) : (
-          <span key={i} className="h-3 w-8 rounded-full bg-brine-300" />
-        ),
-      )}
+      {seq.map((t, i) => {
+        if (t === 'gap') return <span key={i} className="w-2" />
+        if (t === 'long') return <span key={i} className="h-3 w-6 rounded-full bg-brine-300" />
+        if (t === 'vshort') return <span key={i} className="h-2 w-2 rounded-full bg-brine-300" />
+        return <span key={i} className="h-3 w-3 rounded-full bg-brine-300" />
+      })}
+      {series && <span className="ml-0.5 text-lg font-bold leading-none text-brine-300">…</span>}
     </span>
   )
 }
 
-const SOUNDS: { seq: ('short' | 'long')[]; name: string; desc: string }[] = [
+const SOUNDS: { seq: Toot[]; series?: boolean; name: string; desc: string }[] = [
   { seq: ['short'], name: '1 krótki', desc: 'Zmieniam swój kurs w prawo (na sterburtę).' },
   { seq: ['short', 'short'], name: '2 krótkie', desc: 'Zmieniam swój kurs w lewo (na bakburtę).' },
   { seq: ['short', 'short', 'short'], name: '3 krótkie', desc: 'Pracuję maszynami wstecz (cofam / hamuję).' },
-  { seq: ['short', 'short', 'short', 'short', 'short'], name: '5 krótkich', desc: 'Sygnał ostrzegawczy / wątpliwości — „nie rozumiem Twoich zamiarów, uważaj!”.' },
-  { seq: ['long'], name: '1 długi', desc: 'Ostrzeżenie — np. wychodzę z portu, zbliżam się do zakrętu lub miejsca o ograniczonej widoczności.' },
-  { seq: ['long', 'long'], name: '1 długi co ≤2 min', desc: 'We mgle: jednostka o napędzie mechanicznym w drodze (mająca ruch). Powtarzany.' },
-  { seq: ['long', 'short', 'short'], name: '1 długi + 2 krótkie', desc: 'We mgle: jednostka żaglowa, rybacka, ograniczona w manewrowaniu lub holująca. Powtarzany co ≤2 min.' },
+  { seq: ['short', 'short', 'short', 'short'], name: '4 krótkie', desc: '„Nie mogę manewrować” — nie jestem w stanie wykonać manewru (np. awaria).' },
+  {
+    seq: ['vshort', 'vshort', 'vshort', 'vshort', 'vshort', 'vshort'],
+    series: true,
+    name: 'seria bardzo krótkich',
+    desc: 'Niebezpieczeństwo (groźba) zderzenia — natychmiastowe ostrzeżenie.',
+  },
+  {
+    seq: ['short', 'short', 'gap', 'short', 'short'],
+    series: true,
+    name: 'seria podwójnych krótkich',
+    desc: 'Człowiek za burtą! Sygnał alarmowy wzywający pomocy dla rozbitka.',
+  },
+  {
+    seq: ['long', 'gap', 'long'],
+    series: true,
+    name: 'powtarzane długie',
+    desc: 'Wzywam pomocy — jednostka w niebezpieczeństwie prosi o pomoc.',
+  },
 ]
 
 // znaki dzienne (kule, stożki, romby) zawieszone na sztagu
@@ -379,13 +395,13 @@ function Sygnaly() {
         </h2>
         <p className="lead mb-5 max-w-3xl">
           Podawane rogiem / gwizdkiem. <b className="text-white">Krótki</b> ≈ 1 s, <b className="text-white">długi</b> ≈
-          4–6 s. Służą do uzgadniania manewrów i ostrzegania — także we mgle.
+          4–6 s. Służą do uzgadniania manewrów oraz alarmowania (m.in. „człowiek za burtą” czy wzywanie pomocy).
         </p>
         <div className="grid gap-3 sm:grid-cols-2">
           {SOUNDS.map((s) => (
             <div key={s.name} className="card flex items-center gap-4 p-4">
-              <div className="grid w-24 shrink-0 place-items-center gap-2">
-                <Toots seq={s.seq} />
+              <div className="grid w-28 shrink-0 place-items-center gap-2">
+                <Toots seq={s.seq} series={s.series} />
                 <span className="text-xs font-semibold text-brine-200">{s.name}</span>
               </div>
               <p className="text-sm text-brine-100/85">{s.desc}</p>

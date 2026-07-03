@@ -116,12 +116,16 @@ export default function Meteorologia() {
                   />
                 ))}
                 {/* maszt + flaga */}
-                <line x1="60" y1="30" x2="60" y2="150" stroke="#c9a15a" strokeWidth="4" strokeLinecap="round" />
+                <line x1="60" y1="30" x2="60" y2="152" stroke="#c9a15a" strokeWidth="4" strokeLinecap="round" />
+                <circle cx="60" cy="34" r="3" fill="#c9a15a" />
                 <motion.path
-                  d="M60 34 L130 40 L128 54 L60 62 Z"
+                  d={flagPath(b, 0)}
                   fill={cur.color}
-                  animate={{ d: flagPath(b) }}
-                  transition={{ duration: 0.6, repeat: Infinity, repeatType: 'reverse' }}
+                  stroke="#0f2b3f"
+                  strokeWidth="1"
+                  strokeLinejoin="round"
+                  animate={{ d: [flagPath(b, 0), flagPath(b, Math.PI), flagPath(b, 0)] }}
+                  transition={{ duration: Math.max(0.45, 2.6 - b * 0.18), repeat: Infinity, ease: 'easeInOut' }}
                 />
               </svg>
             </div>
@@ -218,7 +222,30 @@ function wavePath(y: number, b: number) {
   return pts.join(' ')
 }
 
-function flagPath(b: number) {
-  const droop = Math.max(0, 22 - b * 2) // silniejszy wiatr = flaga bardziej pozioma
-  return `M60 34 L130 ${40 + droop * 0.2} L128 ${54 + droop} L60 62 Z`
+// Flaga: przy ciszy (b=0) opada pionowo w dół, przy słabym wietrze lekko się
+// unosi, a przy silnym wietrze wypręża do poziomu i mocniej łopocze.
+function flagPath(b: number, phase: number) {
+  const Ox = 60
+  const Oy = 38
+  const L = 70
+  const t = Math.min(1, Math.max(0, b / 6)) // 0 = cisza, 1 = poziomo (ok. 6°B)
+  const theta = ((90 * (1 - t)) * Math.PI) / 180 // 90° w dół przy ciszy, 0° przy silnym
+  const flutter = Math.max(0, Math.min(7, b - 0.5)) * (0.35 + 0.65 * t)
+  const w = flutter * Math.sin(phase)
+  const local: [number, number][] = [
+    [0, -7],
+    [L * 0.5, -7 + w * 0.5],
+    [L, -6 + w],
+    [L, 7 + w],
+    [L * 0.5, 7 + w * 0.5],
+    [0, 7],
+  ]
+  const cos = Math.cos(theta)
+  const sin = Math.sin(theta)
+  const pts = local.map(([x, y]) => {
+    const rx = x * cos - y * sin
+    const ry = x * sin + y * cos
+    return `${(Ox + rx).toFixed(1)} ${(Oy + ry).toFixed(1)}`
+  })
+  return 'M ' + pts.join(' L ') + ' Z'
 }

@@ -2,10 +2,11 @@ import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { PageHeader } from '../components/ui'
 import NavLights from '../components/NavLights'
-import { Sailboat, Anchor, Lightbulb } from 'lucide-react'
+import DeckTopView from '../components/DeckTopView'
+import { Sailboat, Anchor, Lightbulb, Grid2x2 } from 'lucide-react'
 
 type Group = 'rig' | 'hull'
-type Tab = Group | 'lights'
+type Tab = Group | 'lights' | 'deck'
 
 interface Part {
   id: string
@@ -32,7 +33,7 @@ const PARTS: Part[] = [
   { id: 'deck', name: 'Pokład', group: 'hull', ax: 320, ay: 289, desc: 'Górna powierzchnia kadłuba, po której się chodzi. Jego krawędź nadaje charakterystyczną linię (sheer).' },
   { id: 'bow', name: 'Dziób', group: 'hull', ax: 462, ay: 292, desc: 'Przednia część kadłuba. Tnie falę i nadaje kierunek. Przeciwieństwo rufy.' },
   { id: 'stern', name: 'Rufa / pawęż', group: 'hull', ax: 118, ay: 312, desc: 'Tylna część kadłuba. Płaska ścianka na końcu to pawęż; tu często mocowany jest ster.' },
-  { id: 'keel', name: 'Kil (balast)', group: 'hull', ax: 296, ay: 405, desc: 'Ciężka płetwa pod kadłubem. Obniża środek ciężkości (chroni przed wywrotką) i daje opór boczny przeciw dryfowi.' },
+  { id: 'miecz', name: 'Miecz', group: 'hull', ax: 294, ay: 405, desc: 'Opuszczana płetwa (deska) wysuwana przez skrzynię mieczową w dnie kadłuba. Daje opór boczny przeciw dryfowi, a na płyciźnie można ją podnieść. Na mazurskich jachtach zastępuje kil — nie ma balastu, dlatego liczy się balastowanie załogą.' },
   { id: 'rudder', name: 'Ster (płetwa)', group: 'hull', ax: 114, ay: 366, desc: 'Płetwa sterowa zamontowana pionowo przy pawęży (na końcu rufy). Wychylana, zmienia kierunek płynięcia jachtu.' },
   { id: 'tiller', name: 'Rumpel', group: 'hull', ax: 160, ay: 309, desc: 'Drążek połączony z głowicą steru, prowadzony poziomo do kokpitu. Steruje nim sternik; w większych jachtach zastąpiony kołem.' },
   { id: 'cockpit', name: 'Kokpit', group: 'hull', ax: 196, ay: 300, desc: 'Zagłębienie w pokładzie, w którym siedzi załoga i obsługuje szoty oraz ster.' },
@@ -48,7 +49,7 @@ export default function Budowa() {
   const [clicked, setClicked] = useState<string | null>('mast')
   const [hover, setHover] = useState<string | null>(null)
 
-  const group: Group = tab === 'lights' ? 'rig' : tab
+  const group: Group = tab === 'lights' || tab === 'deck' ? 'rig' : tab
   const active = hover ?? clicked
   const list = PARTS.filter((p) => p.group === group)
   const activePart = PARTS.find((p) => p.id === active) ?? null
@@ -66,7 +67,7 @@ export default function Budowa() {
 
   function switchTab(t: Tab) {
     setTab(t)
-    if (t !== 'lights') {
+    if (t === 'rig' || t === 'hull') {
       setClicked(PARTS.find((p) => p.group === t)!.id)
       setHover(null)
     }
@@ -76,8 +77,8 @@ export default function Budowa() {
     <div>
       <PageHeader eyebrow="Budowa jachtu" title="Anatomia slupa">
         Slup to najpopularniejszy typ ożaglowania — jeden maszt, grot i fok. Wybierz część z
-        listy (lub kliknij ją na rysunku), a podświetli się na schemacie. Przełączaj się między
-        <b> ożaglowaniem</b>, <b>elementami stałymi</b> i <b>światłami</b>.
+        listy (lub kliknij ją na rysunku), a podświetli się na schemacie. Zakładki:
+        <b> ożaglowanie</b>, <b>elementy stałe</b>, <b>światła</b> i <b>widok z góry</b> (burty, cumowanie).
       </PageHeader>
 
       {/* podzakładki */}
@@ -94,11 +95,16 @@ export default function Budowa() {
           <Lightbulb className="h-4 w-4" />
           Światła
         </button>
+        <button onClick={() => switchTab('deck')} className={`btn px-4 py-1.5 text-sm ${tab === 'deck' ? 'bg-brine-500 text-white' : 'text-brine-100'}`}>
+          <Grid2x2 className="h-4 w-4" />
+          Widok z góry
+        </button>
       </div>
 
       {tab === 'lights' && <NavLights />}
+      {tab === 'deck' && <DeckTopView />}
 
-      <div className={`grid gap-8 lg:grid-cols-[1fr_330px] ${tab === 'lights' ? 'hidden' : ''}`}>
+      <div className={`grid gap-8 lg:grid-cols-[1fr_330px] ${tab === 'lights' || tab === 'deck' ? 'hidden' : ''}`}>
         {/* RYSUNEK */}
         <div className="card p-4">
           <svg viewBox="0 0 560 470" className="w-full">
@@ -163,7 +169,9 @@ export default function Budowa() {
             <line x1="20" y1={WL} x2="540" y2={WL} strokeDasharray="7 7" onClick={() => setClicked('waterline')} style={{ cursor: 'pointer' }} {...(on('waterline') ? { stroke: ACCENT, strokeWidth: 3, filter: 'url(#glow)' } : { stroke: 'rgba(123,188,217,0.5)', strokeWidth: 1.5 })} />
 
             {/* KIL */}
-            <path d="M276 352 L268 424 Q264 432 274 433 L318 433 Q328 432 322 424 L312 352 Z" fill="#2a4258" onClick={() => setClicked('keel')} style={{ cursor: 'pointer' }} {...edge('keel')} />
+            {/* skrzynia mieczowa + miecz (opuszczana płetwa, bez balastu) */}
+            <rect x="286" y="346" width="24" height="12" rx="2" fill="#1f3346" />
+            <path d="M289 356 L286 426 Q286 433 293 433 L302 431 L305 356 Z" fill="#3a5670" onClick={() => setClicked('miecz')} style={{ cursor: 'pointer' }} {...edge('miecz')} />
             {/* STER (płetwa) — pionowo, zamontowany przy pawęży (na rufie) */}
             <path d="M108 322 L106 400 Q106 409 115 408 L122 406 L123 322 Z" fill="#2a4258" onClick={() => setClicked('rudder')} style={{ cursor: 'pointer' }} {...edge('rudder')} />
             {/* RUMPEL — poziomo z kokpitu do głowicy steru */}

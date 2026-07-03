@@ -8,6 +8,7 @@ import {
   Wrench,
   Scale,
   Link2,
+  LifeBuoy,
   GraduationCap,
   Menu,
   X,
@@ -21,6 +22,7 @@ const NAV = [
   { to: '/budowa', label: 'Budowa jachtu', icon: Wrench },
   { to: '/przepisy', label: 'Przepisy', icon: Scale },
   { to: '/wezly', label: 'Węzły', icon: Link2 },
+  { to: '/ratownictwo', label: 'Ratownictwo', icon: LifeBuoy },
   { to: '/quiz', label: 'Quiz', icon: GraduationCap },
 ]
 
