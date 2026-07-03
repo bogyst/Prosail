@@ -35,10 +35,10 @@ const QUESTIONS: Question[] = [
   },
   {
     topic: 'Locja',
-    q: 'W systemie IALA region A (Europa) znak lewej strony szlaku ma kolor:',
-    options: ['Zielony', 'Czerwony', 'Żółty', 'Czarno-żółty'],
-    correct: 1,
-    explain: 'W regionie A znak lewej strony jest czerwony i walcowaty, a prawej — zielony i stożkowy.',
+    q: 'Na polskim szlaku śródlądowym znak PRAWEJ strony (patrząc w dół rzeki) ma kolor:',
+    options: ['Czerwony', 'Zielony', 'Żółty', 'Czarno-żółty'],
+    correct: 0,
+    explain: 'Na wodach śródlądowych w Polsce prawa strona szlaku jest czerwona (bakeny prostokątne), a lewa zielona (trójkątne). Na morzu (IALA A) jest odwrotnie względem burt.',
   },
   {
     topic: 'Locja',

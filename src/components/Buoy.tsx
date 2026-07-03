@@ -1,4 +1,5 @@
-// Rysownik pław w SVG. System IALA region A (obowiązuje w Polsce/Europie).
+// Rysownik pław w SVG (znaki kardynalne/bezpiecznej wody/niebezpieczeństwa wg IALA;
+// znaki boczne w wersji dla polskich wód śródlądowych: prawa = czerwona, lewa = zielona).
 
 export type BodyShape = 'can' | 'cone' | 'pillar' | 'spar' | 'sphere'
 export type TopMark =

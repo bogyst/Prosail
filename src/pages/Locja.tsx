@@ -25,30 +25,30 @@ const B = bandColor('black')
 
 const MARKS: Mark[] = [
   {
-    id: 'port',
-    name: 'Znak lewej strony szlaku',
-    group: 'Znaki boczne (kardynalne szlaku)',
+    id: 'prawa',
+    name: 'Znak prawej strony szlaku',
+    group: 'Znaki boczne',
     shape: 'can',
     bands: [{ color: R, from: 0, to: 1 }],
     topmark: 'can',
     topColor: R,
     light: 'Czerwone, dowolna charakterystyka',
     meaning:
-      'Czerwona, walcowata pława oznacza lewą krawędź szlaku żeglownego (patrząc w kierunku spływu prądu / wchodzenia do portu).',
-    pass: 'Wchodząc do portu — zostaw ją po lewej burcie (bakburcie).',
+      'Na polskich wodach śródlądowych CZERWONA, walcowata pława (bakon prostokątny) oznacza PRAWĄ krawędź szlaku — patrząc zgodnie z kierunkiem oznakowania szlaku (w dół rzeki).',
+    pass: 'Płynąc zgodnie z kierunkiem szlaku (w dół rzeki) — zostaw ją po prawej stronie.',
   },
   {
-    id: 'stbd',
-    name: 'Znak prawej strony szlaku',
-    group: 'Znaki boczne (kardynalne szlaku)',
+    id: 'lewa',
+    name: 'Znak lewej strony szlaku',
+    group: 'Znaki boczne',
     shape: 'cone',
     bands: [{ color: G, from: 0, to: 1 }],
     topmark: 'cone-up',
     topColor: G,
     light: 'Zielone, dowolna charakterystyka',
     meaning:
-      'Zielona, stożkowa pława oznacza prawą krawędź szlaku żeglownego.',
-    pass: 'Wchodząc do portu — zostaw ją po prawej burcie (sterburcie).',
+      'ZIELONA, stożkowa pława (bakon trójkątny, wierzchołkiem w górę) oznacza LEWĄ krawędź szlaku śródlądowego.',
+    pass: 'Płynąc zgodnie z kierunkiem szlaku (w dół rzeki) — zostaw ją po lewej stronie.',
   },
   {
     id: 'north',
@@ -173,14 +173,20 @@ export default function Locja() {
 
   return (
     <div>
-      <PageHeader eyebrow="Locja" title="Oznakowanie szlaków wodnych (IALA · region A)">
-        Pławy i znaki nawigacyjne to „znaki drogowe” na wodzie. W Europie
-        obowiązuje <Term label="system IALA A" title="System oznakowania IALA">
+      <PageHeader eyebrow="Locja" title="Oznakowanie szlaków wodnych (śródlądowe · Polska)">
+        Pławy i znaki nawigacyjne to „znaki drogowe” na wodzie. Na polskich wodach
+        śródlądowych <Term label="strona prawa jest czerwona, lewa zielona" title="Strony szlaku żeglownego (śródlądowe)">
           <p>
-            Międzynarodowy system oznakowania. W <b>regionie A</b> (Europa,
-            Afryka, większość Azji i Australia) znak <b>lewej</b> strony jest
-            <b> czerwony</b>, a <b>prawej</b> — <b>zielony</b>. W regionie B
-            (obie Ameryki, Japonia) kolory są odwrotne.
+            „Prawa” i „lewa” strona szlaku liczone są <b>patrząc w dół rzeki</b> (zgodnie z
+            kierunkiem oznakowania). <b>Prawa</b> strona = pławy <b className="text-buoyRed">czerwone</b>{' '}
+            (bakeny prostokątne), <b>lewa</b> = <b className="text-buoyGreen">zielone</b> (trójkątne
+            kątem w górę). Reguluje to rozporządzenie o przepisach żeglugowych na śródlądowych
+            drogach wodnych.
+          </p>
+          <p className="mt-2">
+            ⚓ <b>Uwaga:</b> na morzu (system <b>IALA region A</b>) jest odwrotnie — wchodząc z
+            morza do portu masz <b className="text-buoyRed">czerwone po lewej</b> (port), a{' '}
+            <b className="text-buoyGreen">zielone po prawej</b> burcie. To inny układ odniesienia.
           </p>
         </Term>. Kliknij znak, aby poznać jego znaczenie i sposób mijania.
       </PageHeader>

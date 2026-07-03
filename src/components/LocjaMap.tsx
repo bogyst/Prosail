@@ -33,7 +33,7 @@ const ZONES: Record<string, Info> = {
   szlak: {
     id: 'szlak',
     name: 'Szlak żeglowny (tor wodny)',
-    desc: 'Bezpieczny, oznakowany korytarz o odpowiedniej głębokości. Wchodząc do portu trzymaj się między znakami bocznymi: czerwone zostawiaj po lewej burcie, zielone po prawej.',
+    desc: 'Bezpieczny, oznakowany korytarz o odpowiedniej głębokości. Płynąc zgodnie z kierunkiem oznakowania szlaku (strzałka) trzymaj się między znakami bocznymi: zielone zostają po lewej, czerwone po prawej stronie.',
   },
   mielizna: {
     id: 'mielizna',
@@ -75,53 +75,55 @@ const MARKS: MapMark[] = [
     topmark: 'sphere',
     topColor: R,
   },
+  // LEWA strona szlaku = ZIELONE (śródlądowe, patrząc zgodnie z kierunkiem szlaku ↑)
   {
-    id: 'red1',
+    id: 'lewa1',
     name: 'Znak lewej strony szlaku',
-    desc: 'Czerwona, walcowata pława — lewa krawędź toru. Wchodząc do portu zostaw ją po lewej burcie (bakburcie).',
+    desc: 'Zielona, stożkowa pława — lewa krawędź szlaku. Płynąc zgodnie z kierunkiem szlaku (strzałka) zostaw ją po lewej stronie.',
     x: 372,
     y: 405,
     size: 40,
-    shape: 'can',
-    bands: [{ color: R, from: 0, to: 1 }],
-    topmark: 'can',
-    topColor: R,
+    shape: 'cone',
+    bands: [{ color: G, from: 0, to: 1 }],
+    topmark: 'cone-up',
+    topColor: G,
   },
   {
-    id: 'red2',
+    id: 'lewa2',
     name: 'Znak lewej strony szlaku',
-    desc: 'Czerwona, walcowata pława — lewa krawędź toru. Wchodząc do portu zostaw ją po lewej burcie (bakburcie).',
+    desc: 'Zielona, stożkowa pława — lewa krawędź szlaku. Płynąc zgodnie z kierunkiem szlaku zostaw ją po lewej stronie.',
     x: 388,
     y: 288,
     size: 40,
+    shape: 'cone',
+    bands: [{ color: G, from: 0, to: 1 }],
+    topmark: 'cone-up',
+    topColor: G,
+  },
+  // PRAWA strona szlaku = CZERWONE
+  {
+    id: 'prawa1',
+    name: 'Znak prawej strony szlaku',
+    desc: 'Czerwona, walcowata pława — prawa krawędź szlaku. Płynąc zgodnie z kierunkiem szlaku (strzałka) zostaw ją po prawej stronie.',
+    x: 528,
+    y: 405,
+    size: 40,
     shape: 'can',
     bands: [{ color: R, from: 0, to: 1 }],
     topmark: 'can',
     topColor: R,
   },
   {
-    id: 'green1',
+    id: 'prawa2',
     name: 'Znak prawej strony szlaku',
-    desc: 'Zielona, stożkowa pława — prawa krawędź toru. Wchodząc do portu zostaw ją po prawej burcie (sterburcie).',
-    x: 528,
-    y: 405,
-    size: 40,
-    shape: 'cone',
-    bands: [{ color: G, from: 0, to: 1 }],
-    topmark: 'cone-up',
-    topColor: G,
-  },
-  {
-    id: 'green2',
-    name: 'Znak prawej strony szlaku',
-    desc: 'Zielona, stożkowa pława — prawa krawędź toru. Wchodząc do portu zostaw ją po prawej burcie (sterburcie).',
+    desc: 'Czerwona, walcowata pława — prawa krawędź szlaku. Płynąc zgodnie z kierunkiem szlaku zostaw ją po prawej stronie.',
     x: 512,
     y: 288,
     size: 40,
-    shape: 'cone',
-    bands: [{ color: G, from: 0, to: 1 }],
-    topmark: 'cone-up',
-    topColor: G,
+    shape: 'can',
+    bands: [{ color: R, from: 0, to: 1 }],
+    topmark: 'can',
+    topColor: R,
   },
   // 4 znaki kardynalne wokół mielizny
   cardinal(
@@ -254,6 +256,12 @@ export default function LocjaMap() {
               <text x="406" y="452" textAnchor="end" fill="rgba(207,230,240,0.85)" fontSize="16" fontWeight="600">
                 szlak
               </text>
+              {/* kierunek oznakowania szlaku — odniesienie dla „prawej/lewej” */}
+              <g>
+                <line x1="450" y1="360" x2="450" y2="300" stroke="#7bbcd9" strokeWidth="4" strokeLinecap="round" />
+                <polygon points="450,288 442,306 458,306" fill="#7bbcd9" />
+                <text x="462" y="330" fill="#7bbcd9" fontSize="12" fontWeight="700">kierunek szlaku</text>
+              </g>
             </g>
 
             {/* MIELIZNA */}
@@ -279,8 +287,8 @@ export default function LocjaMap() {
               <path d="M900 0 H495 V70 Q495 96 520 100 L760 100 Q790 100 790 70 V0 Z" fill="#26402f" stroke="#3a5a44" strokeWidth="2" />
               <rect x="398" y="96" width="10" height="60" rx="4" fill="#33513e" />
               <rect x="492" y="96" width="10" height="60" rx="4" fill="#33513e" />
-              <circle cx="403" cy="156" r="7" fill={R} stroke="#0f2b3f" strokeWidth="2" />
-              <circle cx="497" cy="156" r="7" fill={G} stroke="#0f2b3f" strokeWidth="2" />
+              <circle cx="403" cy="156" r="7" fill={G} stroke="#0f2b3f" strokeWidth="2" />
+              <circle cx="497" cy="156" r="7" fill={R} stroke="#0f2b3f" strokeWidth="2" />
               <rect x="620" y="30" width="70" height="8" rx="3" fill="#3a5a44" />
               <text x="300" y="52" fill="rgba(207,230,240,0.85)" fontSize="18" fontWeight="700">
                 PORT
@@ -404,7 +412,7 @@ export default function LocjaMap() {
         <div className="card mt-4 p-5 text-sm text-brine-100/80">
           <p className="font-semibold text-white">Legenda</p>
           <ul className="mt-2 space-y-1.5">
-            <li>🔴 znak lewej strony · 🟢 prawej strony toru</li>
+            <li>🟢 lewa strona szlaku · 🔴 prawa strona (śródlądowe, w dół rzeki)</li>
             <li>⚫🟡 znaki kardynalne N/E/S/W (wokół mielizny)</li>
             <li>⚫🔴 izolowane niebezpieczeństwo (na skale)</li>
             <li>🔴⚪ bezpieczna woda / oś toru</li>
