@@ -1,9 +1,11 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { PageHeader } from '../components/ui'
-import { Sailboat, Anchor } from 'lucide-react'
+import NavLights from '../components/NavLights'
+import { Sailboat, Anchor, Lightbulb } from 'lucide-react'
 
 type Group = 'rig' | 'hull'
+type Tab = Group | 'lights'
 
 interface Part {
   id: string
@@ -42,10 +44,11 @@ const LINE = '#22384a'
 const WL = 330
 
 export default function Budowa() {
-  const [group, setGroup] = useState<Group>('rig')
+  const [tab, setTab] = useState<Tab>('rig')
   const [clicked, setClicked] = useState<string | null>('mast')
   const [hover, setHover] = useState<string | null>(null)
 
+  const group: Group = tab === 'lights' ? 'rig' : tab
   const active = hover ?? clicked
   const list = PARTS.filter((p) => p.group === group)
   const activePart = PARTS.find((p) => p.id === active) ?? null
@@ -61,10 +64,12 @@ export default function Budowa() {
     on(id) ? { stroke: ACCENT, strokeWidth: w + 1.5, filter: 'url(#glow)' } : { stroke: base, strokeWidth: w }
   const sailFill = (id: string, base: string) => (on(id) ? '#fff6da' : base)
 
-  function switchGroup(g: Group) {
-    setGroup(g)
-    setClicked(PARTS.find((p) => p.group === g)!.id)
-    setHover(null)
+  function switchTab(t: Tab) {
+    setTab(t)
+    if (t !== 'lights') {
+      setClicked(PARTS.find((p) => p.group === t)!.id)
+      setHover(null)
+    }
   }
 
   return (
@@ -72,10 +77,28 @@ export default function Budowa() {
       <PageHeader eyebrow="Budowa jachtu" title="Anatomia slupa">
         Slup to najpopularniejszy typ ożaglowania — jeden maszt, grot i fok. Wybierz część z
         listy (lub kliknij ją na rysunku), a podświetli się na schemacie. Przełączaj się między
-        <b> ożaglowaniem</b> a <b>elementami stałymi</b> kadłuba.
+        <b> ożaglowaniem</b>, <b>elementami stałymi</b> i <b>światłami</b>.
       </PageHeader>
 
-      <div className="grid gap-8 lg:grid-cols-[1fr_330px]">
+      {/* podzakładki */}
+      <div className="mb-6 inline-flex flex-wrap rounded-xl border border-white/10 bg-white/5 p-1">
+        <button onClick={() => switchTab('rig')} className={`btn px-4 py-1.5 text-sm ${tab === 'rig' ? 'bg-brine-500 text-white' : 'text-brine-100'}`}>
+          <Sailboat className="h-4 w-4" />
+          Ożaglowanie
+        </button>
+        <button onClick={() => switchTab('hull')} className={`btn px-4 py-1.5 text-sm ${tab === 'hull' ? 'bg-brine-500 text-white' : 'text-brine-100'}`}>
+          <Anchor className="h-4 w-4" />
+          Elementy stałe
+        </button>
+        <button onClick={() => switchTab('lights')} className={`btn px-4 py-1.5 text-sm ${tab === 'lights' ? 'bg-brine-500 text-white' : 'text-brine-100'}`}>
+          <Lightbulb className="h-4 w-4" />
+          Światła
+        </button>
+      </div>
+
+      {tab === 'lights' && <NavLights />}
+
+      <div className={`grid gap-8 lg:grid-cols-[1fr_330px] ${tab === 'lights' ? 'hidden' : ''}`}>
         {/* RYSUNEK */}
         <div className="card p-4">
           <svg viewBox="0 0 560 470" className="w-full">
@@ -178,24 +201,6 @@ export default function Budowa() {
 
         {/* PANEL */}
         <div className="space-y-4 lg:sticky lg:top-24 lg:self-start">
-          {/* podzakładki */}
-          <div className="inline-flex w-full rounded-xl border border-white/10 bg-white/5 p-1">
-            <button
-              onClick={() => switchGroup('rig')}
-              className={`btn flex-1 justify-center px-3 py-1.5 text-sm ${group === 'rig' ? 'bg-brine-500 text-white' : 'text-brine-100'}`}
-            >
-              <Sailboat className="h-4 w-4" />
-              Ożaglowanie
-            </button>
-            <button
-              onClick={() => switchGroup('hull')}
-              className={`btn flex-1 justify-center px-3 py-1.5 text-sm ${group === 'hull' ? 'bg-brine-500 text-white' : 'text-brine-100'}`}
-            >
-              <Anchor className="h-4 w-4" />
-              Elementy stałe
-            </button>
-          </div>
-
           {/* lista części (nad opisem — najechanie nie przesuwa listy) */}
           <div className="card p-2">
             {list.map((p) => (

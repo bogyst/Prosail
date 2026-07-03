@@ -8,9 +8,9 @@ w motywie żeglarskim. Pięć modułów, między którymi przełączasz się w m
 | **Teoria żeglowania** | Symulator trymu żagli — zmieniasz kierunek wiatru i kurs jachtu, żagle same ustawiają się optymalnie, a strzałki pokazują siły (ciąg, przechył, opór kilu, wiatr pozorny). Klikalne objaśnienia teorii. |
 | **Locja** | Galeria oznakowania IALA (region A) oraz interaktywna mapa akwenu: szlak, mielizna otoczona znakami kardynalnymi (N/E/S/W), izolowane niebezpieczeństwo na skale, wejście do portu i wieża sygnalizacji sztormowej (Mazury: 0/40/90 błysków). |
 | **Meteorologia** | Interaktywna skala Beauforta (0–12) z animacją fal i flagi oraz przewodnik po rodzajach chmur i ich znaczeniu dla pogody. |
-| **Budowa jachtu** | Schemat slupa z podzakładkami „Ożaglowanie" i „Elementy stałe"; wybór części z listy podświetla ją na rysunku (bez cyferek). |
-| **Przepisy** | Prawo drogi z interaktywnymi scenariuszami (kto ustępuje, kto utrzymuje kurs), kierunkiem wiatru i światłami nawigacyjnymi. |
-| **Węzły** | Sześć podstawowych węzłów żeglarskich — ilustracje, zastosowanie i wiązanie krok po kroku. |
+| **Budowa jachtu** | Schemat slupa z podzakładkami „Ożaglowanie", „Elementy stałe" i „Światła" (widok z góry z sektorami świateł nawigacyjnych); wybór części podświetla ją na rysunku. |
+| **Przepisy** | Trzy zakładki: „Prawo drogi" (interaktywne scenariusze), „Znaki ruchu wodnego" i „Sygnały" (dźwiękowe oraz znaki dzienne — kule i stożki). |
+| **Węzły** | Sześć węzłów z wizualnym wiązaniem krok po kroku (nawigacja między krokami), opisem i zastosowaniem. |
 | **Quiz** | Interaktywny sprawdzian ze wszystkich działów, z natychmiastowym wyjaśnieniem i wynikiem. |
 
 ## 🧱 Stack technologiczny
