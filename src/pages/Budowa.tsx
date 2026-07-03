@@ -31,8 +31,8 @@ const PARTS: Part[] = [
   { id: 'bow', name: 'Dziób', group: 'hull', ax: 462, ay: 292, desc: 'Przednia część kadłuba. Tnie falę i nadaje kierunek. Przeciwieństwo rufy.' },
   { id: 'stern', name: 'Rufa / pawęż', group: 'hull', ax: 118, ay: 312, desc: 'Tylna część kadłuba. Płaska ścianka na końcu to pawęż; tu często mocowany jest ster.' },
   { id: 'keel', name: 'Kil (balast)', group: 'hull', ax: 296, ay: 405, desc: 'Ciężka płetwa pod kadłubem. Obniża środek ciężkości (chroni przed wywrotką) i daje opór boczny przeciw dryfowi.' },
-  { id: 'rudder', name: 'Ster (płetwa)', group: 'hull', ax: 138, ay: 388, desc: 'Płetwa sterowa pod rufą. Wychylana, zmienia kierunek płynięcia jachtu.' },
-  { id: 'tiller', name: 'Rumpel', group: 'hull', ax: 178, ay: 288, desc: 'Drążek połączony ze sterem, którym steruje sternik. W większych jachtach zastąpiony kołem sterowym.' },
+  { id: 'rudder', name: 'Ster (płetwa)', group: 'hull', ax: 114, ay: 366, desc: 'Płetwa sterowa zamontowana pionowo przy pawęży (na końcu rufy). Wychylana, zmienia kierunek płynięcia jachtu.' },
+  { id: 'tiller', name: 'Rumpel', group: 'hull', ax: 160, ay: 309, desc: 'Drążek połączony z głowicą steru, prowadzony poziomo do kokpitu. Steruje nim sternik; w większych jachtach zastąpiony kołem.' },
   { id: 'cockpit', name: 'Kokpit', group: 'hull', ax: 196, ay: 300, desc: 'Zagłębienie w pokładzie, w którym siedzi załoga i obsługuje szoty oraz ster.' },
   { id: 'waterline', name: 'Linia wodna', group: 'hull', ax: 400, ay: 330, desc: 'Linia styku kadłuba z wodą przy normalnym zanurzeniu. Oddziela nadwodzie od podwodzia.' },
 ]
@@ -88,7 +88,8 @@ export default function Budowa() {
                 <stop offset="0%" stopColor="rgba(43,127,171,0.28)" />
                 <stop offset="100%" stopColor="rgba(43,127,171,0.06)" />
               </linearGradient>
-              <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+              {/* region w jednostkach płótna — inaczej płaskie/pionowe linie są przycinane */}
+              <filter id="glow" filterUnits="userSpaceOnUse" x="0" y="0" width="560" height="470">
                 <feDropShadow dx="0" dy="0" stdDeviation="4" floodColor={ACCENT} floodOpacity="0.95" />
               </filter>
             </defs>
@@ -140,10 +141,10 @@ export default function Budowa() {
 
             {/* KIL */}
             <path d="M276 352 L268 424 Q264 432 274 433 L318 433 Q328 432 322 424 L312 352 Z" fill="#2a4258" onClick={() => setClicked('keel')} style={{ cursor: 'pointer' }} {...edge('keel')} />
-            {/* STER */}
-            <path d="M134 349 L128 402 Q127 410 136 409 L150 406 L152 348 Z" fill="#2a4258" onClick={() => setClicked('rudder')} style={{ cursor: 'pointer' }} {...edge('rudder')} />
-            {/* RUMPEL */}
-            <line x1="150" y1="349" x2="205" y2="289" strokeLinecap="round" onClick={() => setClicked('tiller')} style={{ cursor: 'pointer' }} {...(on('tiller') ? { stroke: ACCENT, strokeWidth: 5, filter: 'url(#glow)' } : { stroke: '#6b5124', strokeWidth: 4 })} />
+            {/* STER (płetwa) — pionowo, zamontowany przy pawęży (na rufie) */}
+            <path d="M108 322 L106 400 Q106 409 115 408 L122 406 L123 322 Z" fill="#2a4258" onClick={() => setClicked('rudder')} style={{ cursor: 'pointer' }} {...edge('rudder')} />
+            {/* RUMPEL — poziomo z kokpitu do głowicy steru */}
+            <line x1="114" y1="314" x2="203" y2="304" strokeLinecap="round" onClick={() => setClicked('tiller')} style={{ cursor: 'pointer' }} {...(on('tiller') ? { stroke: ACCENT, strokeWidth: 5, filter: 'url(#glow)' } : { stroke: '#6b5124', strokeWidth: 4 })} />
 
             {/* BOM */}
             <line x1="306" y1="272" x2="180" y2="268" strokeLinecap="round" onClick={() => setClicked('boom')} style={{ cursor: 'pointer' }} {...(on('boom') ? { stroke: ACCENT, strokeWidth: 7, filter: 'url(#glow)' } : { stroke: '#3a2c14', strokeWidth: 5.5 })} />
@@ -195,19 +196,7 @@ export default function Budowa() {
             </button>
           </div>
 
-          {/* opis aktywnej części */}
-          <motion.div key={activePart?.id ?? 'none'} initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} className="card p-5">
-            {activePart ? (
-              <>
-                <h3 className="font-display text-xl font-700 text-white">{activePart.name}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-brine-100/90">{activePart.desc}</p>
-              </>
-            ) : (
-              <p className="text-sm text-brine-100/80">Najedź lub kliknij część na liście, aby ją podświetlić.</p>
-            )}
-          </motion.div>
-
-          {/* lista części */}
+          {/* lista części (nad opisem — najechanie nie przesuwa listy) */}
           <div className="card p-2">
             {list.map((p) => (
               <button
@@ -227,6 +216,18 @@ export default function Budowa() {
               </button>
             ))}
           </div>
+
+          {/* opis aktywnej części (pod listą) */}
+          <motion.div key={activePart?.id ?? 'none'} initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} className="card p-5">
+            {activePart ? (
+              <>
+                <h3 className="font-display text-xl font-700 text-white">{activePart.name}</h3>
+                <p className="mt-2 text-sm leading-relaxed text-brine-100/90">{activePart.desc}</p>
+              </>
+            ) : (
+              <p className="text-sm text-brine-100/80">Najedź lub kliknij część na liście, aby ją podświetlić.</p>
+            )}
+          </motion.div>
         </div>
       </div>
     </div>
