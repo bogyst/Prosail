@@ -210,8 +210,11 @@ export default function LocjaMap() {
   const [sel, setSel] = useState<Info | null>(null)
   const [storm, setStorm] = useState<Storm>(40)
 
-  const lampColor = storm === 0 ? '#5b6b76' : storm === 40 ? Y : R
-  const period = storm === 90 ? 0.667 : storm === 40 ? 1.5 : 0
+  // Mazurskie światło jest ZAWSZE żółte — różni się tylko częstotliwość błysków.
+  const lampColor = storm === 0 ? '#5b6b76' : Y
+  const period = storm === 90 ? 60 / 90 : storm === 40 ? 60 / 40 : 0 // sekundy na 1 błysk
+  // krótki, ostry błysk (ON ~22% cyklu), potem ciemność — reszta liniowo
+  const flashTimes = [0, 0.22, 0.32, 1]
 
   function cycleStorm() {
     const next: Storm = storm === 0 ? 40 : storm === 40 ? 90 : 0
@@ -320,13 +323,13 @@ export default function LocjaMap() {
               {/* światło / poświata */}
               {storm !== 0 && (
                 <motion.circle
+                  key={`glow-${storm}`}
                   cx="23"
                   cy="16"
                   r="15"
                   fill={lampColor}
-                  animate={{ opacity: [0.35, 0, 0.35] }}
-                  transition={{ duration: period, repeat: Infinity, ease: 'easeInOut' }}
-                  opacity="0.2"
+                  animate={{ opacity: [0.45, 0.45, 0, 0] }}
+                  transition={{ duration: period, times: flashTimes, repeat: Infinity, ease: 'linear' }}
                 />
               )}
               {/* wieża kratownicowa */}
@@ -339,12 +342,17 @@ export default function LocjaMap() {
               {/* lampa */}
               <rect x="15" y="12" width="16" height="16" rx="3" fill="#37474f" stroke="#22303a" strokeWidth="1.5" />
               <motion.circle
+                key={`lamp-${storm}`}
                 cx="23"
                 cy="20"
                 r="6"
                 fill={lampColor}
-                animate={storm !== 0 ? { opacity: [1, 0.12, 1] } : { opacity: 0.3 }}
-                transition={storm !== 0 ? { duration: period, repeat: Infinity, ease: 'easeInOut' } : { duration: 0.2 }}
+                animate={storm !== 0 ? { opacity: [1, 1, 0.08, 0.08] } : { opacity: 0.3 }}
+                transition={
+                  storm !== 0
+                    ? { duration: period, times: flashTimes, repeat: Infinity, ease: 'linear' }
+                    : { duration: 0.2 }
+                }
               />
             </svg>
             <span className="mt-0.5 block rounded bg-black/40 px-1 text-center text-[9px] font-bold text-white">
