@@ -129,7 +129,7 @@ const MARKS: MapMark[] = [
     'Znak kardynalny N (północny)',
     'Bezpieczna, głęboka woda jest na PÓŁNOC od znaku (u góry) — mijaj go od północy. Dwa czarne stożki wierzchołkami w górę, czarny pas u góry.',
     712,
-    198,
+    216,
     [
       { color: B, from: 0.5, to: 1 },
       { color: Y, from: 0, to: 0.5 },
@@ -251,7 +251,7 @@ export default function LocjaMap() {
                 strokeDasharray="2 8"
               />
               <line x1="450" y1={H - 10} x2="450" y2="160" stroke="rgba(123,188,217,0.4)" strokeWidth="1.5" strokeDasharray="10 10" />
-              <text x="352" y="470" textAnchor="end" fill="rgba(207,230,240,0.8)" fontSize="16" fontWeight="600">
+              <text x="406" y="452" textAnchor="end" fill="rgba(207,230,240,0.85)" fontSize="16" fontWeight="600">
                 szlak
               </text>
             </g>
