@@ -1,7 +1,9 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
 import Buoy, { type BodyShape, type TopMark, type Band, bandColor } from '../components/Buoy'
+import LocjaMap from '../components/LocjaMap'
 import { PageHeader, Term } from '../components/ui'
+import { LayoutGrid, Map } from 'lucide-react'
 
 interface Mark {
   id: string
@@ -167,6 +169,7 @@ const GROUPS = [...new Set(MARKS.map((m) => m.group))]
 
 export default function Locja() {
   const [sel, setSel] = useState<Mark>(MARKS[2])
+  const [view, setView] = useState<'gallery' | 'map'>('gallery')
 
   return (
     <div>
@@ -182,7 +185,27 @@ export default function Locja() {
         </Term>. Kliknij znak, aby poznać jego znaczenie i sposób mijania.
       </PageHeader>
 
-      <div className="grid gap-8 lg:grid-cols-[1fr_360px]">
+      {/* Przełącznik widoku */}
+      <div className="mb-6 inline-flex rounded-xl border border-white/10 bg-white/5 p-1">
+        <button
+          onClick={() => setView('gallery')}
+          className={`btn px-4 py-1.5 text-sm ${view === 'gallery' ? 'bg-brine-500 text-white' : 'text-brine-100'}`}
+        >
+          <LayoutGrid className="h-4 w-4" />
+          Galeria znaków
+        </button>
+        <button
+          onClick={() => setView('map')}
+          className={`btn px-4 py-1.5 text-sm ${view === 'map' ? 'bg-brine-500 text-white' : 'text-brine-100'}`}
+        >
+          <Map className="h-4 w-4" />
+          Znaki na mapie
+        </button>
+      </div>
+
+      {view === 'map' && <LocjaMap />}
+
+      <div className={`grid gap-8 lg:grid-cols-[1fr_360px] ${view === 'map' ? 'hidden' : ''}`}>
         {/* GALERIA */}
         <div className="space-y-8">
           {GROUPS.map((grp) => (

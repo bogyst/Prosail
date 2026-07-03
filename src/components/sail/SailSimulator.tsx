@@ -125,15 +125,23 @@ export default function SailSimulator() {
   // bearing wiatru pozornego na scenie (między górą=wiatr a dziobem=heading)
   const appBearing = heading <= 180 ? normalizeDeg(heading - app.awa) : normalizeDeg(heading + app.awa)
 
+  // Czysty fordewind -> tryb „motylek”: grot i fok na przeciwnych burtach.
+  const butterfly = awa > 168 && !isLuffing
+  const mainAngle = butterfly ? 90 : boom
+  const jibAngle = butterfly ? 90 : boom * 0.95
+  const jibLee = butterfly ? -lee : lee // fok „wystawiony” na nawietrzną
+
   // geometria ożaglowania (układ lokalny, dziób = góra)
-  const b = (boom * Math.PI) / 180
+  const bM = (mainAngle * Math.PI) / 180
+  const bJ = (jibAngle * Math.PI) / 180
   const mast = { x: CX, y: CY - 30 }
-  const Lmain = 88
-  const mainClew = { x: mast.x + lee * Lmain * Math.sin(b), y: mast.y + Lmain * Math.cos(b) }
+  const Lmain = butterfly ? 80 : 88
+  const mainClew = { x: mast.x + lee * Lmain * Math.sin(bM), y: mast.y + Lmain * Math.cos(bM) }
   const jibTack = { x: CX, y: CY - 86 }
-  const Ljib = 58
-  const jb = b * 0.95
-  const jibClew = { x: jibTack.x + lee * Ljib * Math.sin(jb), y: jibTack.y + Ljib * Math.cos(jb) }
+  const Ljib = butterfly ? 80 : 58
+  const jibClew = { x: jibTack.x + jibLee * Ljib * Math.sin(bJ), y: jibTack.y + Ljib * Math.cos(bJ) }
+  const mainBelly = butterfly ? 8 : 15
+  const jibBelly = butterfly ? 8 : 11
 
   const ceo = { x: CX, y: CY - 8 }
   const driveLen = 20 + forces.drive * 95
@@ -242,22 +250,22 @@ export default function SailSimulator() {
               <>
                 {/* FOK — sam żagiel, brzuch na zawietrzną */}
                 <motion.path
-                  d={sailBanana(jibTack.x, jibTack.y, jibClew.x, jibClew.y, 11, refx, refy)}
+                  d={sailBanana(jibTack.x, jibTack.y, jibClew.x, jibClew.y, jibBelly, refx, refy)}
                   fill="none"
                   stroke="rgba(247,241,227,0.95)"
                   strokeWidth="4.5"
                   strokeLinecap="round"
-                  animate={{ d: sailBanana(jibTack.x, jibTack.y, jibClew.x, jibClew.y, 11, refx, refy) }}
+                  animate={{ d: sailBanana(jibTack.x, jibTack.y, jibClew.x, jibClew.y, jibBelly, refx, refy) }}
                   transition={{ type: 'spring', stiffness: 120, damping: 18 }}
                 />
                 {/* GROT — sam żagiel */}
                 <motion.path
-                  d={sailBanana(mast.x, mast.y, mainClew.x, mainClew.y, 15, refx, refy)}
+                  d={sailBanana(mast.x, mast.y, mainClew.x, mainClew.y, mainBelly, refx, refy)}
                   fill="none"
                   stroke="rgba(238,247,251,1)"
                   strokeWidth="5.5"
                   strokeLinecap="round"
-                  animate={{ d: sailBanana(mast.x, mast.y, mainClew.x, mainClew.y, 15, refx, refy) }}
+                  animate={{ d: sailBanana(mast.x, mast.y, mainClew.x, mainClew.y, mainBelly, refx, refy) }}
                   transition={{ type: 'spring', stiffness: 120, damping: 18 }}
                 />
               </>
@@ -306,13 +314,22 @@ export default function SailSimulator() {
       {/* PANEL */}
       <div className="space-y-5">
         <div className="card p-5">
-          <div className="flex items-center justify-between">
+          <div className="flex flex-wrap items-center gap-2">
             <span className="chip" style={{ backgroundColor: pos.color + '22', color: pos.color, borderColor: pos.color + '55' }}>
               {pos.name}
             </span>
-            <span className="text-xs text-brine-100/70">hals {tack === 'starboard' ? 'prawy' : 'lewy'}</span>
+            {butterfly && (
+              <span className="chip" style={{ backgroundColor: '#7c5cff22', color: '#b9a9ff', borderColor: '#7c5cff55' }}>
+                🦋 motylek
+              </span>
+            )}
+            <span className="ml-auto text-xs text-brine-100/70">hals {tack === 'starboard' ? 'prawy' : 'lewy'}</span>
           </div>
-          <p className="mt-2 text-sm text-brine-100/80">{pos.desc}</p>
+          <p className="mt-2 text-sm text-brine-100/80">
+            {butterfly
+              ? 'Czysty fordewind w trybie „motylek”: grot i fok wystawione na przeciwne burty, aby złapać jak najwięcej wiatru z rufy. Uwaga na niekontrolowany zwrot przez rufę.'
+              : pos.desc}
+          </p>
         </div>
 
         <div className="card p-5 space-y-5">
