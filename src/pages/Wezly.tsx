@@ -49,6 +49,7 @@ const Cleat = () => (
 interface Step {
   cap: string
   el: ReactNode
+  img?: string // opcjonalne zdjęcie zamiast rysunku SVG
 }
 interface Knot {
   id: string
@@ -99,7 +100,8 @@ const KNOTS: Knot[] = [
         ),
       },
       {
-        cap: 'Włóż koniec z powrotem w oczko i zaciśnij — powstaje stała pętla.',
+        cap: 'Gotowy węzeł ratowniczy — stała, niezaciskająca się pętla (zdjęcie).',
+        img: '/knots/bowline-final.webp',
         el: (
           <Fr>
             <Rope d="M150 12 L150 138" />
@@ -437,7 +439,16 @@ export default function Wezly() {
             <div className="mt-4">
               <AnimatePresence mode="wait">
                 <motion.div key={`${sel.id}-${step}`} initial={{ opacity: 0, x: 16 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -16 }}>
-                  {sel.steps[step].el}
+                  {sel.steps[step].img ? (
+                    <img
+                      src={sel.steps[step].img}
+                      alt={sel.steps[step].cap}
+                      className="w-full rounded-lg object-cover"
+                      style={{ aspectRatio: '4 / 3' }}
+                    />
+                  ) : (
+                    sel.steps[step].el
+                  )}
                 </motion.div>
               </AnimatePresence>
 
