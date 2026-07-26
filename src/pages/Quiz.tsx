@@ -260,7 +260,7 @@ export default function Quiz() {
 
         <div className="mx-auto max-w-3xl space-y-6">
           <div className="card p-6">
-            <h3 className="mb-3 font-display text-lg font-700 text-white">Wybierz dział</h3>
+            <h3 className="mb-3 font-display text-lg font-700 text-navy">Wybierz dział</h3>
             <div className="flex flex-wrap gap-2">
               {TOPICS.map((t) => {
                 const count = QUESTIONS.filter((q) => q.topic === t).length
@@ -275,7 +275,7 @@ export default function Quiz() {
           </div>
 
           <div className="card p-6">
-            <h3 className="mb-1 flex items-center gap-2 font-display text-lg font-700 text-white">
+            <h3 className="mb-1 flex items-center gap-2 font-display text-lg font-700 text-navy">
               <Shuffle className="h-5 w-5 text-brine-300" /> Mix — wszystkie działy
             </h3>
             <p className="mb-3 text-sm text-brine-100/70">
@@ -305,7 +305,7 @@ export default function Quiz() {
         <div className="mx-auto max-w-2xl">
           <motion.div initial={{ opacity: 0, scale: 0.96 }} animate={{ opacity: 1, scale: 1 }} className="card p-8 text-center">
             <Trophy className="mx-auto h-16 w-16 text-rope" />
-            <h2 className="mt-4 font-display text-4xl font-700 text-white">
+            <h2 className="mt-4 font-display text-4xl font-700 text-navy">
               {score} / {questions.length}
               <span className="ml-3 text-2xl text-brine-300">({pct}%)</span>
             </h2>
@@ -322,7 +322,7 @@ export default function Quiz() {
                   <div key={topic}>
                     <div className="flex items-center justify-between text-sm">
                       <span className="text-brine-100">{topic}</span>
-                      <span className="tabular-nums font-semibold text-white">
+                      <span className="tabular-nums font-semibold text-navy">
                         {r.ok}/{r.all} · {p}%
                       </span>
                     </div>
@@ -374,7 +374,7 @@ export default function Quiz() {
               <div className="h-full rounded-full bg-brine-500 transition-all" style={{ width: `${((i + (picked !== null ? 1 : 0)) / questions.length) * 100}%` }} />
             </div>
 
-            <h3 className="font-display text-xl font-700 text-white">{cur.q}</h3>
+            <h3 className="font-display text-xl font-700 text-navy">{cur.q}</h3>
 
             <div className="mt-5 space-y-3">
               {cur.options.map((opt, idx) => {
@@ -388,7 +388,7 @@ export default function Quiz() {
                 }
                 return (
                   <button key={idx} onClick={() => choose(idx)} disabled={picked !== null} className={`flex w-full items-center gap-3 rounded-xl border px-4 py-3 text-left text-sm transition-colors ${cls}`}>
-                    <span className="flex-1 text-white">{opt}</span>
+                    <span className="flex-1 text-navy">{opt}</span>
                     {picked !== null && isCorrect && <Check className="h-5 w-5 text-buoyGreen" />}
                     {picked !== null && isPicked && !isCorrect && <X className="h-5 w-5 text-buoyRed" />}
                   </button>

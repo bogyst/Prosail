@@ -382,7 +382,7 @@ export default function LocjaMap() {
                 }
               />
             </svg>
-            <span className="mt-0.5 block rounded bg-black/40 px-1 text-center text-[9px] font-bold text-white">
+            <span className="mt-0.5 block rounded bg-black/40 px-1 text-center text-[9px] font-bold text-navy">
               {storm === 0 ? 'spokój' : `${storm}/min`}
             </span>
           </button>
@@ -395,7 +395,7 @@ export default function LocjaMap() {
           {sel ? (
             <>
               <div className="chip mb-2">{sel.id === 'storm' ? 'Sygnalizacja pogody' : 'Element mapy'}</div>
-              <h3 className="font-display text-xl font-700 text-white">{sel.name}</h3>
+              <h3 className="font-display text-xl font-700 text-navy">{sel.name}</h3>
               <p className="mt-2 text-sm leading-relaxed text-brine-100/90">{sel.desc}</p>
               {sel.id === 'storm' && (
                 <div className="mt-4 flex gap-2">
@@ -418,7 +418,7 @@ export default function LocjaMap() {
             </>
           ) : (
             <>
-              <h3 className="font-display text-lg font-700 text-white">Interaktywna mapa akwenu 🗺️</h3>
+              <h3 className="font-display text-lg font-700 text-navy">Interaktywna mapa akwenu 🗺️</h3>
               <p className="mt-2 text-sm leading-relaxed text-brine-100/80">
                 Klikaj pławy, obszary (szlak, mielizna, port) oraz wieżę sygnalizacji, aby poznać
                 ich znaczenie. Mielizna jest otoczona czterema znakami kardynalnymi wskazującymi
@@ -429,7 +429,7 @@ export default function LocjaMap() {
         </motion.div>
 
         <div className="card mt-4 p-5 text-sm text-brine-100/80">
-          <p className="font-semibold text-white">Legenda</p>
+          <p className="font-semibold text-navy">Legenda</p>
           <ul className="mt-2 space-y-1.5">
             <li>🟢 lewa strona szlaku · 🔴 prawa strona (śródlądowe, w dół rzeki)</li>
             <li>⚫🟡 znaki kardynalne N/E/S/W (wokół mielizny)</li>

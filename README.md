@@ -11,7 +11,10 @@ w motywie żeglarskim. Pięć modułów, między którymi przełączasz się w m
 | **Budowa jachtu** | Schemat slupa z podzakładkami „Ożaglowanie", „Elementy stałe" i „Światła" (widok z góry z sektorami świateł nawigacyjnych); wybór części podświetla ją na rysunku. |
 | **Przepisy** | Trzy zakładki: „Prawo drogi" (interaktywne scenariusze), „Znaki ruchu wodnego" i „Sygnały" (dźwiękowe oraz znaki dzienne — kule i stożki). |
 | **Węzły** | Sześć węzłów z wizualnym wiązaniem krok po kroku (nawigacja między krokami), opisem i zastosowaniem. |
-| **Quiz** | Interaktywny sprawdzian ze wszystkich działów, z natychmiastowym wyjaśnieniem i wynikiem. |
+| **Quiz** | Wybór działu lub tryb Mix (10/30/50/75 pytań); podsumowanie z wynikiem ogólnym i procentowym per dział. |
+| **Ratownictwo** | Numery alarmowe (Mazury), pierwsza pomoc i interaktywny (krokowy) manewr „człowiek za burtą". |
+| **Glosariusz** | Słownik żeglarski z wyszukiwarką, filtrem działów i sortowaniem. |
+| **Poradnik** | Interaktywna checklista pakowania na rejs + dobre nawyki i etykieta. |
 
 ## 🧱 Stack technologiczny
 

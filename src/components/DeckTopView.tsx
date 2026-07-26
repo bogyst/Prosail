@@ -162,7 +162,7 @@ export default function DeckTopView() {
         <motion.div key={sel?.id ?? 'x'} initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} className="card p-5">
           {sel ? (
             <>
-              <h3 className="font-display text-lg font-700 text-white">{sel.name}</h3>
+              <h3 className="font-display text-lg font-700 text-navy">{sel.name}</h3>
               <p className="mt-2 text-sm leading-relaxed text-brine-100/90">{sel.desc}</p>
             </>
           ) : (

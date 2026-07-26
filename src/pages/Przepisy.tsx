@@ -137,19 +137,19 @@ function PrawoDrogi() {
           ))}
         </div>
         <motion.div key={sc.id} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} className="card p-6">
-          <h3 className="font-display text-xl font-700 text-white">{sc.title}</h3>
+          <h3 className="font-display text-xl font-700 text-navy">{sc.title}</h3>
           <div className="mt-3 flex items-start gap-2 rounded-xl bg-buoyGreen/15 p-3">
             <ShieldCheck className="mt-0.5 h-5 w-5 shrink-0 text-buoyGreen" />
             <div>
               <div className="text-xs font-semibold uppercase tracking-wide text-buoyGreen">Zasada</div>
-              <p className="text-sm text-white">{sc.rule}</p>
+              <p className="text-sm text-navy">{sc.rule}</p>
             </div>
           </div>
           <p className="mt-4 text-sm leading-relaxed text-brine-100/85">{sc.explain}</p>
           {sc.bothGiveWay ? (
             <div className="mt-4 rounded-lg bg-[#f4952b]/15 p-2 text-center text-xs">
               <div className="font-semibold text-[#f4952b]">Obie jednostki ustępują</div>
-              <div className="text-white">każda skręca w prawo (na sterburtę)</div>
+              <div className="text-navy">każda skręca w prawo (na sterburtę)</div>
             </div>
           ) : (
             <div className="mt-4 grid grid-cols-2 gap-2 text-center text-xs">
@@ -296,8 +296,8 @@ function ZnakiRuchu() {
   return (
     <div>
       <p className="lead mb-6 max-w-3xl">
-        Znaki żeglugowe to „znaki drogowe” na szlaku. <b className="text-white">Czerwone</b> obwódki
-        oznaczają zakaz lub nakaz, <b className="text-white">niebieskie</b> — informację. Poniżej
+        Znaki żeglugowe to „znaki drogowe” na szlaku. <b className="text-navy">Czerwone</b> obwódki
+        oznaczają zakaz lub nakaz, <b className="text-navy">niebieskie</b> — informację. Poniżej
         najważniejsze (uproszczony przegląd wg systemu europejskiego / CEVNI).
       </p>
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -305,7 +305,7 @@ function ZnakiRuchu() {
           <motion.div key={s.name} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} className="card flex items-center gap-4 p-4">
             <div className="rounded-lg bg-white/5 p-1">{s.svg}</div>
             <div>
-              <h3 className="font-display text-base font-700 text-white">{s.name}</h3>
+              <h3 className="font-display text-base font-700 text-navy">{s.name}</h3>
               <p className="mt-1 text-xs leading-relaxed text-brine-100/80">{s.desc}</p>
             </div>
           </motion.div>
@@ -391,11 +391,11 @@ function Sygnaly() {
   return (
     <div className="space-y-10">
       <div>
-        <h2 className="mb-1 flex items-center gap-2 font-display text-2xl font-700 text-white">
+        <h2 className="mb-1 flex items-center gap-2 font-display text-2xl font-700 text-navy">
           <Volume2 className="h-6 w-6 text-brine-300" /> Sygnały dźwiękowe
         </h2>
         <p className="lead mb-5 max-w-3xl">
-          Podawane rogiem / gwizdkiem. <b className="text-white">Krótki</b> ≈ 1 s, <b className="text-white">długi</b> ≈
+          Podawane rogiem / gwizdkiem. <b className="text-navy">Krótki</b> ≈ 1 s, <b className="text-navy">długi</b> ≈
           4–6 s. Służą do uzgadniania manewrów oraz alarmowania (m.in. „człowiek za burtą” czy wzywanie pomocy).
         </p>
         <div className="grid gap-3 sm:grid-cols-2">
@@ -412,7 +412,7 @@ function Sygnaly() {
       </div>
 
       <div>
-        <h2 className="mb-1 flex items-center gap-2 font-display text-2xl font-700 text-white">
+        <h2 className="mb-1 flex items-center gap-2 font-display text-2xl font-700 text-navy">
           <Signpost className="h-6 w-6 text-brine-300" /> Znaki dzienne (kule i stożki)
         </h2>
         <p className="lead mb-5 max-w-3xl">
@@ -424,7 +424,7 @@ function Sygnaly() {
             <div key={s.name} className="card flex items-center gap-4 p-4">
               <div className="rounded-lg bg-white/10 p-2"><DayShape shapes={s.shapes} /></div>
               <div>
-                <h3 className="font-display text-base font-700 text-white">{s.name}</h3>
+                <h3 className="font-display text-base font-700 text-navy">{s.name}</h3>
                 <p className="mt-1 text-xs leading-relaxed text-brine-100/80">{s.desc}</p>
               </div>
             </div>
@@ -499,7 +499,7 @@ function Patenty() {
         {LICENSES.map((l) => (
           <motion.div key={l.name} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} className="card p-6">
             <div className="flex items-center justify-between gap-3">
-              <h3 className="font-display text-xl font-700 text-white">{l.name}</h3>
+              <h3 className="font-display text-xl font-700 text-navy">{l.name}</h3>
               <span className="chip shrink-0">{l.badge}</span>
             </div>
             <dl className="mt-4 space-y-3 text-sm">
@@ -551,11 +551,11 @@ export default function Przepisy() {
           </p>
         </Term>
         . Zobacz też:{' '}
-        <Link to="/budowa" className="font-semibold text-brine-300 underline decoration-dashed underline-offset-4 hover:text-white">
+        <Link to="/budowa" className="font-semibold text-brine-300 underline decoration-dashed underline-offset-4 hover:text-navy">
           Budowa jachtu
         </Link>{' '}
         oraz{' '}
-        <Link to="/budowa?tab=lights" className="font-semibold text-brine-300 underline decoration-dashed underline-offset-4 hover:text-white">
+        <Link to="/budowa?tab=lights" className="font-semibold text-brine-300 underline decoration-dashed underline-offset-4 hover:text-navy">
           Światła nawigacyjne
         </Link>
         .
@@ -583,7 +583,7 @@ export default function Przepisy() {
         <p>
           ⚠️ To materiał edukacyjny i uproszczony. Przed rejsem zapoznaj się z aktualnymi przepisami
           (COLREG oraz lokalnymi zarządzeniami dla danego akwenu) i pamiętaj o nadrzędnej zasadzie:{' '}
-          <b className="text-white">rób wszystko, aby uniknąć zderzenia</b>.
+          <b className="text-navy">rób wszystko, aby uniknąć zderzenia</b>.
         </p>
       </div>
     </div>

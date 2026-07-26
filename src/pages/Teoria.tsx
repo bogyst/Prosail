@@ -23,7 +23,7 @@ export default function Teoria() {
       {/* Teoria rozszerzona */}
       <div className="mt-12 grid gap-6 lg:grid-cols-2">
         <div>
-          <h2 className="mb-4 font-display text-2xl font-700 text-white">
+          <h2 className="mb-4 font-display text-2xl font-700 text-navy">
             Kursy względem wiatru
           </h2>
           <Accordion>
@@ -80,28 +80,28 @@ export default function Teoria() {
         </div>
 
         <div>
-          <h2 className="mb-4 font-display text-2xl font-700 text-white">
+          <h2 className="mb-4 font-display text-2xl font-700 text-navy">
             Kluczowe pojęcia
           </h2>
           <div className="card p-6 space-y-4 text-sm leading-relaxed text-brine-100/85">
             <p>
-              <b className="text-white">Trym żagla</b> — ustawienie żagla względem
+              <b className="text-navy">Trym żagla</b> — ustawienie żagla względem
               wiatru za pomocą <Term label="szotów" title="Szoty">
                 <p>Liny do wybierania i luzowania żagli. Grotszot steruje grotem, foka‑szoty fokiem.</p>
               </Term>. Reguła: luzuj żagiel aż zacznie łopotać na przednim liku, potem lekko wybierz.
             </p>
             <p>
-              <b className="text-white">Przechył i dryf</b> — im ostrzej do wiatru,
+              <b className="text-navy">Przechył i dryf</b> — im ostrzej do wiatru,
               tym większa siła boczna. Kil/miecz zamienia ją częściowo na ruch do
               przodu, resztę oddajemy jako dryf.
             </p>
             <p>
-              <b className="text-white">Wiatr pozorny</b> — to on decyduje o
+              <b className="text-navy">Wiatr pozorny</b> — to on decyduje o
               trymie. Na szybkich kursach „skręca” ku dziobowi, więc żagle wybieramy
               nieco mocniej, niż sugerowałby wiatr rzeczywisty.
             </p>
             <p>
-              <b className="text-white">Ster</b> — jacht dobrze wytrymowany ma lekką{' '}
+              <b className="text-navy">Ster</b> — jacht dobrze wytrymowany ma lekką{' '}
               <Term label="tendencję zaostrzania" title="Ster nawietrzny">
                 <p>
                   Lekki nacisk na rumpel „pod wiatr”. Jest bezpieczny — po

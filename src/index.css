@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 :root {
-  color-scheme: dark;
+  color-scheme: light;
 }
 
 html,
@@ -13,53 +13,83 @@ body,
 }
 
 body {
-  @apply bg-deep-950 text-brine-50 font-sans antialiased;
-  background-image: var(--tw-sea, none);
+  @apply bg-cream text-brine-50 font-sans antialiased;
 }
 
 @layer components {
   .card {
-    @apply rounded-2xl border border-white/10 bg-white/[0.03] backdrop-blur-sm shadow-card;
+    @apply rounded-lg border border-tan bg-white shadow-card;
   }
 
   .btn {
-    @apply inline-flex items-center gap-2 rounded-xl px-4 py-2 text-sm font-medium
+    @apply inline-flex items-center gap-2 rounded px-4 py-2 text-sm font-semibold
       transition-colors duration-150 focus:outline-none focus-visible:ring-2
-      focus-visible:ring-brine-400/70;
+      focus-visible:ring-navy/50;
   }
 
   .btn-primary {
-    @apply btn bg-brine-500 hover:bg-brine-400 text-white;
+    @apply btn bg-signal text-white hover:bg-[#a92e25];
   }
 
   .btn-ghost {
-    @apply btn bg-white/5 hover:bg-white/10 text-brine-100;
+    @apply btn bg-sand-200 hover:bg-sand-300/70 text-navy;
   }
 
   .chip {
-    @apply inline-flex items-center gap-1.5 rounded-full border border-white/10
-      bg-white/5 px-3 py-1 text-xs font-medium text-brine-100;
+    @apply inline-flex items-center gap-1.5 rounded-full border border-tan
+      bg-sand-100 px-3 py-1 text-xs font-semibold text-navy;
   }
 
   .section-title {
-    @apply font-display text-3xl sm:text-4xl font-700 tracking-tight text-white;
+    @apply font-display text-3xl sm:text-4xl font-700 tracking-tight text-navy;
   }
 
   .lead {
-    @apply text-brine-100/80 leading-relaxed;
+    @apply text-brine-100 leading-relaxed;
   }
 }
 
-/* Suwaki (range) w stylu żeglarskim */
+/* ——— Przekrycia dawnych „szklanych” utili (biel na ciemnym) na granatowe
+       tinty pasujące do jasnego tła. Te same klasy w komponentach. ——— */
+.bg-white\/5,
+.bg-white\/\[0\.03\],
+.bg-white\/\[0\.02\] {
+  background-color: rgba(13, 44, 75, 0.05);
+}
+.bg-white\/10 {
+  background-color: rgba(13, 44, 75, 0.09);
+}
+.bg-white\/15 {
+  background-color: rgba(13, 44, 75, 0.14);
+}
+.hover\:bg-white\/5:hover,
+.hover\:bg-white\/\[0\.03\]:hover {
+  background-color: rgba(13, 44, 75, 0.06);
+}
+.hover\:bg-white\/10:hover {
+  background-color: rgba(13, 44, 75, 0.1);
+}
+.hover\:bg-white\/30:hover {
+  background-color: rgba(13, 44, 75, 0.26);
+}
+.border-white\/10 {
+  border-color: rgba(13, 44, 75, 0.15);
+}
+.divide-white\/10 > :not([hidden]) ~ :not([hidden]) {
+  border-color: rgba(13, 44, 75, 0.12);
+}
+.ring-white\/80 {
+  --tw-ring-color: rgba(13, 44, 75, 0.7);
+}
+
+/* Suwaki (range) */
 input[type='range'] {
   -webkit-appearance: none;
   appearance: none;
   height: 6px;
   border-radius: 9999px;
-  background: linear-gradient(90deg, #22658d, #7bbcd9);
+  background: linear-gradient(90deg, #123a63, #2b7fab);
   outline: none;
-  /* Bez tego przeciąganie suwaka na ekranie dotykowym/trackpadzie potrafi
-     zamiast tego przewijać stronę. */
   touch-action: none;
   -ms-touch-action: none;
 }
@@ -69,17 +99,17 @@ input[type='range']::-webkit-slider-thumb {
   width: 22px;
   height: 22px;
   border-radius: 9999px;
-  background: #f7f1e3;
-  border: 3px solid #2b7fab;
+  background: #faf6ee;
+  border: 3px solid #0d2c4b;
   cursor: pointer;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 2px 5px rgba(13, 44, 75, 0.3);
 }
 input[type='range']::-moz-range-thumb {
   width: 22px;
   height: 22px;
   border-radius: 9999px;
-  background: #f7f1e3;
-  border: 3px solid #2b7fab;
+  background: #faf6ee;
+  border: 3px solid #0d2c4b;
   cursor: pointer;
 }
 
@@ -87,13 +117,18 @@ input[type='range']::-moz-range-thumb {
   font-weight: 700;
 }
 
-/* Delikatne "fale" tła */
+/* Tło strony — czysty krem z delikatnym pasem u góry */
 .sea-bg {
-  background-image: radial-gradient(
-      1200px 800px at 15% -10%,
-      rgba(43, 127, 171, 0.25),
-      transparent 60%
-    ),
-    radial-gradient(1000px 700px at 100% 0%, rgba(15, 43, 63, 0.5), transparent 55%),
-    linear-gradient(180deg, #050f1a, #081a28);
+  background: #faf6ee;
+}
+
+/* Pasek marynistyczny (akcent pod hero/nagłówkami) */
+.stripe-nautical {
+  height: 6px;
+  background: repeating-linear-gradient(
+    90deg,
+    #c8382e 0 56px,
+    #faf6ee 56px 112px,
+    #0d2c4b 112px 168px
+  );
 }

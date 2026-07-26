@@ -4,46 +4,52 @@ export default {
   theme: {
     extend: {
       colors: {
-        // Motyw żeglarski
+        // Motyw „Bałtyk Classic” — jasny krem + granat + czerwień sygnałowa.
+        // Skala brine przemapowana na wersję do jasnego tła (te same nazwy
+        // klas w komponentach, nowe wartości).
         brine: {
-          50: '#eef7fb',
-          100: '#d6ecf5',
-          200: '#aed8ea',
-          300: '#7bbcd9',
-          400: '#489cc4',
-          500: '#2b7fab',
-          600: '#22658d',
-          700: '#1f5173',
-          800: '#1f4460',
-          900: '#0f2b3f',
+          50: '#182c40', // globalny kolor tekstu
+          100: '#33475c', // tekst pomocniczy
+          200: '#274e74',
+          300: '#175d84', // akcenty / linki
+          400: '#2b7fab',
+          500: '#123a63', // aktywne przełączniki (granat, biały tekst)
+          600: '#0f3050',
+          700: '#0d2c4b',
+          800: '#0a2036',
+          900: '#0d2c4b', // granat hero
           950: '#081a28',
         },
-        deep: {
-          900: '#0a1a2b',
-          950: '#050f1a',
+        navy: {
+          DEFAULT: '#0d2c4b',
+          2: '#123a63',
         },
+        deep: {
+          900: '#f3ecdd', // dawniej ciemne tła — teraz kremy
+          950: '#faf6ee',
+        },
+        cream: '#faf6ee',
         sand: {
           100: '#f7f1e3',
-          200: '#efe4c8',
+          200: '#efe7d7',
           300: '#e3d1a3',
           400: '#d4b878',
         },
-        rope: '#c9a15a',
-        buoyRed: '#e2454a',
-        buoyGreen: '#1fa463',
-        buoyYellow: '#f4c430',
+        tan: '#e3dac8',
+        rope: '#a97e2f',
+        signal: '#c8382e',
+        gold: '#e8c56b',
+        buoyRed: '#c8382e',
+        buoyGreen: '#1c7c4a',
+        buoyYellow: '#e0ac1a',
       },
       fontFamily: {
-        display: ['"Barlow Semi Condensed"', 'system-ui', 'sans-serif'],
-        sans: ['Inter', 'system-ui', 'sans-serif'],
+        display: ['Georgia', '"Times New Roman"', 'serif'],
+        sans: ['Inter', '"Segoe UI"', 'system-ui', 'sans-serif'],
       },
       boxShadow: {
-        card: '0 10px 30px -12px rgba(4, 20, 34, 0.6)',
-        glow: '0 0 40px -8px rgba(72, 156, 196, 0.45)',
-      },
-      backgroundImage: {
-        'sea-radial':
-          'radial-gradient(1200px 800px at 20% -10%, rgba(43,127,171,0.35), transparent), radial-gradient(1000px 700px at 100% 0%, rgba(15,43,63,0.6), transparent)',
+        card: '0 1px 2px rgba(13,44,75,0.06), 0 2px 0 #e3dac8',
+        glow: '0 6px 18px -6px rgba(13,44,75,0.25)',
       },
       keyframes: {
         float: {

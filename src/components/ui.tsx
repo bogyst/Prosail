@@ -18,7 +18,7 @@ export function Term({
     <>
       <button
         onClick={() => setOpen(true)}
-        className="group inline-flex items-center gap-1 rounded-md border-b border-dashed border-brine-300/60 px-0.5 font-medium text-brine-200 hover:text-white hover:border-brine-200"
+        className="group inline-flex items-center gap-1 rounded-md border-b border-dashed border-brine-300/60 px-0.5 font-medium text-brine-200 hover:text-navy hover:border-brine-200"
       >
         {label}
         <Info className="h-3.5 w-3.5 opacity-60 group-hover:opacity-100" />
@@ -42,13 +42,13 @@ export function Term({
               exit={{ scale: 0.96, y: 8, opacity: 0 }}
             >
               <button
-                className="absolute right-4 top-4 text-brine-200 hover:text-white"
+                className="absolute right-4 top-4 text-brine-200 hover:text-navy"
                 onClick={() => setOpen(false)}
                 aria-label="Zamknij"
               >
                 <X className="h-5 w-5" />
               </button>
-              <h4 className="font-display text-xl font-700 text-white pr-8">{title}</h4>
+              <h4 className="font-display text-xl font-700 text-navy pr-8">{title}</h4>
               <div className="mt-3 text-sm leading-relaxed text-brine-100/90 space-y-2">
                 {children}
               </div>
@@ -98,7 +98,7 @@ export function AccordionItem({
         className="flex w-full items-center gap-3 px-5 py-4 text-left hover:bg-white/[0.03]"
       >
         {icon && <span className="text-brine-300">{icon}</span>}
-        <span className="flex-1 font-display text-lg font-600 text-white">{title}</span>
+        <span className="flex-1 font-display text-lg font-600 text-navy">{title}</span>
         <ChevronDown
           className={`h-5 w-5 text-brine-300 transition-transform ${isOpen ? 'rotate-180' : ''}`}
         />

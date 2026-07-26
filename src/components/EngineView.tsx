@@ -158,7 +158,7 @@ export default function EngineView() {
           ))}
         </div>
         <motion.div key={sel.id} initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} className="card p-5">
-          <h3 className="font-display text-lg font-700 text-white">{sel.name}</h3>
+          <h3 className="font-display text-lg font-700 text-navy">{sel.name}</h3>
           <p className="mt-2 text-sm leading-relaxed text-brine-100/90">{sel.desc}</p>
         </motion.div>
         <div className="card p-4 text-xs text-brine-100/70">

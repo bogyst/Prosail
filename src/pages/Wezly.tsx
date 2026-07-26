@@ -418,7 +418,7 @@ export default function Wezly() {
               className={`card p-3 transition-all hover:-translate-y-0.5 ${sel.id === k.id ? 'ring-2 ring-brine-400' : ''}`}
             >
               {k.steps[k.steps.length - 1].el}
-              <div className="mt-2 text-center text-sm font-medium text-white">{k.name}</div>
+              <div className="mt-2 text-center text-sm font-medium text-navy">{k.name}</div>
               <div className="text-center text-xs text-brine-100/60">{k.alt}</div>
             </button>
           ))}
@@ -429,7 +429,7 @@ export default function Wezly() {
           <div className="card p-5">
             <div className="flex items-center justify-between">
               <div>
-                <h3 className="font-display text-xl font-700 text-white">{sel.name}</h3>
+                <h3 className="font-display text-xl font-700 text-navy">{sel.name}</h3>
                 <div className="text-xs text-brine-100/60">{sel.alt}</div>
               </div>
               <span className="chip">trudność: {sel.difficulty}</span>

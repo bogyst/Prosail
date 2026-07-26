@@ -257,7 +257,7 @@ export default function Locja() {
               </div>
               <div>
                 <div className="chip mb-2">{sel.group}</div>
-                <h3 className="font-display text-xl font-700 text-white">{sel.name}</h3>
+                <h3 className="font-display text-xl font-700 text-navy">{sel.name}</h3>
               </div>
             </div>
             <dl className="mt-5 space-y-4 text-sm">
@@ -277,7 +277,7 @@ export default function Locja() {
           </motion.div>
 
           <div className="card mt-4 p-5 text-sm text-brine-100/80">
-            <p className="font-semibold text-white">Pamiętnik żeglarza 🧭</p>
+            <p className="font-semibold text-navy">Pamiętnik żeglarza 🧭</p>
             <p className="mt-2">
               Znaki kardynalne wskazują, z której strony jest{' '}
               <b>bezpieczna, głęboka woda</b>. Nazwa (N/E/S/W) mówi, po której

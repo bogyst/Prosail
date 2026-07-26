@@ -134,9 +134,9 @@ export default function Meteorologia() {
 
             <div>
               <div className="flex items-baseline gap-3">
-                <span className="font-display text-6xl font-700 text-white">{cur.n}</span>
+                <span className="font-display text-6xl font-700 text-navy">{cur.n}</span>
                 <div>
-                  <div className="font-display text-2xl font-700 text-white">{cur.name}</div>
+                  <div className="font-display text-2xl font-700 text-navy">{cur.name}</div>
                   <div className="text-sm text-brine-100/70">
                     {cur.kts} kn · {cur.ms} m/s · fala ok. {cur.wave}
                   </div>
@@ -167,7 +167,7 @@ export default function Meteorologia() {
           />
           <div className="mt-2 flex justify-between text-[10px] text-brine-100/50">
             {BEAUFORT.map((x) => (
-              <button key={x.n} onClick={() => setB(x.n)} className="tabular-nums hover:text-white">
+              <button key={x.n} onClick={() => setB(x.n)} className="tabular-nums hover:text-navy">
                 {x.n}
               </button>
             ))}
@@ -176,7 +176,7 @@ export default function Meteorologia() {
       </div>
 
       {/* CHMURY */}
-      <h2 className="mb-4 mt-12 font-display text-2xl font-700 text-white">Rodzaje chmur</h2>
+      <h2 className="mb-4 mt-12 font-display text-2xl font-700 text-navy">Rodzaje chmur</h2>
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {CLOUDS.map((c, i) => (
           <motion.div
@@ -189,7 +189,7 @@ export default function Meteorologia() {
             <div className="flex items-center gap-3">
               <span className="text-3xl">{c.emoji}</span>
               <div>
-                <h3 className="font-display text-lg font-700 text-white">{c.name}</h3>
+                <h3 className="font-display text-lg font-700 text-navy">{c.name}</h3>
                 <div className="text-xs text-brine-100/60">{c.level}</div>
               </div>
             </div>
@@ -203,7 +203,7 @@ export default function Meteorologia() {
       </div>
 
       <div className="card mt-6 p-6 text-sm text-brine-100/85">
-        <h3 className="font-display text-lg font-700 text-white">Reguły kciuka na wodzie</h3>
+        <h3 className="font-display text-lg font-700 text-navy">Reguły kciuka na wodzie</h3>
         <ul className="mt-3 grid gap-2 sm:grid-cols-2">
           <li>🌡️ Gwałtowny spadek ciśnienia = zbliża się załamanie pogody.</li>
           <li>⛈️ Ciemniejąca, piętrząca się chmura Cb od zawietrznej = szykuj się na szkwał, refuj wcześniej.</li>

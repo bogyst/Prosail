@@ -9,6 +9,7 @@ import {
   Link2,
   LifeBuoy,
   GraduationCap,
+  ClipboardCheck,
   ArrowRight,
 } from 'lucide-react'
 
@@ -63,6 +64,13 @@ const CARDS = [
     accent: 'from-buoyRed/30',
   },
   {
+    to: '/poradnik',
+    icon: ClipboardCheck,
+    title: 'Poradnik',
+    desc: 'Checklista pakowania na rejs oraz dobre nawyki i etykieta na jachcie, w porcie i na wodzie.',
+    accent: 'from-sand-300/40',
+  },
+  {
     to: '/quiz',
     icon: GraduationCap,
     title: 'Quiz',
@@ -74,38 +82,54 @@ const CARDS = [
 export default function Home() {
   return (
     <div>
-      {/* HERO */}
-      <section className="relative overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-br from-brine-900/60 to-deep-950 px-6 py-14 sm:px-12 sm:py-20">
-        <div className="pointer-events-none absolute -right-10 top-6 opacity-20">
-          <Sailboat className="h-64 w-64 text-brine-300 animate-sway" />
+      {/* HERO — granatowy blok w stylu klasycznego yacht-clubu */}
+      <section className="relative -mx-4 -mt-8 overflow-hidden bg-gradient-to-b from-navy to-navy-2 px-6 pb-24 pt-16 sm:-mt-10 sm:px-12 sm:pt-20">
+        <div className="pointer-events-none absolute -right-6 top-8 opacity-15">
+          <Sailboat className="h-64 w-64 text-gold animate-sway" />
         </div>
         <motion.div
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className="relative max-w-2xl"
+          className="relative mx-auto max-w-6xl"
         >
-          <div className="chip mb-4">⚓ Nauka żeglarstwa online</div>
-          <h1 className="font-display text-4xl font-700 leading-tight tracking-tight text-white sm:text-6xl">
-            Zrozum żeglowanie.<br />
-            <span className="text-brine-300">Zobacz, jak działa wiatr.</span>
+          <div className="mb-5 text-xs font-semibold uppercase tracking-[0.25em] text-gold">
+            Szkoła teorii żeglarstwa · Mazury
+          </div>
+          <h1 className="max-w-2xl font-display text-4xl font-700 leading-tight text-white sm:text-6xl">
+            Zrozum żeglowanie.{' '}
+            <span className="text-gold">Zobacz, jak działa wiatr.</span>
           </h1>
-          <p className="lead mt-5 text-lg">
-            ProSail to interaktywna platforma, która zamienia teorię żeglarską w
-            eksperyment. Poruszaj suwakami, klikaj w siły i pławy, ucz się przez
-            działanie — od trymu żagli po prawo drogi.
+          <p className="mt-5 max-w-xl text-lg leading-relaxed text-[#c8d6e5]">
+            ProSail zamienia teorię żeglarską w eksperyment: poruszaj suwakami,
+            klikaj w siły i pławy, ucz się przez działanie — od trymu żagli po
+            prawo drogi.
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
             <Link to="/teoria" className="btn-primary text-base">
               Otwórz symulator żagli
               <ArrowRight className="h-4 w-4" />
             </Link>
-            <Link to="/locja" className="btn-ghost text-base">
+            <Link
+              to="/locja"
+              className="btn border-2 border-white/50 text-base text-white hover:bg-white/10"
+            >
               Poznaj oznakowanie
             </Link>
           </div>
         </motion.div>
+        {/* fala przejściowa do kremu */}
+        <svg
+          className="absolute bottom-0 left-0 right-0"
+          viewBox="0 0 1440 70"
+          preserveAspectRatio="none"
+          height="70"
+          width="100%"
+        >
+          <path d="M0,38 C240,70 480,8 720,34 C960,62 1200,15 1440,42 L1440,70 L0,70 Z" fill="#faf6ee" />
+        </svg>
       </section>
+      <div className="stripe-nautical -mx-4" />
 
       {/* KAFELKI */}
       <section className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
@@ -127,7 +151,7 @@ export default function Home() {
                 <span className="grid h-12 w-12 place-items-center rounded-xl bg-white/5 text-brine-300">
                   <c.icon className="h-6 w-6" />
                 </span>
-                <h3 className="mt-4 font-display text-xl font-700 text-white">
+                <h3 className="mt-4 font-display text-xl font-700 text-navy">
                   {c.title}
                 </h3>
                 <p className="mt-2 text-sm leading-relaxed text-brine-100/75">

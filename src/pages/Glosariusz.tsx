@@ -138,7 +138,7 @@ export default function Glosariusz() {
             value={q}
             onChange={(e) => setQ(e.target.value)}
             placeholder="Szukaj hasła lub definicji…"
-            className="w-full rounded-xl border border-white/10 bg-white/5 py-2 pl-9 pr-3 text-sm text-white placeholder:text-brine-100/40 focus:outline-none focus:ring-2 focus:ring-brine-400/60"
+            className="w-full rounded-xl border border-white/10 bg-white/5 py-2 pl-9 pr-3 text-sm text-navy placeholder:text-brine-100/40 focus:outline-none focus:ring-2 focus:ring-brine-400/60"
           />
         </label>
         <div className="inline-flex rounded-xl border border-white/10 bg-white/5 p-1">
@@ -175,7 +175,7 @@ export default function Glosariusz() {
                 {entries.map((e) => (
                   <motion.div key={e.term} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} className="card p-4">
                     <div className="flex items-baseline justify-between gap-3">
-                      <h3 className="font-display text-base font-700 text-white">{e.term}</h3>
+                      <h3 className="font-display text-base font-700 text-navy">{e.term}</h3>
                       <span className="shrink-0 text-[10px] font-semibold uppercase tracking-wide text-brine-100/40">{e.cat}</span>
                     </div>
                     <p className="mt-1 text-sm leading-relaxed text-brine-100/85">{e.def}</p>

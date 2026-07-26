@@ -28,7 +28,7 @@ function Numery() {
               <Phone className="h-4 w-4" />
               <span className="text-xs font-semibold uppercase tracking-wide">{x.label}</span>
             </div>
-            <div className={`mt-1 font-display text-3xl font-700 ${x.primary ? 'text-buoyRed' : 'text-white'}`}>{x.n}</div>
+            <div className={`mt-1 font-display text-3xl font-700 ${x.primary ? 'text-buoyRed' : 'text-navy'}`}>{x.n}</div>
             <p className="mt-1 text-xs leading-relaxed text-brine-100/80">{x.note}</p>
           </a>
         ))}
@@ -36,24 +36,24 @@ function Numery() {
 
       <div className="grid gap-4 lg:grid-cols-2">
         <div className="card p-6">
-          <h3 className="flex items-center gap-2 font-display text-lg font-700 text-white">
+          <h3 className="flex items-center gap-2 font-display text-lg font-700 text-navy">
             <LifeBuoy className="h-5 w-5 text-brine-300" /> MOPR — Mazurskie Ochotnicze Pogotowie Ratunkowe
           </h3>
           <p className="mt-2 text-sm text-brine-100/85">
             Na Szlaku Wielkich Jezior stałe bazy ratowników działają m.in. w{' '}
-            <b className="text-white">Giżycku, Mikołajkach, Piszu</b> oraz w{' '}
-            <b className="text-white">Harszu / Skłodowie</b> nad jeziorem Mamry. MOPR wezwiesz przez{' '}
+            <b className="text-navy">Giżycku, Mikołajkach, Piszu</b> oraz w{' '}
+            <b className="text-navy">Harszu / Skłodowie</b> nad jeziorem Mamry. MOPR wezwiesz przez{' '}
             <b className="text-buoyRed">601&nbsp;100&nbsp;100</b> lub <b>112</b>.
           </p>
         </div>
         <div className="card p-6">
-          <h3 className="font-display text-lg font-700 text-white">Co podać przy zgłoszeniu</h3>
+          <h3 className="font-display text-lg font-700 text-navy">Co podać przy zgłoszeniu</h3>
           <ul className="mt-2 space-y-1.5 text-sm text-brine-100/85">
-            <li>📍 <b className="text-white">Gdzie</b> — akwen, pobliski port/miejscowość, kierunek, punkty charakterystyczne.</li>
-            <li>❗ <b className="text-white">Co się stało</b> i ilu jest poszkodowanych.</li>
-            <li>🩺 <b className="text-white">Stan</b> poszkodowanych (przytomność, oddech, urazy).</li>
-            <li>📞 Swoje <b className="text-white">imię i numer telefonu</b>.</li>
-            <li>⏳ <b className="text-white">Nie rozłączaj się pierwszy</b> — czekaj na pytania dyspozytora.</li>
+            <li>📍 <b className="text-navy">Gdzie</b> — akwen, pobliski port/miejscowość, kierunek, punkty charakterystyczne.</li>
+            <li>❗ <b className="text-navy">Co się stało</b> i ilu jest poszkodowanych.</li>
+            <li>🩺 <b className="text-navy">Stan</b> poszkodowanych (przytomność, oddech, urazy).</li>
+            <li>📞 Swoje <b className="text-navy">imię i numer telefonu</b>.</li>
+            <li>⏳ <b className="text-navy">Nie rozłączaj się pierwszy</b> — czekaj na pytania dyspozytora.</li>
           </ul>
         </div>
       </div>
@@ -67,9 +67,9 @@ function Pomoc() {
   return (
     <div>
       <div className="card mb-6 p-6">
-        <h3 className="font-display text-lg font-700 text-white">Łańcuch przeżycia</h3>
+        <h3 className="font-display text-lg font-700 text-navy">Łańcuch przeżycia</h3>
         <p className="mt-2 text-sm text-brine-100/85">
-          <b className="text-white">Bezpieczeństwo → sprawdzenie → wezwanie pomocy (112 / 601 100 100) → RKO → defibrylacja / przekazanie służbom.</b>{' '}
+          <b className="text-navy">Bezpieczeństwo → sprawdzenie → wezwanie pomocy (112 / 601 100 100) → RKO → defibrylacja / przekazanie służbom.</b>{' '}
           Najpierw zadbaj o własne bezpieczeństwo — ratownik, który sam wpadnie do wody, nie pomoże nikomu.
         </p>
       </div>
@@ -310,7 +310,7 @@ function Mob() {
                 <div className="text-[10px] font-semibold uppercase tracking-wide text-brine-100/60">
                   Krok {step + 1} z {MOB_STEPS.length}
                 </div>
-                <h3 className="font-display text-lg font-700 leading-tight text-white">{s.t}</h3>
+                <h3 className="font-display text-lg font-700 leading-tight text-navy">{s.t}</h3>
               </div>
             </div>
             <div className="space-y-4 p-5">
@@ -320,14 +320,14 @@ function Mob() {
                   <div className="text-[10px] font-semibold uppercase tracking-wide text-rope">
                     📢 {s.who ?? 'Komenda'}
                   </div>
-                  <div className="mt-1 text-sm font-semibold leading-relaxed text-white">{s.cmd}</div>
+                  <div className="mt-1 text-sm font-semibold leading-relaxed text-navy">{s.cmd}</div>
                 </div>
               )}
             </div>
           </motion.div>
 
           <div className="card mt-4 p-5 text-sm text-brine-100/85">
-            <b className="text-white">Zasada ASO:</b> <b>A</b>larm · <b>Ś</b>rodki ratunkowe · <b>O</b>bserwator — trzy
+            <b className="text-navy">Zasada ASO:</b> <b>A</b>larm · <b>Ś</b>rodki ratunkowe · <b>O</b>bserwator — trzy
             pierwsze odruchy, zanim zaczniesz manewr. Ćwicz regularnie: w realnej sytuacji liczą się sekundy.
           </div>
         </div>
@@ -350,7 +350,7 @@ export default function Ratownictwo() {
     <div>
       <PageHeader eyebrow="Ratownictwo wodne" title="Bezpieczeństwo na wodzie">
         Numery alarmowe przydatne na Mazurach, podstawy pierwszej pomocy oraz pełen manewr
-        „człowiek za burtą”. <b className="text-white">W nagłym wypadku dzwoń 112 lub 601 100 100.</b>{' '}
+        „człowiek za burtą”. <b className="text-navy">W nagłym wypadku dzwoń 112 lub 601 100 100.</b>{' '}
         Zawsze noś kamizelkę asekuracyjną i miej na pokładzie środki ratunkowe.
       </PageHeader>
 

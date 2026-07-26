@@ -185,7 +185,7 @@ export default function NavLights() {
       {/* PANEL */}
       <div className="space-y-4">
         <div className="card border-brine-400/30 bg-brine-500/10 p-4">
-          <div className="font-display text-lg font-700 text-white">„Prawa – trawa, lewa – krewa”</div>
+          <div className="font-display text-lg font-700 text-navy">„Prawa – trawa, lewa – krewa”</div>
           <p className="mt-1 text-sm text-brine-100/85">
             Wierszyk na kolory świateł burtowych: <b className="text-buoyGreen">prawa</b> burta (sterburta) —{' '}
             <b className="text-buoyGreen">zielone</b> (trawa), <b className="text-buoyRed">lewa</b> (bakburta) —{' '}
@@ -213,7 +213,7 @@ export default function NavLights() {
         </div>
 
         <motion.div key={sel.id} initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} className="card p-5">
-          <h3 className="font-display text-lg font-700 text-white">{sel.name}</h3>
+          <h3 className="font-display text-lg font-700 text-navy">{sel.name}</h3>
           <div className="mt-2 flex flex-wrap gap-2 text-xs">
             <span className="chip">kąt: {sel.arc}</span>
             <span className="chip">zasięg: {sel.range}</span>

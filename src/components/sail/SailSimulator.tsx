@@ -390,7 +390,7 @@ function Control({
           {icon}
           {label}
         </span>
-        <span className="tabular-nums text-sm font-semibold text-white">{value}</span>
+        <span className="tabular-nums text-sm font-semibold text-navy">{value}</span>
       </div>
       <input type="range" min={min} max={max} value={v} onChange={(e) => onChange(Number(e.target.value))} className="w-full" />
     </div>

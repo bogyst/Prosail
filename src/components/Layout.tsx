@@ -10,6 +10,7 @@ import {
   Link2,
   LifeBuoy,
   BookOpen,
+  ClipboardCheck,
   GraduationCap,
   Menu,
   X,
@@ -17,14 +18,15 @@ import {
 } from 'lucide-react'
 
 const NAV = [
-  { to: '/teoria', label: 'Teoria żeglowania', icon: Sailboat },
+  { to: '/teoria', label: 'Teoria', icon: Sailboat },
   { to: '/locja', label: 'Locja', icon: Compass },
   { to: '/meteorologia', label: 'Meteorologia', icon: CloudSun },
-  { to: '/budowa', label: 'Budowa jachtu', icon: Wrench },
+  { to: '/budowa', label: 'Budowa', icon: Wrench },
   { to: '/przepisy', label: 'Przepisy', icon: Scale },
   { to: '/wezly', label: 'Węzły', icon: Link2 },
   { to: '/ratownictwo', label: 'Ratownictwo', icon: LifeBuoy },
   { to: '/glosariusz', label: 'Glosariusz', icon: BookOpen },
+  { to: '/poradnik', label: 'Poradnik', icon: ClipboardCheck },
   { to: '/quiz', label: 'Quiz', icon: GraduationCap },
 ]
 
@@ -39,7 +41,7 @@ export default function Layout() {
             <span className="grid h-9 w-9 place-items-center rounded-xl bg-brine-500 text-white shadow-glow">
               <Anchor className="h-5 w-5" />
             </span>
-            <span className="font-display text-xl font-700 tracking-tight text-white">
+            <span className="font-display text-xl font-700 tracking-tight text-navy">
               Pro<span className="text-brine-300">Sail</span>
             </span>
           </Link>
@@ -51,7 +53,7 @@ export default function Layout() {
                 to={to}
                 className={({ isActive }) =>
                   `btn px-2.5 py-1.5 text-[13px] ${
-                    isActive ? 'bg-white/10 text-white' : 'text-brine-100 hover:bg-white/5'
+                    isActive ? 'bg-white/10 text-navy' : 'text-brine-100 hover:bg-white/5'
                   }`
                 }
               >
@@ -84,7 +86,7 @@ export default function Layout() {
                   onClick={() => setMobileOpen(false)}
                   className={({ isActive }) =>
                     `flex items-center gap-3 rounded-xl px-3 py-3 ${
-                      isActive ? 'bg-white/10 text-white' : 'text-brine-100'
+                      isActive ? 'bg-white/10 text-navy' : 'text-brine-100'
                     }`
                   }
                 >

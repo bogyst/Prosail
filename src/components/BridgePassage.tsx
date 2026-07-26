@@ -136,9 +136,9 @@ export default function BridgePassage() {
       </div>
 
       <p className="lead mb-5 max-w-3xl">
-        Pod mostami i jazami spotkasz osobne znaki: żółte oznaczają <b className="text-white">zalecane
-        przejście</b> i kierunek ruchu, a czerwono‑białe wyznaczają <b className="text-white">skrajnię</b>
-        (dozwoloną przestrzeń) i zakazy. Zawsze sprawdź <b className="text-white">wysokość prześwitu</b>{' '}
+        Pod mostami i jazami spotkasz osobne znaki: żółte oznaczają <b className="text-navy">zalecane
+        przejście</b> i kierunek ruchu, a czerwono‑białe wyznaczają <b className="text-navy">skrajnię</b>
+        (dozwoloną przestrzeń) i zakazy. Zawsze sprawdź <b className="text-navy">wysokość prześwitu</b>{' '}
         względem masztu i aktualnego stanu wody.
       </p>
 
@@ -147,7 +147,7 @@ export default function BridgePassage() {
           <motion.div key={s.name} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} className="card flex items-center gap-4 p-4">
             <div className="rounded-lg bg-white/5 p-1">{s.svg}</div>
             <div>
-              <h3 className="font-display text-base font-700 text-white">{s.name}</h3>
+              <h3 className="font-display text-base font-700 text-navy">{s.name}</h3>
               <p className="mt-1 text-xs leading-relaxed text-brine-100/80">{s.desc}</p>
             </div>
           </motion.div>
