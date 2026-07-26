@@ -83,7 +83,7 @@ export default function Home() {
   return (
     <div>
       {/* HERO — granatowy blok w stylu klasycznego yacht-clubu */}
-      <section className="relative -mx-4 -mt-8 overflow-hidden bg-gradient-to-b from-navy to-navy-2 px-6 pb-24 pt-16 sm:-mt-10 sm:px-12 sm:pt-20">
+      <section className="relative -mx-4 -mt-8 overflow-hidden on-hull bg-gradient-to-b from-hull to-hull-2 px-6 pb-24 pt-16 sm:-mt-10 sm:px-12 sm:pt-20">
         <div className="pointer-events-none absolute -right-6 top-8 opacity-15">
           <Sailboat className="h-64 w-64 text-gold animate-sway" />
         </div>
@@ -126,7 +126,7 @@ export default function Home() {
           height="70"
           width="100%"
         >
-          <path d="M0,38 C240,70 480,8 720,34 C960,62 1200,15 1440,42 L1440,70 L0,70 Z" fill="#faf6ee" />
+          <path d="M0,38 C240,70 480,8 720,34 C960,62 1200,15 1440,42 L1440,70 L0,70 Z" fill="rgb(var(--c-bg))" />
         </svg>
       </section>
       <div className="stripe-nautical -mx-4" />

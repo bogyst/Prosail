@@ -165,20 +165,53 @@ function PrawoDrogi() {
 
 /* ===================== ZNAKI RUCHU WODNEGO ===================== */
 
-function Sign({ bg, border, slash, children }: { bg: string; border?: string; slash?: boolean; children: ReactNode }) {
+/**
+ * Tablica znaku żeglugowego w proporcjach wzorcowych (zmierzonych na
+ * oficjalnym znaku): kwadrat, ramka o grubości 10% szerokości, a przy znakach
+ * zakazu czerwony pas przekątnej TEJ SAMEJ grubości, biegnący z lewego górnego
+ * do prawego dolnego narożnika. Rogi ostre — bez zaokrągleń.
+ */
+function Sign({
+  bg,
+  border,
+  slash,
+  native,
+  children,
+}: {
+  bg: string
+  border?: string
+  slash?: boolean
+  /// true = piktogram podany w siatce 100×100 (znaki obrysowane z oryginału).
+  /// false/brak = starsza siatka 80×80, skalowana automatycznie.
+  native?: boolean
+  children: ReactNode
+}) {
   return (
-    <svg viewBox="0 0 80 80" width="88" height="88" className="shrink-0">
-      <rect x="5" y="5" width="70" height="70" rx="7" fill={bg} stroke={border ?? bg} strokeWidth="6" />
-      {children}
-      {slash && <line x1="14" y1="66" x2="66" y2="14" stroke="#d63a3f" strokeWidth="7" strokeLinecap="round" />}
+    <svg viewBox="0 0 100 100" width="92" height="92" className="shrink-0">
+      <rect width="100" height="100" fill={bg} />
+      <rect x="5" y="5" width="90" height="90" fill="none" stroke={border ?? bg} strokeWidth="10" />
+      {/* Na oryginale czerwony pas przekątnej biegnie POD czarnym piktogramem. */}
+      {slash && <line x1="0" y1="0" x2="100" y2="100" stroke={SIGN_RED} strokeWidth="10" />}
+      {native ? children : <g transform="scale(1.25)">{children}</g>}
     </svg>
   )
 }
 
-const BK = '#1a1a1a'
+const BK = '#000000'
 const WH = '#f5f2ea'
-const RD = '#d63a3f'
+// Czerwień taka jak na tablicach żeglugowych (zmierzona: #f60010).
+const SIGN_RED = '#f60010'
+const RD = SIGN_RED
 const BL = '#1c6fb0'
+
+/**
+ * Piktogram znaku „zakaz cumowania” (A.7) — ścieżka obrysowana wektorowo
+ * z oficjalnej tablicy, więc kształt jest wierny, a nie odtworzony z opisu.
+ * Układ współrzędnych: 100×100.
+ */
+const MOORING_PICTOGRAM =
+  'M71.33 70L71.33 64.67L67.2 64.67L63.07 64.67L62.57 62.42C61.34 56.84 60.59 52.97 60.72 52.83C60.8 52.75 65.05 53.2 70.17 53.83C77.32 54.71 79.54 54.88 79.73 54.57C80.12 53.96 80.05 52 79.64 52C78.77 52 60.23 49.64 60 49.5C59.86 49.42 59.66 48.87 59.54 48.28C59.35 47.31 59.48 47.08 61.14 45.6C63.54 43.47 66.17 39.93 67 37.74C68.36 34.14 67.47 30.68 64.51 28.07C55.53 20.17 37.3 24.53 37.34 34.57C37.35 37.75 39.1 40.81 43.25 44.92C45.58 47.22 45.67 47.38 45.41 48.42C45.18 49.29 44.94 49.52 44.15 49.61C42.89 49.76 42.33 50.23 42.33 51.14C42.33 52.02 42.92 52.67 43.73 52.67C44.06 52.67 44.33 52.81 44.33 52.99C44.33 53.17 43.81 55.81 43.17 58.86C42.52 61.9 42 64.46 42 64.53C42 64.61 37.2 64.67 31.33 64.67C20.89 64.67 20.67 64.68 20.67 65.33C20.67 65.99 20.89 66 45.33 66L70 66L70 70.67C70 75.11 70.03 75.33 70.67 75.33C71.31 75.33 71.33 75.11 71.33 70Z ' +
+  'M39.58 36.41C38.83 34.56 38.85 33.52 39.68 31.8C40.39 30.33 42.38 28.57 41.85 29.88C41.04 31.87 40.64 33.42 40.41 35.5L40.16 37.83L39.58 36.41Z'
 
 function Anchor2({ c }: { c: string }) {
   return (
@@ -212,12 +245,11 @@ const SIGNS = [
     ),
   },
   {
-    name: 'Zakaz cumowania',
-    desc: 'Nie wolno przybijać ani mocować jednostki do brzegu na tym odcinku.',
+    name: 'Zakaz cumowania (A.7)',
+    desc: 'Nie wolno przybijać ani mocować jednostki do brzegu na tym odcinku. Piktogram: pachołek z liną na krawędzi pomostu, przekreślony czerwonym pasem.',
     svg: (
-      <Sign bg={WH} border={RD} slash>
-        <path d="M31 58 L31 36 Q31 27 40 27 Q49 27 49 36 L49 58 Z" fill={BK} />
-        <line x1="24" y1="58" x2="56" y2="58" stroke={BK} strokeWidth="4" strokeLinecap="round" />
+      <Sign bg={WH} border={RD} slash native>
+        <path d={MOORING_PICTOGRAM} fill={BK} fillRule="evenodd" />
       </Sign>
     ),
   },

@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { NavLink, Outlet, Link } from 'react-router-dom'
+import ThemeToggle from './ThemeToggle'
 import { motion } from 'framer-motion'
 import {
   Sailboat,
@@ -63,13 +64,16 @@ export default function Layout() {
             ))}
           </nav>
 
-          <button
-            className="btn-ghost ml-auto xl:hidden"
-            onClick={() => setMobileOpen((v) => !v)}
-            aria-label="Menu"
-          >
-            {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-          </button>
+          <div className="ml-auto flex items-center gap-2 xl:ml-3">
+            <ThemeToggle />
+            <button
+              className="btn-ghost xl:hidden"
+              onClick={() => setMobileOpen((v) => !v)}
+              aria-label="Menu"
+            >
+              {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+            </button>
+          </div>
         </div>
 
         {mobileOpen && (

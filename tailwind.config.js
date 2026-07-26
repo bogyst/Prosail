@@ -1,41 +1,49 @@
 /** @type {import('tailwindcss').Config} */
 export default {
+  darkMode: 'class',
   content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
   theme: {
     extend: {
       colors: {
-        // Motyw „Bałtyk Classic” — jasny krem + granat + czerwień sygnałowa.
-        // Skala brine przemapowana na wersję do jasnego tła (te same nazwy
-        // klas w komponentach, nowe wartości).
+        // Paleta oparta na zmiennych CSS — dzięki temu tryb nocny to jeden blok
+        // nadpisań w index.css, a modyfikatory przezroczystości (np. /80)
+        // działają dalej normalnie.
         brine: {
-          50: '#182c40', // globalny kolor tekstu
-          100: '#33475c', // tekst pomocniczy
-          200: '#274e74',
-          300: '#175d84', // akcenty / linki
-          400: '#2b7fab',
-          500: '#123a63', // aktywne przełączniki (granat, biały tekst)
+          50: 'rgb(var(--c-ink) / <alpha-value>)',
+          100: 'rgb(var(--c-ink-soft) / <alpha-value>)',
+          200: 'rgb(var(--c-ink-mid) / <alpha-value>)',
+          300: 'rgb(var(--c-accent) / <alpha-value>)',
+          400: 'rgb(var(--c-accent-2) / <alpha-value>)',
+          500: 'rgb(var(--c-active) / <alpha-value>)',
           600: '#0f3050',
           700: '#0d2c4b',
           800: '#0a2036',
-          900: '#0d2c4b', // granat hero
+          900: '#0d2c4b',
           950: '#081a28',
         },
+        // Kolor nagłówków (odwraca się w trybie nocnym).
         navy: {
+          DEFAULT: 'rgb(var(--c-heading) / <alpha-value>)',
+          2: '#123a63',
+        },
+        // Stały granat — hero i inne miejsca, gdzie granat jest TŁEM.
+        hull: {
           DEFAULT: '#0d2c4b',
           2: '#123a63',
         },
         deep: {
-          900: '#f3ecdd', // dawniej ciemne tła — teraz kremy
-          950: '#faf6ee',
+          900: 'rgb(var(--c-surface-2) / <alpha-value>)',
+          950: 'rgb(var(--c-bg) / <alpha-value>)',
         },
-        cream: '#faf6ee',
+        cream: 'rgb(var(--c-bg) / <alpha-value>)',
+        surface: 'rgb(var(--c-surface) / <alpha-value>)',
         sand: {
-          100: '#f7f1e3',
-          200: '#efe7d7',
-          300: '#e3d1a3',
+          100: 'rgb(var(--c-sand-1) / <alpha-value>)',
+          200: 'rgb(var(--c-sand-2) / <alpha-value>)',
+          300: 'rgb(var(--c-sand-3) / <alpha-value>)',
           400: '#d4b878',
         },
-        tan: '#e3dac8',
+        tan: 'rgb(var(--c-line) / <alpha-value>)',
         rope: '#a97e2f',
         signal: '#c8382e',
         gold: '#e8c56b',
