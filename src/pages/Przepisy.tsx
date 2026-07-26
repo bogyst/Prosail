@@ -1,7 +1,8 @@
 import { useState, type ReactNode } from 'react'
+import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { PageHeader, Term } from '../components/ui'
-import { ShieldCheck, Milestone, Volume2, Signpost } from 'lucide-react'
+import { ShieldCheck, Milestone, Volume2, Signpost, Award } from 'lucide-react'
 
 /* ===================== PRAWO DROGI ===================== */
 
@@ -434,12 +435,106 @@ function Sygnaly() {
   )
 }
 
+/* ===================== PATENTY ===================== */
+
+const LICENSES = [
+  {
+    name: 'Bez patentu',
+    badge: '⛵ start',
+    who: 'Każdy — bez egzaminu i minimalnego wieku (praktyka: pod opieką).',
+    can: 'Jachty ŻAGLOWE o długości kadłuba do 7,5 m oraz jachty MOTOROWE o mocy silnika do 10 kW (ok. 13,6 KM) — po wodach śródlądowych.',
+    note: 'To dlatego małymi łódkami typu Optimist czy małą żaglówką możesz pływać bez żadnych papierów.',
+  },
+  {
+    name: 'Żeglarz jachtowy',
+    badge: '🥉 pierwszy patent',
+    who: 'Ukończone 14 lat + zdany egzamin (teoria i praktyka) przed komisją PZŻ. Nie ma wymogu wcześniejszego stażu.',
+    can: 'Jachty żaglowe (także z silnikiem pomocniczym): po wodach ŚRÓDLĄDOWYCH bez ograniczeń długości, a po wodach MORSKICH jachty do 12 m — do 2 Mm od brzegu, w porze dziennej.',
+    note: 'Standardowy cel kursu na Mazurach. Egzamin: nawigacja, locja, przepisy, meteorologia, manewrówka.',
+  },
+  {
+    name: 'Jachtowy sternik morski',
+    badge: '🥈 morze',
+    who: 'Ukończone 18 lat + staż: co najmniej 2 rejsy morskie w sumie min. 200 godzin żeglugi + egzamin.',
+    can: 'Po wodach śródlądowych — wszystkie jachty żaglowe; po MORSKICH — jachty żaglowe do 18 m długości kadłuba (bez limitu odległości i pory doby).',
+    note: 'Naturalny kolejny krok po żeglarzu jachtowym, gdy chcesz czarterować na morzu (Chorwacja, Grecja itd.).',
+  },
+  {
+    name: 'Kapitan jachtowy',
+    badge: '🥇 bez ograniczeń',
+    who: 'Patent JSM + duży staż morski (m.in. rejsy łącznie min. 1200 godzin, w tym samodzielne prowadzenie i rejsy poza wodami pływowymi/Bałtykiem).',
+    can: 'Wszystkie jachty żaglowe po wodach śródlądowych i morskich BEZ OGRANICZEŃ (długości, akwenu, pory).',
+    note: 'Najwyższy stopień żeglarski w Polsce.',
+  },
+  {
+    name: 'Sternik motorowodny',
+    badge: '🚤 motorówki',
+    who: 'Ukończone 14 lat + egzamin (osobny, motorowodny).',
+    can: 'Jachty MOTOROWE: po śródlądziu bez ograniczeń mocy, po morzu do 12 m / 2 Mm od brzegu w dzień. (Osoby 14–16 lat: moc do 60 kW, pod nadzorem.)',
+    note: 'Przydatny na Mazurach np. do prowadzenia motorówek czarterowych i RIB-ów powyżej 10 kW.',
+  },
+]
+
+function Patenty() {
+  return (
+    <div>
+      <p className="lead mb-6 max-w-3xl">
+        W Polsce uprawnienia żeglarskie reguluje ustawa o żegludze śródlądowej i rozporządzenie o
+        uprawianiu turystyki wodnej. Poniżej ścieżka rozwoju — od pływania bez patentu po stopień
+        kapitana.
+      </p>
+
+      {/* ścieżka rozwoju */}
+      <div className="mb-8 flex flex-wrap items-center gap-2 text-sm">
+        {['Bez patentu', 'Żeglarz jachtowy', 'Jachtowy sternik morski', 'Kapitan jachtowy'].map((s, i, arr) => (
+          <span key={s} className="flex items-center gap-2">
+            <span className="chip">{s}</span>
+            {i < arr.length - 1 && <span className="text-brine-300">→</span>}
+          </span>
+        ))}
+        <span className="ml-2 text-brine-100/50">(równolegle: Sternik motorowodny 🚤)</span>
+      </div>
+
+      <div className="grid gap-4 lg:grid-cols-2">
+        {LICENSES.map((l) => (
+          <motion.div key={l.name} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} className="card p-6">
+            <div className="flex items-center justify-between gap-3">
+              <h3 className="font-display text-xl font-700 text-white">{l.name}</h3>
+              <span className="chip shrink-0">{l.badge}</span>
+            </div>
+            <dl className="mt-4 space-y-3 text-sm">
+              <div>
+                <dt className="text-xs font-semibold uppercase tracking-wide text-brine-100/50">Kto może / warunki</dt>
+                <dd className="mt-0.5 text-brine-100/90">{l.who}</dd>
+              </div>
+              <div>
+                <dt className="text-xs font-semibold uppercase tracking-wide text-brine-100/50">Co możesz prowadzić</dt>
+                <dd className="mt-0.5 text-brine-100/90">{l.can}</dd>
+              </div>
+              <div>
+                <dt className="text-xs font-semibold uppercase tracking-wide text-brine-100/50">Warto wiedzieć</dt>
+                <dd className="mt-0.5 text-brine-100/80">{l.note}</dd>
+              </div>
+            </dl>
+          </motion.div>
+        ))}
+      </div>
+
+      <div className="card mt-6 p-5 text-xs text-brine-100/70">
+        ⚠️ Stan prawny może się zmieniać — przed egzaminem sprawdź aktualne wymagania na stronie
+        Polskiego Związku Żeglarskiego (pya.org.pl) i w obowiązującym rozporządzeniu.
+      </div>
+    </div>
+  )
+}
+
 /* ===================== STRONA ===================== */
 
 const TABS = [
   { id: 'droga', label: 'Prawo drogi', icon: ShieldCheck },
   { id: 'znaki', label: 'Znaki ruchu wodnego', icon: Milestone },
   { id: 'sygnaly', label: 'Sygnały', icon: Volume2 },
+  { id: 'patenty', label: 'Patenty', icon: Award },
 ] as const
 
 export default function Przepisy() {
@@ -455,7 +550,15 @@ export default function Przepisy() {
             śródlądowych — lokalne przepisy żeglugowe (w Europie system CEVNI).
           </p>
         </Term>
-        . Światła nawigacyjne znajdziesz w zakładce <b className="text-white">Budowa jachtu → Światła</b>.
+        . Zobacz też:{' '}
+        <Link to="/budowa" className="font-semibold text-brine-300 underline decoration-dashed underline-offset-4 hover:text-white">
+          Budowa jachtu
+        </Link>{' '}
+        oraz{' '}
+        <Link to="/budowa?tab=lights" className="font-semibold text-brine-300 underline decoration-dashed underline-offset-4 hover:text-white">
+          Światła nawigacyjne
+        </Link>
+        .
       </PageHeader>
 
       <div className="mb-6 inline-flex flex-wrap rounded-xl border border-white/10 bg-white/5 p-1">
@@ -474,6 +577,7 @@ export default function Przepisy() {
       {tab === 'droga' && <PrawoDrogi />}
       {tab === 'znaki' && <ZnakiRuchu />}
       {tab === 'sygnaly' && <Sygnaly />}
+      {tab === 'patenty' && <Patenty />}
 
       <div className="card mt-8 p-6 text-sm text-brine-100/85">
         <p>

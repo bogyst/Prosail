@@ -9,6 +9,7 @@ import {
   Scale,
   Link2,
   LifeBuoy,
+  BookOpen,
   GraduationCap,
   Menu,
   X,
@@ -23,6 +24,7 @@ const NAV = [
   { to: '/przepisy', label: 'Przepisy', icon: Scale },
   { to: '/wezly', label: 'Węzły', icon: Link2 },
   { to: '/ratownictwo', label: 'Ratownictwo', icon: LifeBuoy },
+  { to: '/glosariusz', label: 'Glosariusz', icon: BookOpen },
   { to: '/quiz', label: 'Quiz', icon: GraduationCap },
 ]
 

@@ -124,8 +124,10 @@ export default function Meteorologia() {
                   stroke="#0f2b3f"
                   strokeWidth="1"
                   strokeLinejoin="round"
-                  animate={{ d: [flagPath(b, 0), flagPath(b, Math.PI), flagPath(b, 0)] }}
-                  transition={{ duration: Math.max(0.45, 2.6 - b * 0.18), repeat: Infinity, ease: 'easeInOut' }}
+                  animate={{
+                    d: [0, 0.5, 1, 1.5, 2].map((k) => flagPath(b, k * Math.PI)),
+                  }}
+                  transition={{ duration: Math.max(0.35, 2.4 - b * 0.17), repeat: Infinity, ease: 'linear' }}
                 />
               </svg>
             </div>
@@ -230,14 +232,16 @@ function flagPath(b: number, phase: number) {
   const L = 70
   const t = Math.min(1, Math.max(0, b / 6)) // 0 = cisza, 1 = poziomo (ok. 6°B)
   const theta = ((90 * (1 - t)) * Math.PI) / 180 // 90° w dół przy ciszy, 0° przy silnym
-  const flutter = Math.max(0, Math.min(7, b - 0.5)) * (0.35 + 0.65 * t)
-  const w = flutter * Math.sin(phase)
+  // amplituda łopotu rośnie z siłą wiatru (fala biegnie wzdłuż flagi)
+  const amp = Math.max(0, Math.min(12, b * 1.5)) * (0.3 + 0.7 * t)
+  const w1 = amp * 0.45 * Math.sin(phase + Math.PI * 0.9)
+  const w2 = amp * Math.sin(phase)
   const local: [number, number][] = [
     [0, -7],
-    [L * 0.5, -7 + w * 0.5],
-    [L, -6 + w],
-    [L, 7 + w],
-    [L * 0.5, 7 + w * 0.5],
+    [L * 0.5, -7 + w1],
+    [L, -6 + w2],
+    [L, 7 + w2],
+    [L * 0.5, 7 + w1],
     [0, 7],
   ]
   const cos = Math.cos(theta)

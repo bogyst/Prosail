@@ -9,6 +9,7 @@ import Przepisy from './pages/Przepisy'
 import Wezly from './pages/Wezly'
 import Quiz from './pages/Quiz'
 import Ratownictwo from './pages/Ratownictwo'
+import Glosariusz from './pages/Glosariusz'
 import NotFound from './pages/NotFound'
 
 export default function App() {
@@ -23,6 +24,7 @@ export default function App() {
         <Route path="przepisy" element={<Przepisy />} />
         <Route path="wezly" element={<Wezly />} />
         <Route path="ratownictwo" element={<Ratownictwo />} />
+        <Route path="glosariusz" element={<Glosariusz />} />
         <Route path="quiz" element={<Quiz />} />
         <Route path="*" element={<NotFound />} />
       </Route>
