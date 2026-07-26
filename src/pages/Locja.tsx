@@ -4,12 +4,20 @@ import Buoy, { type BodyShape, type TopMark, type Band, bandColor } from '../com
 import LocjaMap from '../components/LocjaMap'
 import BridgePassage from '../components/BridgePassage'
 import { PageHeader, Term } from '../components/ui'
+import Illustration from '../components/Illustration'
 import { LayoutGrid, Map, Construction } from 'lucide-react'
 
 interface Mark {
   id: string
   name: string
   group: string
+  /**
+   * Opcjonalny obrazek zamiast rysowanej pławy.
+   * Wrzuć plik np. do `public/znaki/pława-lewa.webp` i podaj tu:
+   *   img: '/znaki/plawa-lewa.webp'
+   * Bez tego pola rysowana jest pława wektorowa (shape/bands/topmark).
+   */
+  img?: string
   shape: BodyShape
   bands: Band[]
   topmark?: TopMark
@@ -236,7 +244,9 @@ export default function Locja() {
                     }`}
                   >
                     <div className="rounded-xl bg-gradient-to-b from-[#eaf3fb] to-[#c2dcef] px-2 pt-2">
-                      <Buoy shape={m.shape} bands={m.bands} topmark={m.topmark} topColor={m.topColor} size={82} />
+                      <Illustration img={m.img} alt={m.name} className="h-[139px] w-[82px] object-contain">
+                        <Buoy shape={m.shape} bands={m.bands} topmark={m.topmark} topColor={m.topColor} size={82} />
+                      </Illustration>
                     </div>
                     <span className="mt-2 text-center text-xs leading-tight text-brine-100/80">
                       {m.name}
@@ -253,7 +263,9 @@ export default function Locja() {
           <motion.div key={sel.id} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="card p-6">
             <div className="flex items-center gap-5">
               <div className="shrink-0 rounded-xl bg-gradient-to-b from-[#eaf3fb] to-[#c2dcef] px-2 pt-2">
-                <Buoy shape={sel.shape} bands={sel.bands} topmark={sel.topmark} topColor={sel.topColor} size={100} />
+                <Illustration img={sel.img} alt={sel.name} className="h-[170px] w-[100px] object-contain">
+                  <Buoy shape={sel.shape} bands={sel.bands} topmark={sel.topmark} topColor={sel.topColor} size={100} />
+                </Illustration>
               </div>
               <div>
                 <div className="chip mb-2">{sel.group}</div>

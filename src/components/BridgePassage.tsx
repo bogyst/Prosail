@@ -1,5 +1,6 @@
 import { type ReactNode } from 'react'
 import { motion } from 'framer-motion'
+import Illustration from './Illustration'
 
 const Y = '#f4c430'
 const R = '#d63a3f'
@@ -21,7 +22,15 @@ const YellowDiamond = (
   </Board>
 )
 
-const SIGNS: { name: string; desc: string; svg: ReactNode }[] = [
+interface BridgeSign {
+  name: string
+  desc: string
+  /** Opcjonalny obrazek zamiast rysunku, np. '/znaki/most-skrajnia.webp'. */
+  img?: string
+  svg: ReactNode
+}
+
+const SIGNS: BridgeSign[] = [
   {
     name: 'Przejście zalecane — oba kierunki',
     desc: 'Żółty romb pod przęsłem oznacza zalecane przejście (przęsło żeglowne). Widoczny z obu stron = ruch dozwolony w obu kierunkach.',
@@ -145,7 +154,11 @@ export default function BridgePassage() {
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {SIGNS.map((s) => (
           <motion.div key={s.name} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} className="card flex items-center gap-4 p-4">
-            <div className="rounded-lg bg-white/5 p-1">{s.svg}</div>
+            <div className="shrink-0 rounded-lg bg-white/5 p-1">
+              <Illustration img={s.img} alt={`Znak: ${s.name}`} className="h-[92px] w-[92px] object-contain">
+                {s.svg}
+              </Illustration>
+            </div>
             <div>
               <h3 className="font-display text-base font-700 text-navy">{s.name}</h3>
               <p className="mt-1 text-xs leading-relaxed text-brine-100/80">{s.desc}</p>

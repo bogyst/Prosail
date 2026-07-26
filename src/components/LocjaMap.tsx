@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
 import Buoy, { type BodyShape, type TopMark, type Band, bandColor } from './Buoy'
+import Illustration from './Illustration'
 
 const R = bandColor('red')
 const G = bandColor('green')
@@ -14,6 +15,8 @@ interface MapMark {
   id: string
   name: string
   desc: string
+  /** Opcjonalny obrazek zamiast rysowanej pławy, np. '/znaki/plawa.webp'. */
+  img?: string
   x: number
   y: number
   size: number
@@ -332,7 +335,9 @@ export default function LocjaMap() {
                   sel?.id === m.id ? 'ring-2 ring-white/80' : ''
                 }`}
               >
-                <Buoy shape={m.shape} bands={m.bands} topmark={m.topmark} topColor={m.topColor} size={m.size} />
+                <Illustration img={m.img} alt={m.name} className="object-contain" >
+                  <Buoy shape={m.shape} bands={m.bands} topmark={m.topmark} topColor={m.topColor} size={m.size} />
+                </Illustration>
               </span>
             </button>
           ))}

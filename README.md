@@ -198,6 +198,13 @@ prosail/
 
 ---
 
+## 🖼️ Podmiana rysunków na własne obrazki
+
+Każdą ilustrację (znaki żeglugowe, pławy, kroki węzłów, pytania quizu) można
+zastąpić plikiem **WEBP** — wystarczy wrzucić go do `public/` i dopisać jedno
+pole `img` w danych. Rysunek SVG zostaje jako zapas. Instrukcja z przykładami:
+[`docs/OBRAZKI.md`](docs/OBRAZKI.md).
+
 ## 📚 Uwaga merytoryczna
 
 Model fizyki w symulatorze jest **uproszczony i poglądowy** — służy do

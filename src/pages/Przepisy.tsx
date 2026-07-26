@@ -2,6 +2,7 @@ import { useState, type ReactNode } from 'react'
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { PageHeader, Term } from '../components/ui'
+import Illustration from '../components/Illustration'
 import { ShieldCheck, Milestone, Volume2, Signpost, Award } from 'lucide-react'
 
 /* ===================== PRAWO DROGI ===================== */
@@ -224,7 +225,19 @@ function Anchor2({ c }: { c: string }) {
   )
 }
 
-const SIGNS = [
+interface SignEntry {
+  name: string
+  desc: string
+  /**
+   * Opcjonalny obrazek zamiast rysunku SVG — patrz przykład „Zakaz cumowania”.
+   * Plik wrzuć do `public/znaki/…`, a tutaj podaj ścieżkę: '/znaki/nazwa.webp'.
+   */
+  img?: string
+  /** Rysunek zapasowy, używany gdy nie ma `img`. */
+  svg: ReactNode
+}
+
+const SIGNS: SignEntry[] = [
   {
     name: 'Zakaz przejścia',
     desc: 'Wejście / przejście zabronione (np. tor zamknięty, wygrodzony akwen). Trzy poziome pasy czerwono‑biało‑czerwone albo czerwona tablica.',
@@ -247,6 +260,10 @@ const SIGNS = [
   {
     name: 'Zakaz cumowania (A.7)',
     desc: 'Nie wolno przybijać ani mocować jednostki do brzegu na tym odcinku. Piktogram: pachołek z liną na krawędzi pomostu, przekreślony czerwonym pasem.',
+    // ↓↓↓ PRZYKŁAD PODMIANY RYSUNKU NA OBRAZEK ↓↓↓
+    // Plik leży w `public/znaki/`, więc ścieżka zaczyna się od „/znaki/”.
+    // Usuń tę linię, aby wrócić do rysunku SVG poniżej.
+    img: '/znaki/zakaz-cumowania.webp',
     svg: (
       <Sign bg={WH} border={RD} slash native>
         <path d={MOORING_PICTOGRAM} fill={BK} fillRule="evenodd" />
@@ -335,7 +352,11 @@ function ZnakiRuchu() {
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {SIGNS.map((s) => (
           <motion.div key={s.name} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} className="card flex items-center gap-4 p-4">
-            <div className="rounded-lg bg-white/5 p-1">{s.svg}</div>
+            <div className="shrink-0 rounded-lg bg-white/5 p-1">
+              <Illustration img={s.img} alt={`Znak: ${s.name}`} className="h-[92px] w-[92px] object-contain">
+                {s.svg}
+              </Illustration>
+            </div>
             <div>
               <h3 className="font-display text-base font-700 text-navy">{s.name}</h3>
               <p className="mt-1 text-xs leading-relaxed text-brine-100/80">{s.desc}</p>
@@ -411,7 +432,17 @@ function DayShape({ shapes }: { shapes: ('ball' | 'coneUp' | 'coneDown' | 'diamo
   )
 }
 
-const SHAPES: { shapes: ('ball' | 'coneUp' | 'coneDown' | 'diamond' | 'cyl')[]; name: string; desc: string }[] = [
+type DayShapeKind = 'ball' | 'coneUp' | 'coneDown' | 'diamond' | 'cyl'
+
+interface DayShapeEntry {
+  shapes: DayShapeKind[]
+  name: string
+  desc: string
+  /** Opcjonalny obrazek zamiast rysunku, np. '/znaki/kula-kotwiczna.webp'. */
+  img?: string
+}
+
+const SHAPES: DayShapeEntry[] = [
   { shapes: ['ball'], name: 'Kula (na dziobie)', desc: 'Jednostka stoi na kotwicy. W nocy zamiast kuli — białe światło widoczne dookoła widnokręgu.' },
   { shapes: ['coneDown'], name: 'Stożek wierzchołkiem w dół', desc: 'Jednostka żaglowa idąca dodatkowo na silniku (żaglowo‑motorowa) — traktowana jak motorowa.' },
   { shapes: ['ball', 'ball', 'ball'], name: 'Trzy kule w pionie', desc: 'Jednostka na mieliźnie (osiadła na dnie).' },
@@ -454,7 +485,11 @@ function Sygnaly() {
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {SHAPES.map((s) => (
             <div key={s.name} className="card flex items-center gap-4 p-4">
-              <div className="rounded-lg bg-white/10 p-2"><DayShape shapes={s.shapes} /></div>
+              <div className="shrink-0 rounded-lg bg-white/10 p-2">
+                <Illustration img={s.img} alt={`Znak dzienny: ${s.name}`} className="h-[96px] w-[70px] object-contain">
+                  <DayShape shapes={s.shapes} />
+                </Illustration>
+              </div>
               <div>
                 <h3 className="font-display text-base font-700 text-navy">{s.name}</h3>
                 <p className="mt-1 text-xs leading-relaxed text-brine-100/80">{s.desc}</p>

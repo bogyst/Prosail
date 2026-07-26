@@ -7,8 +7,18 @@ interface Question {
   topic: string
   q: string
   options: string[]
+  /** Indeks poprawnej odpowiedzi (liczony od 0). */
   correct: number
   explain: string
+  /**
+   * OPCJONALNY OBRAZEK DO PYTANIA (np. znak do rozpoznania).
+   * Wrzuć plik do `public/` i podaj ścieżkę stamtąd, np.:
+   *   img: '/znaki/zakaz-cumowania.webp'
+   * Przykład użycia znajdziesz w pytaniu „Jaki to znak?” poniżej.
+   */
+  img?: string
+  /** Podpis pod obrazkiem (dla czytników ekranu i podpisu). */
+  imgAlt?: string
 }
 
 // Baza pytań — rozbudowywana. Algorytm sam wykrywa działy po polu `topic`.
@@ -89,6 +99,17 @@ const QUESTIONS: Question[] = [
     options: ['Spokój', 'Ostrzeżenie', 'Alarm — niebezpieczeństwo', 'Koniec ostrzeżenia'],
     correct: 2,
     explain: '40 błysków/min to ostrzeżenie (spodziewane pogorszenie), a 90 błysków/min to alarm — burza i silny wiatr nadchodzą w krótkim czasie.',
+  },
+  // ↓↓↓ PRZYKŁAD PYTANIA Z OBRAZKIEM (wzór do kopiowania) ↓↓↓
+  {
+    topic: 'Przepisy',
+    q: 'Jaki to znak żeglugowy?',
+    img: '/znaki/zakaz-cumowania.webp',
+    imgAlt: 'Biała tablica z czerwoną ramką i czerwonym pasem przekreślenia, w środku czarny pachołek z liną',
+    options: ['Zakaz kotwiczenia', 'Zakaz cumowania', 'Zakaz wyprzedzania', 'Miejsce postoju'],
+    correct: 1,
+    explain:
+      'To znak A.7 — zakaz cumowania. Piktogram przedstawia pachołek z liną na krawędzi pomostu, przekreślony czerwonym pasem. Zakaz kotwiczenia ma w środku kotwicę.',
   },
   {
     topic: 'Przepisy',
@@ -375,6 +396,18 @@ export default function Quiz() {
             </div>
 
             <h3 className="font-display text-xl font-700 text-navy">{cur.q}</h3>
+
+            {/* Obrazek do pytania — pokazywany tylko, gdy pytanie ma pole `img`. */}
+            {cur.img && (
+              <figure className="mt-4 flex justify-center">
+                <img
+                  src={cur.img}
+                  alt={cur.imgAlt ?? 'Ilustracja do pytania'}
+                  loading="lazy"
+                  className="max-h-56 rounded-lg border border-tan bg-white p-2 object-contain"
+                />
+              </figure>
+            )}
 
             <div className="mt-5 space-y-3">
               {cur.options.map((opt, idx) => {
