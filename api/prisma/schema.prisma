@@ -1,0 +1,108 @@
+// Schemat bazy ProSail — konta szkół żeglarskich, kursantów i administratora.
+//
+// Zasada działania:
+//  • ADMIN  — właściciel platformy: zarządza szkołami i ich miesięcznymi limitami.
+//  • SCHOOL — szkoła żeglarska: w ramach limitu na dany miesiąc tworzy dostępy
+//             dla kursantów (każdy ważny domyślnie 14 dni).
+//  • STUDENT— kursant: loguje się jednorazowym kodem dostępu, bez hasła.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  ADMIN
+  SCHOOL
+  STUDENT
+}
+
+model User {
+  id           String    @id @default(cuid())
+  role         Role
+  name         String
+  // E-mail wymagany dla ADMIN i SCHOOL (logowanie hasłem); dla kursantów opcjonalny.
+  email        String?   @unique
+  passwordHash String?
+  isActive     Boolean   @default(true)
+  lastLoginAt  DateTime?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  // Konto szkoły (gdy role = SCHOOL)
+  school       School?
+  // Dostęp kursanta (gdy role = STUDENT)
+  enrollment   Enrollment?
+  auditLogs    AuditLog[] @relation("AuditActor")
+
+  @@index([role])
+}
+
+model School {
+  id           String   @id @default(cuid())
+  name         String
+  contactEmail String
+  contactPhone String?
+  city         String?
+  notes        String?
+
+  /// Ile dostępów dla kursantów szkoła może utworzyć w jednym miesiącu.
+  monthlyQuota Int      @default(20)
+  /// Na ile dni ważny jest dostęp jednego kursanta (domyślnie 14).
+  accessDays   Int      @default(14)
+  isActive     Boolean  @default(true)
+
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  ownerId      String   @unique
+  owner        User     @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+
+  enrollments  Enrollment[]
+
+  @@index([isActive])
+}
+
+model Enrollment {
+  id          String    @id @default(cuid())
+
+  schoolId    String
+  school      School    @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+
+  studentId   String    @unique
+  student     User      @relation(fields: [studentId], references: [id], onDelete: Cascade)
+
+  /// Kod, którym kursant loguje się do platformy (jednorazowo wydany przez szkołę).
+  accessCode  String    @unique
+  /// Okres rozliczeniowy w formacie YYYY-MM — służy do liczenia zużycia limitu.
+  period      String
+  startsAt    DateTime  @default(now())
+  expiresAt   DateTime
+  /// Pierwsze udane logowanie kursanta.
+  activatedAt DateTime?
+  /// Wycofanie dostępu przez szkołę lub administratora.
+  revokedAt   DateTime?
+
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@index([schoolId, period])
+  @@index([expiresAt])
+}
+
+model AuditLog {
+  id        String   @id @default(cuid())
+  /// Kto wykonał akcję (może być null, gdy konto usunięto).
+  actorId   String?
+  actor     User?    @relation("AuditActor", fields: [actorId], references: [id], onDelete: SetNull)
+  action    String
+  targetId  String?
+  meta      String?
+  createdAt DateTime @default(now())
+
+  @@index([createdAt])
+}

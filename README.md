@@ -22,11 +22,24 @@ w motywie żeglarskim. Pięć modułów, między którymi przełączasz się w m
 - **Tailwind CSS** — spójny motyw żeglarski (głęboki granat, morska zieleń, lina).
 - **Framer Motion** — płynne animacje.
 - **SVG** — cała interaktywna grafika (jacht, żagle, pławy, siły) rysowana wektorowo, więc jest ostra na każdym ekranie.
-- **Brak backendu** — treść jest statyczna, więc hosting jest tani, szybki i odporny.
+- **Backend (`api/`)** — **Fastify + PostgreSQL + Prisma**: konta szkół, kursantów
+  i panel administratora. Sesje w ciasteczku `httpOnly` (JWT). Szczegóły i lista
+  endpointów: [`api/README.md`](api/README.md).
 
-Efekt buildu to zwykłe pliki statyczne (`dist/`), które serwuje lekki **nginx**
-w kontenerze. Przed nim opcjonalnie stoi **Caddy**, który sam wystawia i odnawia
-certyfikat **HTTPS (Let's Encrypt)**.
+Frontend to statyczne pliki (`dist/`) serwowane przez **nginx**, który dodatkowo
+przekazuje `/api/...` do usługi API (ten sam origin, bez CORS). Przed wszystkim
+opcjonalnie stoi **Caddy** z automatycznym **HTTPS (Let's Encrypt)**.
+
+## 👥 Konta: szkoły, kursanci, administrator
+
+| Rola | Logowanie | Uprawnienia |
+|------|-----------|-------------|
+| **Administrator** | e-mail + hasło | dodaje szkoły, ustawia im **miesięczny limit kont kursantów**, blokuje współpracę, widzi zużycie i audyt |
+| **Szkoła** | e-mail + hasło | wydaje kursantom dostępy **w ramach limitu na dany miesiąc**, wycofuje i odnawia je, widzi stan puli |
+| **Kursant** | **kod dostępu** (bez hasła) | korzysta z materiałów przez **14 dni** (długość ustala administrator) |
+
+Limit rozliczany jest miesięcznie. Slot wraca do puli tylko wtedy, gdy szkoła
+wycofa kod, którego kursant nigdy nie użył.
 
 ---
 
@@ -66,33 +79,41 @@ git clone <URL_TWOJEGO_REPO> prosail
 cd prosail
 ```
 
+### 3. Uzupełnij `.env` (hasła i sekrety)
+
+```bash
+cp .env.example .env
+nano .env     # POSTGRES_PASSWORD, JWT_SECRET (min. 32 znaki), ADMIN_EMAIL/PASSWORD
+```
+
 ### 3a. Szybki start — tylko HTTP (test, port 8080)
 
 ```bash
-docker compose up -d --build web
+docker compose up -d --build          # baza + api + frontend
+docker compose exec api npx tsx scripts/seed.ts   # pierwszy administrator
 ```
 
-Strona będzie dostępna pod `http://ADRES_IP_SERWERA:8080`.
+Strona będzie dostępna pod `http://ADRES_IP_SERWERA:8080`,
+a API pod `http://ADRES_IP_SERWERA:8080/api/health`.
 
 ### 3b. Produkcja — z automatycznym HTTPS i własną domeną
 
 Warunek: rekord **A** (i ewentualnie **AAAA**) Twojej domeny musi wskazywać na
 publiczne IP VPS-a, a porty **80** i **443** muszą być otwarte.
 
-```bash
-cp .env.example .env
-nano .env          # wpisz swoją DOMENĘ i EMAIL
-```
+W `.env` ustaw dodatkowo:
 
 ```env
 DOMAIN=twojadomena.pl
 EMAIL=twoj-email@example.com
+COOKIE_SECURE=true      # sesja tylko po HTTPS
 ```
 
-Uruchom aplikację razem z reverse proxy Caddy (profil `tls`):
+Uruchom wszystko razem z reverse proxy Caddy (profil `tls`):
 
 ```bash
 docker compose --profile tls up -d --build
+docker compose exec api npx tsx scripts/seed.ts   # pierwszy administrator
 ```
 
 Caddy automatycznie pobierze certyfikat Let's Encrypt. Po chwili strona działa
@@ -131,7 +152,17 @@ docker compose ps                 # status kontenerów
 docker compose logs -f web        # logi aplikacji
 docker compose logs -f caddy      # logi TLS/proxy
 docker compose down               # zatrzymanie
-docker compose down -v            # zatrzymanie + usunięcie wolumenów (certyfikaty!)
+docker compose down -v            # zatrzymanie + usunięcie wolumenów (BAZA I CERTYFIKATY!)
+docker compose logs -f api        # logi API
+docker compose exec api npx tsx scripts/seed.ts        # utwórz/zmień hasło admina
+docker compose exec db pg_dump -U prosail prosail > backup-$(date +%F).sql   # kopia bazy
+```
+
+### Kopie zapasowe bazy (zalecane)
+
+```bash
+# codziennie o 3:00 — dopisz do crontab -e
+0 3 * * * cd /root/prosail && docker compose exec -T db pg_dump -U prosail prosail | gzip > /root/backups/prosail-$(date +\%F).sql.gz
 ```
 
 ---
@@ -154,7 +185,14 @@ prosail/
 │   │   ├── Buoy.tsx        # generator pław IALA w SVG
 │   │   └── sail/SailSimulator.tsx   # symulator trymu żagli
 │   ├── lib/sailing.ts      # model fizyki żeglowania (kursy, trym, siły)
-│   └── pages/              # Teoria, Locja, Meteorologia, Budowa, Przepisy
+│   └── pages/              # Teoria, Locja, Meteorologia, Budowa, Przepisy, …
+├── api/                    # backend: konta szkół i kursantów
+│   ├── prisma/schema.prisma    # model danych (User, School, Enrollment, AuditLog)
+│   ├── src/routes/             # auth, admin, school
+│   ├── src/lib/period.ts       # limity miesięczne i ważność dostępu
+│   ├── scripts/seed.ts         # pierwszy administrator
+│   ├── scripts/e2e.ts          # test całego przepływu (51 asercji)
+│   └── README.md               # pełna dokumentacja API
 └── ...
 ```
 

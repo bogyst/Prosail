@@ -1,39 +1,80 @@
-# ProSail — produkcyjny compose z automatycznym HTTPS (Caddy + Let's Encrypt).
+# ProSail — frontend (nginx) + API (Fastify) + baza (PostgreSQL) + HTTPS (Caddy).
 #
-# Szybki start (bez domeny, tylko HTTP na porcie 8080):
-#   docker compose up -d --build web
+# Szybki start bez domeny (HTTP na porcie 8080):
+#   cp .env.example .env   # ustaw hasła i sekrety
+#   docker compose up -d --build
 #
-# Pełny start z HTTPS (wymaga domeny wskazującej na IP serwera):
-#   DOMAIN=twojadomena.pl EMAIL=ty@example.com docker compose --profile tls up -d --build
+# Produkcja z domeną i HTTPS:
+#   DOMAIN i EMAIL w .env, następnie:
+#   docker compose --profile tls up -d --build
+#
+# Pierwszy administrator (jednorazowo):
+#   docker compose exec api npx tsx scripts/seed.ts
 
 services:
-  # Aplikacja: statyczny build serwowany przez nginx
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-prosail}
+      POSTGRES_USER: ${POSTGRES_USER:-prosail}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?ustaw POSTGRES_PASSWORD w .env}
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U ${POSTGRES_USER:-prosail} -d ${POSTGRES_DB:-prosail}']
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    # Baza nie jest wystawiana na świat — tylko dla usługi api.
+    expose:
+      - '5432'
+
+  api:
+    build: ./api
+    image: prosail-api:latest
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      NODE_ENV: production
+      PORT: '4000'
+      DATABASE_URL: postgresql://${POSTGRES_USER:-prosail}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB:-prosail}
+      JWT_SECRET: ${JWT_SECRET:?ustaw JWT_SECRET (min. 32 znaki) w .env}
+      SESSION_TTL: ${SESSION_TTL:-12h}
+      COOKIE_SECURE: ${COOKIE_SECURE:-false}
+      ADMIN_EMAIL: ${ADMIN_EMAIL:-}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:-}
+      ADMIN_NAME: ${ADMIN_NAME:-Administrator}
+    expose:
+      - '4000'
+
   web:
     build: .
     image: prosail:latest
     restart: unless-stopped
-    # Wystaw port 8080 na hoście, gdy używasz samego 'web' (bez Caddy).
-    # Przy profilu 'tls' ruch idzie przez Caddy, więc ten port jest opcjonalny.
+    depends_on:
+      - api
     ports:
-      - "8080:80"
+      - '8080:80'
     expose:
-      - "80"
+      - '80'
     healthcheck:
-      test: ["CMD", "wget", "-qO-", "http://127.0.0.1/healthz"]
+      test: ['CMD', 'wget', '-qO-', 'http://127.0.0.1/healthz']
       interval: 30s
       timeout: 3s
       retries: 3
 
-  # Reverse proxy z automatycznym certyfikatem TLS (uruchamiane profilem 'tls')
   caddy:
     image: caddy:2-alpine
     restart: unless-stopped
-    profiles: ["tls"]
+    profiles: ['tls']
     depends_on:
       - web
     ports:
-      - "80:80"
-      - "443:443"
+      - '80:80'
+      - '443:443'
     environment:
       DOMAIN: ${DOMAIN:-localhost}
       EMAIL: ${EMAIL:-}
@@ -43,5 +84,6 @@ services:
       - caddy_config:/config
 
 volumes:
+  db_data:
   caddy_data:
   caddy_config:
