@@ -48,6 +48,7 @@ python3 -c "from PIL import Image; Image.open('znak.png').convert('RGB').save('p
 | Znaki przy przejściu pod mostem | `src/components/BridgePassage.tsx` | tablica `SIGNS` |
 | Kroki wiązania węzłów | `src/pages/Wezly.tsx` | `KNOTS[].steps[]` |
 | Obrazek do pytania w quizie | `src/pages/Quiz.tsx` | tablica `QUESTIONS` |
+| Okucia pokładowe (knagi, kluzy, półkluzy) | `src/components/Fittings.tsx` | tablica `FITTINGS` |
 
 ## Przykład 1 — znak żeglugowy (działa w projekcie)
 

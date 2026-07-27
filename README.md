@@ -8,7 +8,7 @@ w motywie żeglarskim. Pięć modułów, między którymi przełączasz się w m
 | **Teoria żeglowania** | Symulator trymu żagli — zmieniasz kierunek wiatru i kurs jachtu, żagle same ustawiają się optymalnie, a strzałki pokazują siły (ciąg, przechył, opór kilu, wiatr pozorny). Klikalne objaśnienia teorii. |
 | **Locja** | Galeria oznakowania IALA (region A) oraz interaktywna mapa akwenu: szlak, mielizna otoczona znakami kardynalnymi (N/E/S/W), izolowane niebezpieczeństwo na skale, wejście do portu i wieża sygnalizacji sztormowej (Mazury: 0/40/90 błysków). |
 | **Meteorologia** | Interaktywna skala Beauforta (0–12) z animacją fal i flagi oraz przewodnik po rodzajach chmur i ich znaczeniu dla pogody. |
-| **Budowa jachtu** | Schemat slupa z podzakładkami „Ożaglowanie", „Elementy stałe" i „Światła" (widok z góry z sektorami świateł nawigacyjnych); wybór części podświetla ją na rysunku. |
+| **Budowa jachtu** | Schemat slupa z podzakładkami „Ożaglowanie", „Olinowanie ruchome", „Elementy stałe", „Silnik" (zaburtowy, w orientacji jak na jachcie), „Knagi i kluzy" (osprzęt pokładowy + knagowanie ósemką krok po kroku), „Światła" i „Widok z góry" (cumowanie burtą: cumy/szpringi/bresty z animacją „czemu zapobiega"). Przycisk **„Sprawdź wiedzę o budowie jachtu"** uruchamia sprawdzian, w którym trzeba kliknąć wskazaną część na rysunku. |
 | **Przepisy** | Trzy zakładki: „Prawo drogi" (interaktywne scenariusze), „Znaki ruchu wodnego" i „Sygnały" (dźwiękowe oraz znaki dzienne — kule i stożki). |
 | **Węzły** | Sześć węzłów z wizualnym wiązaniem krok po kroku (nawigacja między krokami), opisem i zastosowaniem. |
 | **Quiz** | Wybór działu lub tryb Mix (10/30/50/75 pytań); podsumowanie z wynikiem ogólnym i procentowym per dział. |
@@ -183,6 +183,11 @@ prosail/
 │   │   ├── Layout.tsx      # nawigacja / motyw
 │   │   ├── ui.tsx          # klikalne pojęcia, akordeony, paski sił
 │   │   ├── Buoy.tsx        # generator pław IALA w SVG
+│   │   ├── YachtDiagram.tsx     # wspólny rysunek jachtu (schemat + sprawdzian)
+│   │   ├── BudowaQuiz.tsx       # sprawdzian „kliknij część na rysunku"
+│   │   ├── DeckTopView.tsx      # cumowanie burtą: cumy / szpringi / bresty
+│   │   ├── EngineView.tsx       # silnik zaburtowy
+│   │   ├── Fittings.tsx         # knagi, kluzy, półkluzy, pachołki
 │   │   └── sail/SailSimulator.tsx   # symulator trymu żagli
 │   ├── lib/sailing.ts      # model fizyki żeglowania (kursy, trym, siły)
 │   └── pages/              # Teoria, Locja, Meteorologia, Budowa, Przepisy, …
