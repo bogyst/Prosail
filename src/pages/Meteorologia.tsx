@@ -1,6 +1,9 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
+import { Maximize2, Camera } from 'lucide-react'
 import { PageHeader, Term } from '../components/ui'
+import CloudModal from '../components/CloudModal'
+import { CLOUDS, type Cloud } from '../data/clouds'
 
 interface Beaufort {
   n: number
@@ -29,53 +32,9 @@ const BEAUFORT: Beaufort[] = [
   { n: 12, name: 'Huragan', kts: '≥64', ms: '≥32,7', land: 'Katastrofalne zniszczenia.', sea: 'Powietrze pełne piany i pyłu, morze białe.', wave: '≥14 m', color: '#7a1f24' },
 ]
 
-const CLOUDS = [
-  {
-    name: 'Cirrus (Ci)',
-    level: 'Wysokie (>6 km)',
-    look: 'Delikatne, włókniste „pióra” z kryształków lodu.',
-    weather: 'Zwiastują nadejście ciepłego frontu — pogoda może się psuć w ciągu 12–24 h.',
-    emoji: '🪶',
-  },
-  {
-    name: 'Cumulus (Cu)',
-    level: 'Niskie/średnie',
-    look: 'Białe, kłębiaste „kalafiory” o płaskiej podstawie.',
-    weather: 'Ładna pogoda (cumulus humilis). Rozbudowa w pionie zapowiada niestabilność.',
-    emoji: '☁️',
-  },
-  {
-    name: 'Cumulonimbus (Cb)',
-    level: 'Pionowo rozbudowana',
-    look: 'Potężna chmura burzowa z „kowadłem” na szczycie.',
-    weather: 'Burze, ulewy, grad, gwałtowne szkwały i porywy — najgroźniejsza dla żeglarza!',
-    emoji: '⛈️',
-  },
-  {
-    name: 'Stratus (St)',
-    level: 'Niskie (<2 km)',
-    look: 'Jednolita, szara warstwa jak mgła nad ziemią.',
-    weather: 'Zachmurzenie, mżawka, ograniczona widzialność. Wiatr zwykle słaby.',
-    emoji: '🌫️',
-  },
-  {
-    name: 'Nimbostratus (Ns)',
-    level: 'Niskie/średnie',
-    look: 'Gruba, ciemnoszara warstwa bez wyraźnej struktury.',
-    weather: 'Ciągły, długotrwały deszcz lub śnieg — typowa dla frontu ciepłego.',
-    emoji: '🌧️',
-  },
-  {
-    name: 'Stratocumulus (Sc)',
-    level: 'Niskie',
-    look: 'Szaro‑białe „bałwanki” ułożone w płaty lub rzędy.',
-    weather: 'Zmienne zachmurzenie, zwykle bez opadów lub słaba mżawka.',
-    emoji: '🌥️',
-  },
-]
-
 export default function Meteorologia() {
   const [b, setB] = useState(4)
+  const [openCloud, setOpenCloud] = useState<Cloud | null>(null)
   const cur = BEAUFORT[b]
 
   return (
@@ -176,21 +135,30 @@ export default function Meteorologia() {
       </div>
 
       {/* CHMURY */}
-      <h2 className="mb-4 mt-12 font-display text-2xl font-700 text-navy">Rodzaje chmur</h2>
+      <div className="mb-4 mt-12 flex flex-wrap items-end justify-between gap-2">
+        <h2 className="font-display text-2xl font-700 text-navy">Rodzaje chmur</h2>
+        <p className="text-xs text-brine-100/70">Kliknij chmurę, aby zobaczyć szczegółowy opis i zdjęcia.</p>
+      </div>
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {CLOUDS.map((c, i) => (
-          <motion.div
-            key={c.name}
+          <motion.button
+            key={c.id}
+            onClick={() => setOpenCloud(c)}
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: i * 0.05 }}
-            className="card p-5"
+            transition={{ delay: i * 0.04 }}
+            whileHover={{ y: -3 }}
+            className="card group relative p-5 text-left transition-shadow hover:shadow-lg"
+            aria-label={`Szczegóły chmury ${c.name}`}
           >
+            <Maximize2 className="absolute right-4 top-4 h-4 w-4 text-brine-100/35 transition-colors group-hover:text-brine-500" />
             <div className="flex items-center gap-3">
               <span className="text-3xl">{c.emoji}</span>
-              <div>
-                <h3 className="font-display text-lg font-700 text-navy">{c.name}</h3>
-                <div className="text-xs text-brine-100/60">{c.level}</div>
+              <div className="min-w-0">
+                <h3 className="font-display text-lg font-700 leading-tight text-navy">{c.name}</h3>
+                <div className="text-xs text-brine-100/60">
+                  {c.family} · {c.altitude}
+                </div>
               </div>
             </div>
             <p className="mt-3 text-sm text-brine-100/85">{c.look}</p>
@@ -198,9 +166,17 @@ export default function Meteorologia() {
               <b className="text-brine-200">Pogoda: </b>
               {c.weather}
             </p>
-          </motion.div>
+            {c.photos.length > 0 && (
+              <span className="mt-3 inline-flex items-center gap-1.5 text-xs font-semibold text-brine-500">
+                <Camera className="h-3.5 w-3.5" />
+                {c.photos.length} zdj.
+              </span>
+            )}
+          </motion.button>
         ))}
       </div>
+
+      <CloudModal cloud={openCloud} onClose={() => setOpenCloud(null)} />
 
       <div className="card mt-6 p-6 text-sm text-brine-100/85">
         <h3 className="font-display text-lg font-700 text-navy">Reguły kciuka na wodzie</h3>

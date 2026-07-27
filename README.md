@@ -7,9 +7,9 @@ w motywie żeglarskim. Pięć modułów, między którymi przełączasz się w m
 |-------|------------|
 | **Teoria żeglowania** | Symulator trymu żagli — zmieniasz kierunek wiatru i kurs jachtu, żagle same ustawiają się optymalnie, a strzałki pokazują siły (ciąg, przechył, opór kilu, wiatr pozorny). Klikalne objaśnienia teorii. |
 | **Locja** | Galeria oznakowania IALA (region A) oraz interaktywna mapa akwenu: szlak, mielizna otoczona znakami kardynalnymi (N/E/S/W), izolowane niebezpieczeństwo na skale, wejście do portu i wieża sygnalizacji sztormowej (Mazury: 0/40/90 błysków). |
-| **Meteorologia** | Interaktywna skala Beauforta (0–12) z animacją fal i flagi oraz przewodnik po rodzajach chmur i ich znaczeniu dla pogody. |
+| **Meteorologia** | Interaktywna skala Beauforta (0–12) z animacją fal i flagi oraz przewodnik po chmurach: kliknięcie kafelka otwiera okno ze szczegółami (wysokość, powstawanie, prognoza, rozpoznawanie, wskazówki dla żeglarza) i przewijaną galerią zdjęć. |
 | **Budowa jachtu** | Schemat slupa z podzakładkami „Ożaglowanie", „Olinowanie ruchome", „Elementy stałe", „Silnik" (zaburtowy, w orientacji jak na jachcie), „Knagi i kluzy" (osprzęt pokładowy + knagowanie ósemką krok po kroku), „Światła" i „Widok z góry" (cumowanie burtą: cumy/szpringi/bresty z animacją „czemu zapobiega"). Przycisk **„Sprawdź wiedzę o budowie jachtu"** uruchamia sprawdzian, w którym trzeba kliknąć wskazaną część na rysunku. |
-| **Przepisy** | Trzy zakładki: „Prawo drogi" (interaktywne scenariusze), „Znaki ruchu wodnego" i „Sygnały" (dźwiękowe oraz znaki dzienne — kule i stożki). |
+| **Przepisy** | Zakładki: „Prawo drogi" (interaktywne scenariusze), „Znaki ruchu wodnego" (podział na kategorie A–E i tabliczki uzupełniające, z filtrem i opisem wyglądu każdej grupy), „Sygnały" (dźwiękowe oraz znaki dzienne) i „Patenty". |
 | **Węzły** | Sześć węzłów z wizualnym wiązaniem krok po kroku (nawigacja między krokami), opisem i zastosowaniem. |
 | **Quiz** | Wybór działu lub tryb Mix (10/30/50/75 pytań); podsumowanie z wynikiem ogólnym i procentowym per dział. |
 | **Ratownictwo** | Numery alarmowe (Mazury), pierwsza pomoc i interaktywny (krokowy) manewr „człowiek za burtą". |
@@ -189,6 +189,7 @@ prosail/
 │   │   ├── EngineView.tsx       # silnik zaburtowy
 │   │   ├── Fittings.tsx         # knagi, kluzy, półkluzy, pachołki
 │   │   └── sail/SailSimulator.tsx   # symulator trymu żagli
+│   ├── data/clouds.ts      # opisy i galerie zdjęć chmur (edytowane ręcznie)
 │   ├── lib/sailing.ts      # model fizyki żeglowania (kursy, trym, siły)
 │   └── pages/              # Teoria, Locja, Meteorologia, Budowa, Przepisy, …
 ├── api/                    # backend: konta szkół i kursantów

@@ -49,6 +49,7 @@ python3 -c "from PIL import Image; Image.open('znak.png').convert('RGB').save('p
 | Kroki wiązania węzłów | `src/pages/Wezly.tsx` | `KNOTS[].steps[]` |
 | Obrazek do pytania w quizie | `src/pages/Quiz.tsx` | tablica `QUESTIONS` |
 | Okucia pokładowe (knagi, kluzy, półkluzy) | `src/components/Fittings.tsx` | tablica `FITTINGS` |
+| Zdjęcia chmur (galeria w oknie szczegółów) | `src/data/clouds.ts` | `CLOUDS[].photos[]` |
 
 ## Przykład 1 — znak żeglugowy (działa w projekcie)
 
@@ -117,3 +118,63 @@ Za wybór odpowiada komponent `src/components/Illustration.tsx`:
 Jeśli `img` jest ustawione → renderuje `<img>`; jeśli nie → pokazuje rysunek SVG.
 Dzięki temu podmiana grafiki to zawsze **jedna linia w danych**, a stare rysunki
 nie są tracone.
+
+## Przykład 4 — zdjęcia chmury (działa w projekcie)
+
+Chmury mają nie jeden obrazek, tylko **galerię** — po kliknięciu kafelka otwiera
+się okno ze szczegółowym opisem i przewijanymi zdjęciami (strzałki ← →,
+przyciski, kropki). Wszystko dopisujesz w `src/data/clouds.ts`:
+
+```ts
+{
+  id: 'cumulonimbus',
+  name: 'Cumulonimbus (Cb)',
+  // … opisy …
+  photos: [
+    {
+      src: '/chmury/cumulonimbus-1.webp',   // plik z public/chmury/
+      alt: 'Chmura burzowa z rozlanym kowadłem nad taflą jeziora',  // obowiązkowe
+      caption: 'Dojrzały cumulonimbus: ciemna podstawa i kowadło u szczytu.', // opcjonalne
+      credit: 'fot. Jan Kowalski',           // opcjonalne
+    },
+    { src: '/chmury/cumulonimbus-2.webp', alt: 'Ta sama chmura o zachodzie słońca' },
+  ],
+}
+```
+
+Chmura z pustą tablicą `photos: []` też działa — galeria pokazuje wtedy
+komunikat zastępczy. Zdjęcia najlepiej poziome, ok. **1200×800 px**.
+
+> Dwa zdjęcia dołączone do projektu (`public/chmury/…`) to **grafiki poglądowe**
+> wygenerowane na potrzeby demonstracji, a nie prawdziwe fotografie —
+> podmień je na własne.
+
+## Przykład 5 — nowy znak żeglugowy w odpowiedniej kategorii
+
+Znaki w dziale „Przepisy → Znaki ruchu wodnego" są podzielone na grupy
+**A–E** oraz tabliczki uzupełniające (zgodnie z załącznikiem nr 7 do przepisów
+żeglugowych). Wystarczy dopisać obiekt do tablicy `SIGNS` w
+`src/pages/Przepisy.tsx` — znak sam trafi do właściwej sekcji i do filtrów:
+
+```ts
+{
+  group: 'A',            // 'A' zakazu · 'B' nakazu · 'C' ograniczenia
+                         // 'D' zalecenia · 'E' informacyjne · 'U' uzupełniające
+  code: 'A.12',          // oznaczenie z rozporządzenia (opcjonalne)
+  name: 'Zakaz ruchu jednostek motorowych',
+  desc: 'Krótki opis znaczenia znaku…',
+  img: '/znaki/a12.webp',                          // ← obrazek
+  svg: <Sign bg={WH} border={RD} slash>…</Sign>,   // ← rysunek zapasowy
+}
+```
+
+Gotowe „szkielety” tablic, których możesz użyć w polu `svg`:
+
+| Grupa | Kod |
+|---|---|
+| A (zakaz) | `<Sign bg={WH} border={RD} slash>…</Sign>` |
+| B (nakaz) | `<Sign bg={WH} border={RD}>…</Sign>` |
+| C (ograniczenie) | `<Sign bg={WH} border={RD}>…</Sign>` + wartość liczbowa |
+| D (zalecenie) | `<Sign bg={YE} diamond>…</Sign>` — tablica na wierzchołku |
+| E (informacyjny) | `<Sign bg={BL}>…</Sign>` — biały piktogram |
+| Uzupełniająca | `<Plate>…</Plate>` — biała tabliczka z czarną obwódką |

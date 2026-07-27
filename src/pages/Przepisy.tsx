@@ -177,6 +177,7 @@ function Sign({
   border,
   slash,
   native,
+  diamond,
   children,
 }: {
   bg: string
@@ -185,15 +186,32 @@ function Sign({
   /// true = piktogram podany w siatce 100×100 (znaki obrysowane z oryginału).
   /// false/brak = starsza siatka 80×80, skalowana automatycznie.
   native?: boolean
+  /// true = tablica postawiona na wierzchołku (znaki zalecenia — grupa D).
+  diamond?: boolean
   children: ReactNode
 }) {
-  return (
-    <svg viewBox="0 0 100 100" width="92" height="92" className="shrink-0">
+  const board = (
+    <>
       <rect width="100" height="100" fill={bg} />
       <rect x="5" y="5" width="90" height="90" fill="none" stroke={border ?? bg} strokeWidth="10" />
       {/* Na oryginale czerwony pas przekątnej biegnie POD czarnym piktogramem. */}
       {slash && <line x1="0" y1="0" x2="100" y2="100" stroke={SIGN_RED} strokeWidth="10" />}
       {native ? children : <g transform="scale(1.25)">{children}</g>}
+    </>
+  )
+  return (
+    <svg viewBox="0 0 100 100" width="92" height="92" className="shrink-0">
+      {diamond ? <g transform="translate(50 50) rotate(45) scale(0.705) translate(-50 -50)">{board}</g> : board}
+    </svg>
+  )
+}
+
+/** Tabliczka dodatkowa (uzupełniająca): biała, z czarną obwódką, szersza niż wyższa. */
+function Plate({ children }: { children: ReactNode }) {
+  return (
+    <svg viewBox="0 0 100 100" width="92" height="92" className="shrink-0">
+      <rect x="2" y="28" width="96" height="44" fill={WH} stroke={BK} strokeWidth="5" />
+      {children}
     </svg>
   )
 }
@@ -225,7 +243,127 @@ function Anchor2({ c }: { c: string }) {
   )
 }
 
+/* ————————————————————————————————————————————————————————————————
+   ZNAKI ŻEGLUGOWE — podział na grupy zgodny z załącznikiem nr 7 do
+   rozporządzenia Ministra Infrastruktury z 28.04.2003 r. w sprawie przepisów
+   żeglugowych na śródlądowych drogach wodnych (Dz.U. 2003 nr 212 poz. 2072).
+
+   DODAWANIE WŁASNYCH ZNAKÓW — wszystko robisz w tablicy SIGNS poniżej:
+
+     {
+       group: 'A',                         // A / B / C / D / E / U — patrz SIGN_GROUPS
+       code: 'A.12',                       // oznaczenie z rozporządzenia (opcjonalne)
+       name: 'Zakaz ruchu jednostek motorowych',
+       desc: 'Krótki opis znaczenia znaku…',
+       img: '/znaki/a12.webp',             // OBRAZEK — plik z katalogu public/znaki/
+       svg: <Sign bg={WH} border={RD} slash>…</Sign>,   // rysunek zapasowy
+     }
+
+   Jeśli podasz `img`, wyświetli się obrazek. Jeśli nie — rysunek `svg`.
+   Znak trafia automatycznie do właściwej kategorii i do filtrów.
+   ———————————————————————————————————————————————————————————————— */
+
+type SignGroup = 'A' | 'B' | 'C' | 'D' | 'E' | 'U'
+
+const YE = '#f7c600' // żółć znaków zalecenia (grupa D)
+const GR = '#00893c' // zieleń znaku E.1
+
+interface SignGroupInfo {
+  id: SignGroup
+  code: string
+  name: string
+  /** jak wygląda tablica w tej grupie */
+  look: string
+  /** wyjątek albo uwaga praktyczna */
+  note?: string
+  sample: ReactNode
+}
+
+const SIGN_GROUPS: SignGroupInfo[] = [
+  {
+    id: 'A',
+    code: 'A',
+    name: 'Znaki zakazu',
+    look: 'Kwadratowa biała tablica z czerwoną obwódką. Czarny piktogram jest przekreślony czerwonym pasem biegnącym z lewego górnego do prawego dolnego narożnika.',
+    note: 'Wyjątek: A.1 (zakaz przejścia) pokazywany bywa jako pasy czerwono‑biało‑czerwone, czerwone tablice, czerwone światła albo czerwone flagi.',
+    sample: (
+      <Sign bg={WH} border={RD} slash>
+        <rect x="26" y="30" width="28" height="20" rx="3" fill={BK} />
+      </Sign>
+    ),
+  },
+  {
+    id: 'B',
+    code: 'B',
+    name: 'Znaki nakazu',
+    look: 'Też kwadratowa biała tablica z czerwoną obwódką i czarnym piktogramem — ale BEZ czerwonego przekreślenia. Nakazuje określone zachowanie.',
+    note: 'Brak ukośnego pasa to jedyna szybka różnica między nakazem a zakazem — patrz na przekreślenie, nie na kolor.',
+    sample: (
+      <Sign bg={WH} border={RD}>
+        <g stroke={BK} strokeWidth="6" fill={BK} strokeLinecap="round">
+          <line x1="24" y1="40" x2="52" y2="40" />
+          <polygon points="58,40 46,32 46,48" />
+        </g>
+      </Sign>
+    ),
+  },
+  {
+    id: 'C',
+    code: 'C',
+    name: 'Znaki ograniczenia',
+    look: 'Biała tablica z czerwoną obwódką: czarny piktogram plus WARTOŚĆ LICZBOWA — głębokość, prześwit albo szerokość przejścia.',
+    note: 'Znak C.4 nie ma ani piktogramu, ani liczby — oznacza „inne ograniczenia” i zawsze towarzyszy mu tabliczka dodatkowa.',
+    sample: (
+      <Sign bg={WH} border={RD}>
+        <text x="40" y="52" textAnchor="middle" fontSize="30" fontWeight="800" fill={BK}>
+          3,0
+        </text>
+      </Sign>
+    ),
+  },
+  {
+    id: 'D',
+    code: 'D',
+    name: 'Znaki zalecenia',
+    look: 'Żółty kwadrat postawiony na wierzchołku (romb). Nic nie nakazuje — wskazuje rozwiązanie zalecane, np. przęsło mostu, którym najlepiej przejść.',
+    note: 'Obszar zalecany wyznaczają dwa takie romby (D.2); strzałka wewnątrz podaje zalecany kierunek (D.3).',
+    sample: <Sign bg={YE} diamond children={<g />} />,
+  },
+  {
+    id: 'E',
+    code: 'E',
+    name: 'Znaki informacyjne',
+    look: 'Kwadratowa NIEBIESKA tablica z białym piktogramem. Nie zakazuje ani nie nakazuje — informuje, co w danym miejscu wolno albo co się tam znajduje.',
+    note: 'Wyjątek: E.1 (przejście dozwolone) to prostokąt w trzy pionowe pasy zielono‑biało‑zielone.',
+    sample: (
+      <Sign bg={BL}>
+        <text x="40" y="54" textAnchor="middle" fontSize="40" fontWeight="800" fill={WH}>
+          P
+        </text>
+      </Sign>
+    ),
+  },
+  {
+    id: 'U',
+    code: '—',
+    name: 'Znaki uzupełniające',
+    look: 'Białe tabliczki z czarną obwódką umieszczane pod znakiem głównym albo obok niego. Objaśniają go lub uzupełniają.',
+    note: 'Podają odległość do miejsca obowiązywania, długość odcinka, kierunek (strzałka) albo dodatkowe wyjaśnienie.',
+    sample: (
+      <Plate>
+        <text x="50" y="58" textAnchor="middle" fontSize="24" fontWeight="800" fill={BK}>
+          500 m
+        </text>
+      </Plate>
+    ),
+  },
+]
+
 interface SignEntry {
+  /** kategoria znaku — decyduje, w której sekcji i pod jakim filtrem się pokaże */
+  group: SignGroup
+  /** oznaczenie z rozporządzenia, np. 'A.7' (opcjonalne) */
+  code?: string
   name: string
   desc: string
   /**
@@ -238,7 +376,10 @@ interface SignEntry {
 }
 
 const SIGNS: SignEntry[] = [
+  /* ——— A. ZNAKI ZAKAZU ——— */
   {
+    group: 'A',
+    code: 'A.1',
     name: 'Zakaz przejścia',
     desc: 'Wejście / przejście zabronione (np. tor zamknięty, wygrodzony akwen). Trzy poziome pasy czerwono‑biało‑czerwone albo czerwona tablica.',
     svg: (
@@ -249,6 +390,24 @@ const SIGNS: SignEntry[] = [
     ),
   },
   {
+    group: 'A',
+    code: 'A.2',
+    name: 'Zakaz wyprzedzania',
+    desc: 'Na tym odcinku nie wolno wyprzedzać innych jednostek (np. wąski tor, zakręt).',
+    svg: (
+      <Sign bg={WH} border={RD} slash>
+        <g stroke={BK} strokeWidth="4" fill={BK} strokeLinecap="round">
+          <line x1="30" y1="56" x2="30" y2="26" />
+          <polygon points="30,20 24,32 36,32" />
+          <line x1="50" y1="56" x2="50" y2="26" />
+          <polygon points="50,20 44,32 56,32" />
+        </g>
+      </Sign>
+    ),
+  },
+  {
+    group: 'A',
+    code: 'A.6',
     name: 'Zakaz kotwiczenia',
     desc: 'Nie wolno rzucać kotwicy ani wlec łańcucha po dnie (np. nad kablem lub rurociągiem).',
     svg: (
@@ -258,7 +417,9 @@ const SIGNS: SignEntry[] = [
     ),
   },
   {
-    name: 'Zakaz cumowania (A.7)',
+    group: 'A',
+    code: 'A.7',
+    name: 'Zakaz cumowania',
     desc: 'Nie wolno przybijać ani mocować jednostki do brzegu na tym odcinku. Piktogram: pachołek z liną na krawędzi pomostu, przekreślony czerwonym pasem.',
     // ↓↓↓ PRZYKŁAD PODMIANY RYSUNKU NA OBRAZEK ↓↓↓
     // Plik leży w `public/znaki/`, więc ścieżka zaczyna się od „/znaki/”.
@@ -271,6 +432,8 @@ const SIGNS: SignEntry[] = [
     ),
   },
   {
+    group: 'A',
+    code: 'A.9',
     name: 'Zakaz wytwarzania fali',
     desc: 'Zwolnij tak, by nie tworzyć martwej fali ani ssania — chroni brzegi, pomosty i inne jednostki.',
     svg: (
@@ -280,97 +443,323 @@ const SIGNS: SignEntry[] = [
       </Sign>
     ),
   },
+
+  /* ——— B. ZNAKI NAKAZU ——— */
   {
-    name: 'Zakaz wyprzedzania',
-    desc: 'Na tym odcinku nie wolno wyprzedzać innych jednostek (np. wąski tor, zakręt).',
-    svg: (
-      <Sign bg={WH} border={RD} slash>
-        <g stroke={BK} strokeWidth="4" fill={BK} strokeLinecap="round">
-          <line x1="30" y1="56" x2="30" y2="26" /><polygon points="30,20 24,32 36,32" />
-          <line x1="50" y1="56" x2="50" y2="26" /><polygon points="50,20 44,32 56,32" />
-        </g>
-      </Sign>
-    ),
-  },
-  {
-    name: 'Ograniczenie prędkości',
-    desc: 'Maksymalna dozwolona prędkość (w km/h) na danym odcinku. Liczba podana na tablicy.',
-    svg: (
-      <Sign bg={WH} border={RD}>
-        <text x="40" y="52" textAnchor="middle" fontSize="34" fontWeight="800" fill={BK}>8</text>
-      </Sign>
-    ),
-  },
-  {
-    name: 'Nakaz kierunku (w prawo)',
-    desc: 'Nakaz płynięcia we wskazanym kierunku / trzymania się prawej strony toru.',
+    group: 'B',
+    code: 'B.1',
+    name: 'Nakaz obrania wskazanego kierunku',
+    desc: 'Nakaz płynięcia we wskazanym kierunku / trzymania się wskazanej strony toru wodnego.',
     svg: (
       <Sign bg={WH} border={RD}>
         <g stroke={BK} strokeWidth="6" fill={BK} strokeLinecap="round">
-          <line x1="24" y1="40" x2="52" y2="40" /><polygon points="58,40 46,32 46,48" />
+          <line x1="24" y1="40" x2="52" y2="40" />
+          <polygon points="58,40 46,32 46,48" />
         </g>
       </Sign>
     ),
   },
   {
-    name: 'Uwaga / ostrzeżenie',
-    desc: 'Nakaz szczególnej ostrożności — np. przewężenie, roboty, prom, prąd. Sprawdź, czego dotyczy.',
+    group: 'B',
+    code: 'B.6',
+    name: 'Nakaz nieprzekraczania prędkości',
+    desc: 'Maksymalna dozwolona prędkość (w km/h) na danym odcinku. Liczba podana na tablicy.',
     svg: (
       <Sign bg={WH} border={RD}>
-        <text x="40" y="54" textAnchor="middle" fontSize="40" fontWeight="800" fill={RD}>!</text>
+        <text x="40" y="52" textAnchor="middle" fontSize="34" fontWeight="800" fill={BK}>
+          8
+        </text>
       </Sign>
     ),
   },
   {
+    group: 'B',
+    code: 'B.8',
+    name: 'Nakaz zachowania szczególnej ostrożności',
+    desc: 'Odcinek wymagający wzmożonej uwagi — np. przewężenie, roboty, prom, silny prąd. Sprawdź, czego dotyczy (często jest tabliczka dodatkowa).',
+    svg: (
+      <Sign bg={WH} border={RD}>
+        <text x="40" y="54" textAnchor="middle" fontSize="40" fontWeight="800" fill={RD}>
+          !
+        </text>
+      </Sign>
+    ),
+  },
+
+  /* ——— C. ZNAKI OGRANICZENIA ——— */
+  {
+    group: 'C',
+    code: 'C.1',
+    name: 'Ograniczona głębokość',
+    desc: 'Podana liczba to głębokość szlaku w metrach. Porównaj ją z zanurzeniem jachtu (miecz opuszczony!) i zostaw zapas na falę.',
+    svg: (
+      <Sign bg={WH} border={RD}>
+        <g stroke={BK} strokeWidth="3.5" fill={BK}>
+          <line x1="14" y1="20" x2="66" y2="20" />
+          <line x1="20" y1="26" x2="20" y2="52" />
+          <polygon points="20,58 14,46 26,46" />
+        </g>
+        <text x="48" y="52" textAnchor="middle" fontSize="26" fontWeight="800" fill={BK}>
+          1,8
+        </text>
+      </Sign>
+    ),
+  },
+  {
+    group: 'C',
+    code: 'C.2',
+    name: 'Ograniczona wysokość (prześwit)',
+    desc: 'Maksymalna wysokość jednostki nad lustrem wody — kluczowa przy przejściu pod mostem lub linią energetyczną. Uwzględnij aktualny stan wody!',
+    svg: (
+      <Sign bg={WH} border={RD}>
+        <g stroke={BK} strokeWidth="3.5" fill={BK}>
+          <line x1="14" y1="18" x2="66" y2="18" />
+          <line x1="14" y1="60" x2="66" y2="60" />
+          <line x1="22" y1="26" x2="22" y2="52" />
+          <polygon points="22,20 16,32 28,32" />
+          <polygon points="22,58 16,46 28,46" />
+        </g>
+        <text x="50" y="48" textAnchor="middle" fontSize="24" fontWeight="800" fill={BK}>
+          3,0
+        </text>
+      </Sign>
+    ),
+  },
+  {
+    group: 'C',
+    code: 'C.3',
+    name: 'Ograniczona szerokość przejścia',
+    desc: 'Szerokość przejścia lub kanału w metrach. Przy wąskich przejściach uzgodnij mijanie zawczasu — najlepiej sygnałem dźwiękowym.',
+    svg: (
+      <Sign bg={WH} border={RD}>
+        <g stroke={BK} strokeWidth="3.5" fill={BK}>
+          <line x1="16" y1="16" x2="16" y2="62" />
+          <line x1="64" y1="16" x2="64" y2="62" />
+          <line x1="24" y1="30" x2="56" y2="30" />
+          <polygon points="18,30 30,24 30,36" />
+          <polygon points="62,30 50,24 50,36" />
+        </g>
+        <text x="40" y="58" textAnchor="middle" fontSize="22" fontWeight="800" fill={BK}>
+          12
+        </text>
+      </Sign>
+    ),
+  },
+
+  /* ——— D. ZNAKI ZALECENIA ——— */
+  {
+    group: 'D',
+    code: 'D.1a',
+    name: 'Zalecane przejście — oba kierunki',
+    desc: 'Żółty romb pod przęsłem mostu oznacza przejście zalecane. Widoczny z obu stron = ruch dozwolony w obu kierunkach.',
+    svg: <Sign bg={YE} diamond children={<g />} />,
+  },
+  {
+    group: 'D',
+    code: 'D.3',
+    name: 'Zalecany kierunek ruchu',
+    desc: 'Zalecenie przejścia w kierunku wskazanym strzałką — np. obejście mielizny albo wskazanie właściwego odgałęzienia szlaku.',
+    svg: (
+      <Sign bg={YE} diamond>
+        <g stroke={BK} strokeWidth="5" fill={BK} strokeLinecap="round">
+          <line x1="26" y1="40" x2="50" y2="40" />
+          <polygon points="58,40 46,33 46,47" />
+        </g>
+      </Sign>
+    ),
+  },
+
+  /* ——— E. ZNAKI INFORMACYJNE ——— */
+  {
+    group: 'E',
+    code: 'E.1',
+    name: 'Przejście dozwolone',
+    desc: 'Jedyny znak informacyjny, który nie jest niebieskim kwadratem: prostokąt w trzy pionowe pasy zielono‑biało‑zielone. Oznacza, że przejście jest otwarte.',
+    svg: (
+      <svg viewBox="0 0 100 100" width="92" height="92" className="shrink-0">
+        <rect x="4" y="20" width="92" height="60" fill={WH} stroke={BK} strokeWidth="3" />
+        <rect x="4" y="20" width="26" height="60" fill={GR} />
+        <rect x="70" y="20" width="26" height="60" fill={GR} />
+      </svg>
+    ),
+  },
+  {
+    group: 'E',
+    code: 'E.5',
+    name: 'Miejsce postoju',
+    desc: 'Wyznaczone miejsce postoju / cumowania jednostek. Odmiany E.5.1–E.5.15 doprecyzowują, ile jednostek może stać w rzędzie i po której stronie znaku.',
+    svg: (
+      <Sign bg={BL}>
+        <text x="40" y="54" textAnchor="middle" fontSize="40" fontWeight="800" fill={WH}>
+          P
+        </text>
+      </Sign>
+    ),
+  },
+  {
+    group: 'E',
+    code: 'E.6',
     name: 'Dozwolone kotwiczenie',
-    desc: 'Znak informacyjny — w tym miejscu można rzucić kotwicę.',
+    desc: 'W tym miejscu można rzucić kotwicę i wlec łańcuch po dnie.',
     svg: (
       <Sign bg={BL}>
         <Anchor2 c={WH} />
       </Sign>
     ),
   },
+
+  /* ——— ZNAKI UZUPEŁNIAJĄCE ——— */
   {
-    name: 'Miejsce postoju',
-    desc: 'Znak informacyjny — wyznaczone miejsce postoju / cumowania jednostek.',
+    group: 'U',
+    name: 'Tabliczka odległości',
+    desc: 'Podaje, za ile metrów zaczyna obowiązywać znak główny, pod którym wisi.',
     svg: (
-      <Sign bg={BL}>
-        <text x="40" y="54" textAnchor="middle" fontSize="40" fontWeight="800" fill={WH}>P</text>
-      </Sign>
+      <Plate>
+        <text x="50" y="58" textAnchor="middle" fontSize="24" fontWeight="800" fill={BK}>
+          500 m
+        </text>
+      </Plate>
+    ),
+  },
+  {
+    group: 'U',
+    name: 'Tabliczka kierunku',
+    desc: 'Strzałka wskazuje, po której stronie albo w którą stronę obowiązuje znak główny.',
+    svg: (
+      <Plate>
+        <g stroke={BK} strokeWidth="6" fill={BK} strokeLinecap="round">
+          <line x1="26" y1="50" x2="62" y2="50" />
+          <polygon points="74,50 58,41 58,59" />
+        </g>
+      </Plate>
+    ),
+  },
+  {
+    group: 'U',
+    name: 'Tabliczka długości odcinka',
+    desc: 'Mówi, na jak długim odcinku obowiązuje znak główny (np. zakaz wytwarzania fali przez 2 km).',
+    svg: (
+      <Plate>
+        <g stroke={BK} strokeWidth="4" fill={BK}>
+          <line x1="16" y1="42" x2="16" y2="60" />
+          <line x1="84" y1="42" x2="84" y2="60" />
+          <line x1="22" y1="51" x2="78" y2="51" />
+          <polygon points="16,51 28,45 28,57" />
+          <polygon points="84,51 72,45 72,57" />
+        </g>
+        <text x="50" y="42" textAnchor="middle" fontSize="17" fontWeight="800" fill={BK}>
+          2 km
+        </text>
+      </Plate>
     ),
   },
 ]
 
+function SignCard({ s }: { s: SignEntry }) {
+  return (
+    <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} className="card flex items-center gap-4 p-4">
+      <div className="shrink-0 rounded-lg bg-white/5 p-1">
+        <Illustration img={s.img} alt={`Znak: ${s.name}`} className="h-[92px] w-[92px] object-contain">
+          {s.svg}
+        </Illustration>
+      </div>
+      <div>
+        <div className="flex flex-wrap items-baseline gap-2">
+          {s.code && <span className="chip px-2 py-0.5 text-[11px] tabular-nums">{s.code}</span>}
+          <h3 className="font-display text-base font-700 text-navy">{s.name}</h3>
+        </div>
+        <p className="mt-1 text-xs leading-relaxed text-brine-100/80">{s.desc}</p>
+      </div>
+    </motion.div>
+  )
+}
+
 function ZnakiRuchu() {
+  const [filter, setFilter] = useState<SignGroup | 'all'>('all')
+  const shown = filter === 'all' ? SIGN_GROUPS : SIGN_GROUPS.filter((g) => g.id === filter)
+  const count = (g: SignGroup) => SIGNS.filter((s) => s.group === g).length
+
   return (
     <div>
-      <p className="lead mb-6 max-w-3xl">
-        Znaki żeglugowe to „znaki drogowe” na szlaku. <b className="text-navy">Czerwone</b> obwódki
-        oznaczają zakaz lub nakaz, <b className="text-navy">niebieskie</b> — informację. Poniżej
-        najważniejsze (uproszczony przegląd wg systemu europejskiego / CEVNI).
+      <p className="lead mb-4 max-w-3xl">
+        Znaki żeglugowe to „znaki drogowe” na szlaku. Dzielą się na pięć grup oznaczonych literami{' '}
+        <b className="text-navy">A–E</b> plus tabliczki uzupełniające. Grupę rozpoznasz po samym
+        wyglądzie tablicy, zanim jeszcze odczytasz piktogram: <b className="text-navy">czerwona obwódka</b>{' '}
+        to zakaz, nakaz albo ograniczenie, <b className="text-navy">żółty romb</b> — zalecenie, a{' '}
+        <b className="text-navy">niebieski kwadrat</b> — informacja.
       </p>
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {SIGNS.map((s) => (
-          <motion.div key={s.name} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} className="card flex items-center gap-4 p-4">
-            <div className="shrink-0 rounded-lg bg-white/5 p-1">
-              <Illustration img={s.img} alt={`Znak: ${s.name}`} className="h-[92px] w-[92px] object-contain">
-                {s.svg}
-              </Illustration>
-            </div>
-            <div>
-              <h3 className="font-display text-base font-700 text-navy">{s.name}</h3>
-              <p className="mt-1 text-xs leading-relaxed text-brine-100/80">{s.desc}</p>
-            </div>
-          </motion.div>
+      <p className="mb-6 max-w-3xl text-xs text-brine-100/60">
+        Podstawa prawna: załącznik nr 7 do rozporządzenia Ministra Infrastruktury z 28 kwietnia 2003 r.
+        w sprawie przepisów żeglugowych na śródlądowych drogach wodnych (Dz.U. 2003 nr 212 poz. 2072).
+        Oznakowanie samego szlaku (pławy, znaki brzegowe) reguluje załącznik nr 8 — znajdziesz je w dziale{' '}
+        <Link to="/locja" className="font-semibold text-navy underline decoration-dotted underline-offset-2">
+          Locja
+        </Link>
+        .
+      </p>
+
+      {/* FILTR KATEGORII */}
+      <div className="mb-8 flex flex-wrap gap-2">
+        <button
+          onClick={() => setFilter('all')}
+          className={`btn px-3 py-1.5 text-sm ${filter === 'all' ? 'bg-brine-500 text-white' : 'chip'}`}
+        >
+          Wszystkie ({SIGNS.length})
+        </button>
+        {SIGN_GROUPS.map((g) => (
+          <button
+            key={g.id}
+            onClick={() => setFilter(g.id)}
+            className={`btn px-3 py-1.5 text-sm ${filter === g.id ? 'bg-brine-500 text-white' : 'chip'}`}
+          >
+            {g.code !== '—' && <span className="font-mono font-bold">{g.code}</span>}
+            {g.name} ({count(g.id)})
+          </button>
         ))}
+      </div>
+
+      <div className="space-y-10">
+        {shown.map((g) => {
+          const list = SIGNS.filter((s) => s.group === g.id)
+          return (
+            <section key={g.id}>
+              {/* nagłówek kategorii — wygląd tablic w tej grupie */}
+              <div className="card mb-4 flex flex-col gap-4 p-5 sm:flex-row sm:items-start">
+                <div className="shrink-0 rounded-lg bg-white/5 p-1">{g.sample}</div>
+                <div>
+                  <h2 className="font-display text-xl font-700 text-navy">
+                    {g.code !== '—' && <span className="mr-2 font-mono text-brine-500">{g.code}.</span>}
+                    {g.name}
+                  </h2>
+                  <p className="mt-1 text-sm leading-relaxed text-brine-100/85">{g.look}</p>
+                  {g.note && (
+                    <p className="mt-2 rounded-lg bg-white/5 p-2 text-xs leading-relaxed text-brine-100/75">
+                      <b className="text-navy">Uwaga:</b> {g.note}
+                    </p>
+                  )}
+                </div>
+              </div>
+
+              {list.length > 0 ? (
+                <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                  {list.map((s) => (
+                    <SignCard key={s.name} s={s} />
+                  ))}
+                </div>
+              ) : (
+                <p className="rounded-lg border border-dashed border-white/15 p-4 text-sm text-brine-100/60">
+                  Brak znaków w tej kategorii — dopisz je do tablicy <code>SIGNS</code> w{' '}
+                  <code>src/pages/Przepisy.tsx</code>.
+                </p>
+              )}
+            </section>
+          )
+        })}
       </div>
     </div>
   )
 }
 
-/* ===================== SYGNAŁY ===================== */
-
-// pojedynczy sygnał dźwiękowy jako sekwencja kropek/kresek
 type Toot = 'short' | 'long' | 'vshort' | 'gap'
 function Toots({ seq, series }: { seq: Toot[]; series?: boolean }) {
   return (
