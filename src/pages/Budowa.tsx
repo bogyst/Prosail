@@ -110,7 +110,7 @@ export default function Budowa() {
                       onMouseEnter={() => setHover(p.id)}
                       onMouseLeave={() => setHover(null)}
                       className={`flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left text-sm transition-colors ${
-                        active === p.id ? 'bg-brine-500/25 text-white' : 'text-brine-100 hover:bg-white/5'
+                        active === p.id ? 'bg-brine-500/25 text-navy' : 'text-brine-100 hover:bg-white/5'
                       }`}
                     >
                       <span

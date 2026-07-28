@@ -151,7 +151,7 @@ export default function Meteorologia() {
             className="card group relative p-5 text-left transition-shadow hover:shadow-lg"
             aria-label={`Szczegóły chmury ${c.name}`}
           >
-            <Maximize2 className="absolute right-4 top-4 h-4 w-4 text-brine-100/35 transition-colors group-hover:text-brine-500" />
+            <Maximize2 className="absolute right-4 top-4 h-4 w-4 text-brine-100/35 transition-colors group-hover:text-brine-300" />
             <div className="flex items-center gap-3">
               <span className="text-3xl">{c.emoji}</span>
               <div className="min-w-0">
@@ -167,7 +167,7 @@ export default function Meteorologia() {
               {c.weather}
             </p>
             {c.photos.length > 0 && (
-              <span className="mt-3 inline-flex items-center gap-1.5 text-xs font-semibold text-brine-500">
+              <span className="mt-3 inline-flex items-center gap-1.5 text-xs font-semibold text-brine-300">
                 <Camera className="h-3.5 w-3.5" />
                 {c.photos.length} zdj.
               </span>

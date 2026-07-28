@@ -76,7 +76,7 @@ const SIGNS: BridgeSign[] = [
         <text x="66" y="50" textAnchor="middle" fontSize="15" fontWeight="800" fill={BK}>
           3,0
         </text>
-        <text x="45" y="88" textAnchor="middle" fontSize="10" fill="#9fb4c0">
+        <text x="45" y="88" textAnchor="middle" fontSize="10" fill="#4a5a64">
           metry
         </text>
       </Board>
@@ -106,7 +106,18 @@ export default function BridgePassage() {
               <stop offset="0%" stopColor="#123f5b" />
               <stop offset="100%" stopColor="#0a2438" />
             </linearGradient>
+            <linearGradient id="bp-sky" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor="#0c2537" />
+              <stop offset="100%" stopColor="#0a1c2b" />
+            </linearGradient>
+            <clipPath id="bp-frame">
+              <rect x="0" y="0" width="640" height="260" rx="14" />
+            </clipPath>
           </defs>
+          {/* Scena jest zawsze ciemna (także w trybie dziennym) — bez własnego
+              tła jasne napisy ginęły na białej karcie. */}
+          <rect x="0" y="0" width="640" height="260" rx="14" fill="url(#bp-sky)" />
+          <g clipPath="url(#bp-frame)">
           <rect x="0" y="150" width="640" height="110" fill="url(#bp-water)" />
           {/* przęsło / most */}
           <rect x="0" y="40" width="640" height="34" fill="#4a5a64" />
@@ -138,9 +149,10 @@ export default function BridgePassage() {
             <path d="M-40 0 L34 0 C 44 0, 44 12, 34 14 L-40 14 C -48 12, -48 2, -40 0 Z" fill="#e8dcc0" stroke="#0f2b3f" strokeWidth="2" />
             <line x1="-6" y1="2" x2="-6" y2="-40" stroke="#c9a15a" strokeWidth="3" />
           </g>
-          <text x="320" y="214" textAnchor="middle" fill="rgba(207,230,240,0.85)" fontSize="12" fontWeight="700">
+          <text x="320" y="214" textAnchor="middle" fill="rgba(207,230,240,0.9)" fontSize="12" fontWeight="700">
             przęsło żeglowne (żółty romb) — mijaj między tablicami skrajni
           </text>
+          </g>
         </svg>
       </div>
 

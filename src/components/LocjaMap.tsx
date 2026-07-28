@@ -277,7 +277,7 @@ export default function LocjaMap() {
               <ellipse cx="712" cy="322" rx="118" ry="86" fill="rgba(226,206,150,0.22)" />
               <ellipse cx="712" cy="322" rx="118" ry="86" fill="none" stroke="rgba(226,206,150,0.5)" strokeWidth="2" strokeDasharray="7 7" />
               <ellipse cx="712" cy="322" rx="72" ry="48" fill="rgba(226,206,150,0.3)" />
-              <text x="712" y="326" textAnchor="middle" fill="rgba(120,100,60,0.95)" fontSize="15" fontWeight="700">
+              <text x="712" y="326" textAnchor="middle" fill="#f0e0ae" fontSize="15" fontWeight="700">
                 mielizna
               </text>
             </g>
@@ -387,7 +387,8 @@ export default function LocjaMap() {
                 }
               />
             </svg>
-            <span className="mt-0.5 block rounded bg-black/40 px-1 text-center text-[9px] font-bold text-navy">
+            {/* etykieta leży na ciemnej mapie — kolor stały, niezależny od motywu */}
+            <span className="mt-0.5 block rounded bg-black/60 px-1 text-center text-[9px] font-bold text-white">
               {storm === 0 ? 'spokój' : `${storm}/min`}
             </span>
           </button>

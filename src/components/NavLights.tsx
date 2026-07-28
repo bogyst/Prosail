@@ -187,9 +187,9 @@ export default function NavLights() {
         <div className="card border-brine-400/30 bg-brine-500/10 p-4">
           <div className="font-display text-lg font-700 text-navy">„Prawa – trawa, lewa – krewa”</div>
           <p className="mt-1 text-sm text-brine-100/85">
-            Wierszyk na kolory świateł burtowych: <b className="text-buoyGreen">prawa</b> burta (sterburta) —{' '}
-            <b className="text-buoyGreen">zielone</b> (trawa), <b className="text-buoyRed">lewa</b> (bakburta) —{' '}
-            <b className="text-buoyRed">czerwone</b> (krew).
+            Wierszyk na kolory świateł burtowych: <b className="ink-green">prawa</b> burta (sterburta) —{' '}
+            <b className="ink-green">zielone</b> (trawa), <b className="ink-red">lewa</b> (bakburta) —{' '}
+            <b className="ink-red">czerwone</b> (krew).
           </p>
         </div>
 
@@ -199,7 +199,7 @@ export default function NavLights() {
               key={l.id}
               onClick={() => setSel(l)}
               className={`flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left text-sm transition-colors ${
-                sel.id === l.id ? 'bg-brine-500/25 text-white' : 'text-brine-100 hover:bg-white/5'
+                sel.id === l.id ? 'bg-brine-500/25 text-navy' : 'text-brine-100 hover:bg-white/5'
               }`}
             >
               <span className="flex -space-x-1">

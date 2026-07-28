@@ -153,7 +153,7 @@ export default function BudowaQuiz({ onClose }: { onClose: () => void }) {
             )}
             {phase === 'right' && (
               <motion.div key="ok" initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} className="mt-3">
-                <p className="flex items-center gap-2 font-semibold" style={{ color: OK }}>
+                <p className="ink-green flex items-center gap-2 font-semibold">
                   <Check className="h-4 w-4" /> Dobrze!
                 </p>
                 <p className="mt-2 text-sm leading-relaxed text-brine-100/85">{q.desc}</p>
@@ -161,12 +161,12 @@ export default function BudowaQuiz({ onClose }: { onClose: () => void }) {
             )}
             {phase === 'wrong' && (
               <motion.div key="bad" initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} className="mt-3">
-                <p className="flex items-center gap-2 font-semibold" style={{ color: BAD }}>
+                <p className="ink-red flex items-center gap-2 font-semibold">
                   <X className="h-4 w-4" />
                   {picked ? `To jest: ${PARTS.find((p) => p.id === picked)?.name}` : 'Nie ten element'}
                 </p>
                 <p className="mt-1 text-sm text-brine-100/80">
-                  Szukany element podświetlony jest na <span style={{ color: OK }}>zielono</span>.
+                  Szukany element podświetlony jest na <span className="ink-green font-semibold">zielono</span>.
                 </p>
                 <p className="mt-2 text-sm leading-relaxed text-brine-100/85">{q.desc}</p>
               </motion.div>

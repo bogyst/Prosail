@@ -422,8 +422,8 @@ export default function Quiz() {
                 return (
                   <button key={idx} onClick={() => choose(idx)} disabled={picked !== null} className={`flex w-full items-center gap-3 rounded-xl border px-4 py-3 text-left text-sm transition-colors ${cls}`}>
                     <span className="flex-1 text-navy">{opt}</span>
-                    {picked !== null && isCorrect && <Check className="h-5 w-5 text-buoyGreen" />}
-                    {picked !== null && isPicked && !isCorrect && <X className="h-5 w-5 text-buoyRed" />}
+                    {picked !== null && isCorrect && <Check className="h-5 w-5 ink-green" />}
+                    {picked !== null && isPicked && !isCorrect && <X className="h-5 w-5 ink-red" />}
                   </button>
                 )
               })}
@@ -433,7 +433,7 @@ export default function Quiz() {
               {picked !== null && (
                 <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} className="mt-4 overflow-hidden">
                   <div className="rounded-xl bg-white/5 p-4 text-sm text-brine-100/90">
-                    <b className={picked === cur.correct ? 'text-buoyGreen' : 'text-buoyRed'}>
+                    <b className={picked === cur.correct ? 'ink-green' : 'ink-red'}>
                       {picked === cur.correct ? 'Dobrze! ' : 'Niezupełnie. '}
                     </b>
                     {cur.explain}

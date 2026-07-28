@@ -144,6 +144,45 @@ body {
   --tw-ring-color: var(--tint-ring);
 }
 
+/* ——— Czytelność napisów pomocniczych ————————————————————————————
+   Podpisy i etykiety używają koloru `--c-ink-soft` z przezroczystością.
+   Przy niskim kryciu kontrast spadał do 2–4:1 (najmocniej w trybie
+   dziennym, ale w nocnym też). Podnosimy dolny zakres krycia —
+   hierarchia zostaje zachowana, a każdy stopień ma ≥ 4,5:1 wg WCAG AA. */
+.text-brine-100\/40 { color: rgb(var(--c-ink-soft) / 0.78); }
+.text-brine-100\/50 { color: rgb(var(--c-ink-soft) / 0.82); }
+.text-brine-100\/60 { color: rgb(var(--c-ink-soft) / 0.86); }
+.text-brine-100\/70 { color: rgb(var(--c-ink-soft) / 0.9); }
+.text-brine-100\/75 { color: rgb(var(--c-ink-soft) / 0.92); }
+.text-brine-100\/80 { color: rgb(var(--c-ink-soft) / 0.94); }
+.text-brine-100\/85 { color: rgb(var(--c-ink-soft) / 0.96); }
+
+/* ——— Kolory akcentu w TEKŚCIE ————————————————————————————————
+   Te same barwy, którymi rysujemy liny i światła na schematach, są za
+   jasne na kremowym tle i za ciemne na granatowym. Do napisów używamy
+   więc wariantów zależnych od motywu — nie surowych kolorów rysunku. */
+.ink-red { color: #b3252b; }
+.ink-green { color: #14663f; }
+.ink-teal { color: #08685e; }
+.ink-blue { color: #1a5c9e; }
+.ink-orange { color: #a2560c; }
+.ink-gold { color: #7a5a1e; }
+.dark .ink-red { color: #ff8f92; }
+.dark .ink-green { color: #5fdc9f; }
+.dark .ink-teal { color: #3fd8c6; }
+.dark .ink-blue { color: #7db9f0; }
+.dark .ink-orange { color: #ffb35c; }
+.dark .ink-gold { color: #e2c46b; }
+
+/* Gdy kolor akcentu przychodzi z danych (np. kolor kursu w symulatorze),
+   nie da się go zapisać w klasie. Podajemy go wtedy jako `--accent`, a tu
+   przyciemniamy na jasnym tle. Pierwsza deklaracja to zapas dla przeglądarek
+   bez `color-mix` — wtedy napis jest po prostu granatowy, czyli czytelny. */
+:root:not(.dark) .accent-ink { color: rgb(var(--c-heading)); }
+:root:not(.dark) .accent-ink { color: color-mix(in srgb, var(--accent) 62%, #1a1a1a); }
+.dark .accent-ink { color: var(--accent); }
+.dark .accent-ink { color: color-mix(in srgb, var(--accent) 72%, #fff); }
+
 /* Wyjątek: hero na stałym granacie — tam biel zostaje bielą */
 .on-hull .border-white\/10 {
   border-color: rgba(255, 255, 255, 0.15);

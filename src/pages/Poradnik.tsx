@@ -129,7 +129,7 @@ function Checklista() {
         </button>
       </div>
       {pct === 100 && (
-        <div className="card mb-6 border-buoyGreen/40 bg-buoyGreen/10 p-4 text-center text-sm font-semibold text-buoyGreen">
+        <div className="card mb-6 border-buoyGreen/40 bg-buoyGreen/10 p-4 text-center text-sm font-semibold ink-green">
           ⚓ Wszystko spakowane — do zobaczenia na wodzie!
         </div>
       )}

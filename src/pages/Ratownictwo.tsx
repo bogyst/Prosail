@@ -28,7 +28,7 @@ function Numery() {
               <Phone className="h-4 w-4" />
               <span className="text-xs font-semibold uppercase tracking-wide">{x.label}</span>
             </div>
-            <div className={`mt-1 font-display text-3xl font-700 ${x.primary ? 'text-buoyRed' : 'text-navy'}`}>{x.n}</div>
+            <div className={`mt-1 font-display text-3xl font-700 ${x.primary ? 'ink-red' : 'text-navy'}`}>{x.n}</div>
             <p className="mt-1 text-xs leading-relaxed text-brine-100/80">{x.note}</p>
           </a>
         ))}
@@ -43,7 +43,7 @@ function Numery() {
             Na Szlaku Wielkich Jezior stałe bazy ratowników działają m.in. w{' '}
             <b className="text-navy">Giżycku, Mikołajkach, Piszu</b> oraz w{' '}
             <b className="text-navy">Harszu / Skłodowie</b> nad jeziorem Mamry. MOPR wezwiesz przez{' '}
-            <b className="text-buoyRed">601&nbsp;100&nbsp;100</b> lub <b>112</b>.
+            <b className="ink-red">601&nbsp;100&nbsp;100</b> lub <b>112</b>.
           </p>
         </div>
         <div className="card p-6">

@@ -140,22 +140,22 @@ function PrawoDrogi() {
         <motion.div key={sc.id} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} className="card p-6">
           <h3 className="font-display text-xl font-700 text-navy">{sc.title}</h3>
           <div className="mt-3 flex items-start gap-2 rounded-xl bg-buoyGreen/15 p-3">
-            <ShieldCheck className="mt-0.5 h-5 w-5 shrink-0 text-buoyGreen" />
+            <ShieldCheck className="mt-0.5 h-5 w-5 shrink-0 ink-green" />
             <div>
-              <div className="text-xs font-semibold uppercase tracking-wide text-buoyGreen">Zasada</div>
+              <div className="text-xs font-semibold uppercase tracking-wide ink-green">Zasada</div>
               <p className="text-sm text-navy">{sc.rule}</p>
             </div>
           </div>
           <p className="mt-4 text-sm leading-relaxed text-brine-100/85">{sc.explain}</p>
           {sc.bothGiveWay ? (
             <div className="mt-4 rounded-lg bg-[#f4952b]/15 p-2 text-center text-xs">
-              <div className="font-semibold text-[#f4952b]">Obie jednostki ustępują</div>
+              <div className="font-semibold ink-orange">Obie jednostki ustępują</div>
               <div className="text-navy">każda skręca w prawo (na sterburtę)</div>
             </div>
           ) : (
             <div className="mt-4 grid grid-cols-2 gap-2 text-center text-xs">
-              <div className="rounded-lg bg-buoyGreen/15 p-2"><div className="font-semibold text-buoyGreen">Pierwszeństwo</div><div className="text-white">{standOn?.label}</div></div>
-              <div className="rounded-lg bg-buoyRed/15 p-2"><div className="font-semibold text-buoyRed">Ustępuje</div><div className="text-white">{giveWay?.label}</div></div>
+              <div className="rounded-lg bg-buoyGreen/15 p-2"><div className="font-semibold ink-green">Pierwszeństwo</div><div className="text-navy">{standOn?.label}</div></div>
+              <div className="rounded-lg bg-buoyRed/15 p-2"><div className="font-semibold ink-red">Ustępuje</div><div className="text-navy">{giveWay?.label}</div></div>
             </div>
           )}
         </motion.div>
@@ -728,7 +728,7 @@ function ZnakiRuchu() {
                 <div className="shrink-0 rounded-lg bg-white/5 p-1">{g.sample}</div>
                 <div>
                   <h2 className="font-display text-xl font-700 text-navy">
-                    {g.code !== '—' && <span className="mr-2 font-mono text-brine-500">{g.code}.</span>}
+                    {g.code !== '—' && <span className="mr-2 font-mono text-brine-300">{g.code}.</span>}
                     {g.name}
                   </h2>
                   <p className="mt-1 text-sm leading-relaxed text-brine-100/85">{g.look}</p>

@@ -267,7 +267,7 @@ export default function EngineView() {
               key={p.id}
               onClick={() => setSel(p)}
               className={`flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left text-sm transition-colors ${
-                sel.id === p.id ? 'bg-brine-500/25 text-white' : 'text-brine-100 hover:bg-white/5'
+                sel.id === p.id ? 'bg-brine-500/25 text-navy' : 'text-brine-100 hover:bg-white/5'
               }`}
             >
               <span className="h-2.5 w-2.5 shrink-0 rounded-full" style={{ backgroundColor: sel.id === p.id ? ACCENT : 'rgba(123,188,217,0.5)' }} />

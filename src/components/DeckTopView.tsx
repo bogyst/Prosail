@@ -15,6 +15,10 @@ const COL = {
   brest: '#3b8fe0',
 } as const
 
+/** Te same barwy w tekście byłyby za jasne na kremowym tle — do napisów
+ *  używamy klas zależnych od motywu (patrz `.ink-*` w src/index.css). */
+const INK = { cuma: 'ink-red', szpring: 'ink-teal', brest: 'ink-blue' } as const
+
 type LineKind = keyof typeof COL
 
 /** punkty zaczepienia na jachcie (knagi) — współrzędne w układzie jachtu */
@@ -220,9 +224,7 @@ export default function DeckTopView() {
             title={hint}
           >
             <span className="h-2.5 w-6 rounded-full" style={{ backgroundColor: COL[k] }} />
-            <span className="font-display text-sm font-700" style={{ color: COL[k] }}>
-              {label}
-            </span>
+            <span className={`font-display text-sm font-700 ${INK[k]}`}>{label}</span>
             <span className="hidden text-[11px] font-normal text-brine-100/70 sm:inline">— {hint}</span>
           </button>
         ))}
@@ -448,7 +450,7 @@ export default function DeckTopView() {
           <div className="card p-2">
             {(['cuma', 'szpring', 'brest'] as LineKind[]).map((k) => (
               <div key={k}>
-                <div className="px-2 pb-1 pt-2 text-xs font-semibold uppercase tracking-wide" style={{ color: COL[k] }}>
+                <div className={`px-2 pb-1 pt-2 text-xs font-semibold uppercase tracking-wide ${INK[k]}`}>
                   {k === 'cuma' ? 'Cumy' : k === 'szpring' ? 'Szpringi' : 'Bresty'}
                 </div>
                 {LINES.filter((l) => l.kind === k).map((l) => (
@@ -458,7 +460,7 @@ export default function DeckTopView() {
                     onMouseEnter={() => setHoverKind(k)}
                     onMouseLeave={() => setHoverKind(null)}
                     className={`flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left text-sm transition-colors ${
-                      selLine === l.id ? 'bg-brine-500/25 text-white' : 'text-brine-100 hover:bg-white/5'
+                      selLine === l.id ? 'bg-brine-500/25 text-navy' : 'text-brine-100 hover:bg-white/5'
                     }`}
                   >
                     <span className="h-2.5 w-2.5 shrink-0 rounded-full" style={{ backgroundColor: COL[k] }} />
@@ -473,7 +475,7 @@ export default function DeckTopView() {
                 key={f.id}
                 onClick={() => (setSelFeat(f.id), setSelLine(null))}
                 className={`flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left text-sm transition-colors ${
-                  selFeat === f.id ? 'bg-brine-500/25 text-white' : 'text-brine-100 hover:bg-white/5'
+                  selFeat === f.id ? 'bg-brine-500/25 text-navy' : 'text-brine-100 hover:bg-white/5'
                 }`}
               >
                 <span className="h-2.5 w-2.5 shrink-0 rounded-full" style={{ backgroundColor: selFeat === f.id ? ACCENT : 'rgba(123,188,217,0.5)' }} />
@@ -485,9 +487,7 @@ export default function DeckTopView() {
           <motion.div key={selLine ?? selFeat ?? 'none'} initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} className="card p-5">
             {active ? (
               <>
-                <h3 className="font-display text-lg font-700" style={{ color: COL[active.kind] }}>
-                  {active.name}
-                </h3>
+                <h3 className={`font-display text-lg font-700 ${INK[active.kind]}`}>{active.name}</h3>
                 <p className="mt-2 text-sm leading-relaxed text-brine-100/90">{active.desc}</p>
                 <div className="mt-3 rounded-lg bg-white/5 p-3 text-xs text-brine-100/80">
                   <b className="text-navy">Bez tej liny:</b> {active.stopsLabel}.

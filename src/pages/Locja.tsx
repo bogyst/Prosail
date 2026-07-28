@@ -187,15 +187,15 @@ export default function Locja() {
         śródlądowych <Term label="strona prawa jest czerwona, lewa zielona" title="Strony szlaku żeglownego (śródlądowe)">
           <p>
             „Prawa” i „lewa” strona szlaku liczone są <b>patrząc w dół rzeki</b> (zgodnie z
-            kierunkiem oznakowania). <b>Prawa</b> strona = pławy <b className="text-buoyRed">czerwone</b>{' '}
-            (bakeny prostokątne), <b>lewa</b> = <b className="text-buoyGreen">zielone</b> (trójkątne
+            kierunkiem oznakowania). <b>Prawa</b> strona = pławy <b className="ink-red">czerwone</b>{' '}
+            (bakeny prostokątne), <b>lewa</b> = <b className="ink-green">zielone</b> (trójkątne
             kątem w górę). Reguluje to rozporządzenie o przepisach żeglugowych na śródlądowych
             drogach wodnych.
           </p>
           <p className="mt-2">
             ⚓ <b>Uwaga:</b> na morzu (system <b>IALA region A</b>) jest odwrotnie — wchodząc z
-            morza do portu masz <b className="text-buoyRed">czerwone po lewej</b> (port), a{' '}
-            <b className="text-buoyGreen">zielone po prawej</b> burcie. To inny układ odniesienia.
+            morza do portu masz <b className="ink-red">czerwone po lewej</b> (port), a{' '}
+            <b className="ink-green">zielone po prawej</b> burcie. To inny układ odniesienia.
           </p>
         </Term>. Kliknij znak, aby poznać jego znaczenie i sposób mijania.
       </PageHeader>

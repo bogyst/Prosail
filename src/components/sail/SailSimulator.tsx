@@ -294,16 +294,16 @@ export default function SailSimulator() {
 
         {/* legenda sił */}
         <div className="mt-2 flex flex-wrap justify-center gap-x-4 gap-y-1 text-xs text-brine-100/80">
-          <Term label={<span className="text-[#1fa463]">● siła ciągu</span>} title="Siła ciągu (napędowa)">
+          <Term label={<span className="ink-green">● siła ciągu</span>} title="Siła ciągu (napędowa)">
             <p>Składowa wypadkowej siły aerodynamicznej wzdłuż osi jachtu, do przodu. To ona napędza jacht. Największa na półwietrze i baksztagu.</p>
           </Term>
-          <Term label={<span className="text-[#f4952b]">● siła przechyłu</span>} title="Siła przechylająca (boczna)">
+          <Term label={<span className="ink-orange">● siła przechyłu</span>} title="Siła przechylająca (boczna)">
             <p>Składowa boczna. Powoduje przechył i dryf. Na kursach ostrych do wiatru jest duża — dlatego jacht mocno się kładzie i wolniej płynie „pod wiatr”.</p>
           </Term>
-          <Term label={<span className="text-[#489cc4]">● opór kilu</span>} title="Opór boczny (kil / miecz)">
+          <Term label={<span className="ink-blue">● opór kilu</span>} title="Opór boczny (kil / miecz)">
             <p>Kil lub miecz pod wodą stawia opór ruchowi w bok i równoważy siłę przechylającą. Różnica kątów to <b>dryf</b> (leeway).</p>
           </Term>
-          <Term label={<span className="text-[#c9a15a]">● wiatr pozorny</span>} title="Wiatr rzeczywisty vs pozorny">
+          <Term label={<span className="ink-gold">● wiatr pozorny</span>} title="Wiatr rzeczywisty vs pozorny">
             <p>
               Wiatr <b>rzeczywisty</b> wieje z góry (małe niebieskie strzałki). Wiatr <b>pozorny</b> (złota strzałka) — odczuwany na płynącym jachcie — jest zawsze przesunięty ku dziobowi. Żagle trymuje się do <b>pozornego</b>.
             </p>
@@ -315,11 +315,11 @@ export default function SailSimulator() {
       <div className="space-y-5">
         <div className="card p-5">
           <div className="flex flex-wrap items-center gap-2">
-            <span className="chip" style={{ backgroundColor: pos.color + '22', color: pos.color, borderColor: pos.color + '55' }}>
+            <span className="chip accent-ink" style={{ backgroundColor: pos.color + '22', borderColor: pos.color + '55', ['--accent' as string]: pos.color }}>
               {pos.name}
             </span>
             {butterfly && (
-              <span className="chip" style={{ backgroundColor: '#7c5cff22', color: '#b9a9ff', borderColor: '#7c5cff55' }}>
+              <span className="chip accent-ink" style={{ backgroundColor: '#7c5cff22', borderColor: '#7c5cff55', ['--accent' as string]: '#7c5cff' }}>
                 🦋 motylek
               </span>
             )}
