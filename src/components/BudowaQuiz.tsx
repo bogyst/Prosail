@@ -104,7 +104,7 @@ export default function BudowaQuiz({ onClose }: { onClose: () => void }) {
         )}
 
         <div className="mt-6 flex flex-wrap justify-center gap-3">
-          <button onClick={restart} className="btn-primary">
+          <button onClick={restart} className="btn-secondary">
             <RotateCcw className="h-4 w-4" />
             Jeszcze raz
           </button>
@@ -177,7 +177,7 @@ export default function BudowaQuiz({ onClose }: { onClose: () => void }) {
           </AnimatePresence>
 
           {phase !== 'ask' && (
-            <button onClick={next} className="btn-primary mt-4 w-full justify-center">
+            <button onClick={next} className="btn-secondary mt-4 w-full justify-center">
               {idx + 1 >= questions.length ? 'Zobacz wynik' : 'Następne pytanie'}
               <ArrowRight className="h-4 w-4" />
             </button>

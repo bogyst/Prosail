@@ -106,15 +106,15 @@ export default function Home() {
             prawo drogi.
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
-            <Link to="/teoria" className="btn-primary text-base">
-              Otwórz symulator żagli
+            <Link to="/quiz" className="btn-primary text-base">
+              Sprawdź się w teście
               <ArrowRight className="h-4 w-4" />
             </Link>
             <Link
-              to="/locja"
+              to="/teoria"
               className="btn border-2 border-white/50 text-base text-white hover:bg-white/10"
             >
-              Poznaj oznakowanie
+              Otwórz symulator żagli
             </Link>
           </div>
         </motion.div>

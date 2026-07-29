@@ -73,7 +73,7 @@ export default function Budowa() {
 
       {/* SPRAWDZIAN — klikanie w części na rysunku */}
       <div className="mb-6">
-        <button onClick={() => setQuiz((q) => !q)} className={quiz ? 'btn-ghost' : 'btn-primary'}>
+        <button onClick={() => setQuiz((q) => !q)} className={quiz ? 'btn-ghost' : 'btn-secondary'}>
           <Target className="h-4 w-4" />
           {quiz ? 'Wróć do schematu' : 'Sprawdź wiedzę o budowie jachtu'}
         </button>

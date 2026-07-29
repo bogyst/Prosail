@@ -395,7 +395,7 @@ export default function Fittings() {
                     <ChevronLeft className="h-4 w-4" />
                     Wstecz
                   </button>
-                  <button onClick={() => setStep((s) => Math.min(STEPS.length - 1, s + 1))} disabled={step === STEPS.length - 1} className="btn-primary disabled:opacity-40">
+                  <button onClick={() => setStep((s) => Math.min(STEPS.length - 1, s + 1))} disabled={step === STEPS.length - 1} className="btn-secondary disabled:opacity-40">
                     Dalej
                     <ChevronRight className="h-4 w-4" />
                   </button>

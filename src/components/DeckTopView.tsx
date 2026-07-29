@@ -450,6 +450,28 @@ export default function DeckTopView() {
 
         {/* PANEL */}
         <div className="space-y-4 lg:sticky lg:top-24 lg:self-start">
+          <motion.div key={selLine ?? selFeat ?? 'none'} initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} className="card p-5">
+            {active ? (
+              <>
+                <h3 className={`font-display text-lg font-700 ${INK[active.kind]}`}>{active.name}</h3>
+                <p className="mt-2 text-sm leading-relaxed text-brine-100/90">{active.desc}</p>
+                <div className="mt-3 rounded-lg bg-white/5 p-3 text-xs text-brine-100/80">
+                  <b className="text-navy">Bez tej liny:</b> {active.stopsLabel}.
+                </div>
+                <button onClick={() => runDemo(active)} className="btn-secondary mt-3 w-full justify-center" disabled={demo === active.id}>
+                  {demo === active.id ? <RotateCcw className="h-4 w-4 animate-spin" /> : <Play className="h-4 w-4" />}
+                  {demo === active.id ? 'Pokazuję…' : 'Pokaż, czemu zapobiega'}
+                </button>
+              </>
+            ) : activeFeat ? (
+              <>
+                <h3 className="font-display text-lg font-700 text-navy">{activeFeat.name}</h3>
+                <p className="mt-2 text-sm leading-relaxed text-brine-100/90">{activeFeat.desc}</p>
+              </>
+            ) : (
+              <p className="text-sm text-brine-100/80">Wybierz linę lub element jachtu.</p>
+            )}
+          </motion.div>
           <div className="card p-2">
             {(['cuma', 'szpring', 'brest'] as LineKind[]).map((k) => (
               <div key={k}>
@@ -487,28 +509,6 @@ export default function DeckTopView() {
             ))}
           </div>
 
-          <motion.div key={selLine ?? selFeat ?? 'none'} initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} className="card p-5">
-            {active ? (
-              <>
-                <h3 className={`font-display text-lg font-700 ${INK[active.kind]}`}>{active.name}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-brine-100/90">{active.desc}</p>
-                <div className="mt-3 rounded-lg bg-white/5 p-3 text-xs text-brine-100/80">
-                  <b className="text-navy">Bez tej liny:</b> {active.stopsLabel}.
-                </div>
-                <button onClick={() => runDemo(active)} className="btn-primary mt-3 w-full justify-center" disabled={demo === active.id}>
-                  {demo === active.id ? <RotateCcw className="h-4 w-4 animate-spin" /> : <Play className="h-4 w-4" />}
-                  {demo === active.id ? 'Pokazuję…' : 'Pokaż, czemu zapobiega'}
-                </button>
-              </>
-            ) : activeFeat ? (
-              <>
-                <h3 className="font-display text-lg font-700 text-navy">{activeFeat.name}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-brine-100/90">{activeFeat.desc}</p>
-              </>
-            ) : (
-              <p className="text-sm text-brine-100/80">Wybierz linę lub element jachtu.</p>
-            )}
-          </motion.div>
 
           <div className="card p-4 text-xs leading-relaxed text-brine-100/75">
             💡 <b className="text-navy">Komplet na burtę</b> to zwykle 6 lin: 2 cumy (dziobowa i rufowa),

@@ -98,6 +98,12 @@ body {
     @apply btn bg-sand-200 text-navy hover:bg-sand-300/70;
   }
 
+  /* Spokojniejszy wariant akcji — granat zamiast sygnałowej czerwieni.
+     Czerwień zostaje dla rzeczy naprawdę ważnych (alarmy, ratownictwo). */
+  .btn-secondary {
+    @apply btn bg-brine-500 text-white hover:bg-brine-600;
+  }
+
   .chip {
     @apply inline-flex items-center gap-1.5 rounded-full border border-tan
       bg-sand-100 px-3 py-1 text-xs font-semibold text-navy;

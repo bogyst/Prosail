@@ -352,11 +352,24 @@ export default function SailSimulator() {
           </div>
         </div>
 
-        <div className="card p-5 space-y-3">
-          <div className="text-xs font-semibold uppercase tracking-wide text-brine-100/60">Siły i osiągi</div>
+        <div className="card space-y-3 p-5">
+          {/* Siły — te same kolory co strzałki na rysunku */}
+          <div className="text-xs font-semibold uppercase tracking-wide text-brine-100/60">
+            Siły na żaglach <span className="font-normal normal-case">(jak strzałki na rysunku)</span>
+          </div>
           <StatBar label="Siła ciągu" value={forces.drive} color="#1fa463" />
           <StatBar label="Siła przechyłu" value={forces.heel} color="#f4952b" />
-          <StatBar label="Prędkość jachtu (poglądowo)" value={forces.speed} color="#7bbcd9" />
+
+          {/* Efekt — celowo INNY kolor niż którakolwiek strzałka, bo to nie jest siła */}
+          <div className="border-t border-white/10 pt-3 text-xs font-semibold uppercase tracking-wide text-brine-100/60">
+            Efekt
+          </div>
+          <StatBar label="Prędkość jachtu (poglądowo)" value={forces.speed} color="#6b5bd2" />
+          <p className="text-xs leading-relaxed text-brine-100/70">
+            Prędkość to <b className="text-navy">skutek</b>, a nie siła — dlatego ma osobny kolor i nie
+            odpowiada jej żadna strzałka. Niebieska strzałka na rysunku to{' '}
+            <b className="text-navy">opór boczny kila/miecza</b>, który równoważy przechył.
+          </p>
           <p className="pt-1 text-xs text-brine-100/60">
             Kąt żagla do osi jachtu: <b className="text-brine-100">{Math.round(boom)}°</b> · wiatr pozorny ok. <b className="text-brine-100">{Math.round(app.awa)}°</b> od dziobu
           </p>
