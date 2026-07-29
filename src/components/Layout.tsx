@@ -38,7 +38,7 @@ export default function Layout() {
     <div className="sea-bg min-h-screen">
       <header className="sticky top-0 z-40 border-b border-white/10 bg-deep-950/70 backdrop-blur-md">
         <div className="mx-auto flex max-w-7xl items-center gap-4 px-4 py-3">
-          <Link to="/" className="flex items-center gap-2.5">
+          <Link to="/" className="tap flex items-center gap-2.5">
             <span className="grid h-9 w-9 place-items-center rounded-xl bg-brine-500 text-white shadow-glow">
               <Anchor className="h-5 w-5" />
             </span>
@@ -67,7 +67,7 @@ export default function Layout() {
           <div className="ml-auto flex items-center gap-2 xl:ml-3">
             <ThemeToggle />
             <button
-              className="btn-ghost xl:hidden"
+              className="btn-ghost tap-sq px-3 xl:hidden"
               onClick={() => setMobileOpen((v) => !v)}
               aria-label="Menu"
             >
@@ -89,7 +89,7 @@ export default function Layout() {
                   to={to}
                   onClick={() => setMobileOpen(false)}
                   className={({ isActive }) =>
-                    `flex items-center gap-3 rounded-xl px-3 py-3 ${
+                    `tap flex items-center gap-3 rounded-xl px-3 py-3.5 ${
                       isActive ? 'bg-white/10 text-navy' : 'text-brine-100'
                     }`
                   }

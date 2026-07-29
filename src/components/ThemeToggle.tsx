@@ -45,7 +45,7 @@ export default function ThemeToggle() {
   return (
     <button
       onClick={() => setTheme(next)}
-      className="btn-ghost px-2.5 py-1.5"
+      className="btn-ghost tap-sq px-3 py-2"
       aria-label={next === 'dark' ? 'Włącz tryb nocny' : 'Włącz tryb dzienny'}
       title={next === 'dark' ? 'Tryb nocny' : 'Tryb dzienny'}
     >

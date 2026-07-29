@@ -124,9 +124,16 @@ export default function Meteorologia() {
             onChange={(e) => setB(Number(e.target.value))}
             className="w-full"
           />
-          <div className="mt-2 flex justify-between text-[10px] text-brine-100/50">
+          <div className="mt-1 flex justify-between text-[11px] text-brine-100/70">
             {BEAUFORT.map((x) => (
-              <button key={x.n} onClick={() => setB(x.n)} className="tabular-nums hover:text-navy">
+              <button
+                key={x.n}
+                onClick={() => setB(x.n)}
+                aria-label={`Stopień ${x.n} w skali Beauforta`}
+                className={`min-w-[26px] rounded-md py-3 tabular-nums transition-colors hover:bg-white/10 hover:text-navy ${
+                  b === x.n ? 'bg-brine-500/25 font-bold text-navy' : ''
+                }`}
+              >
                 {x.n}
               </button>
             ))}

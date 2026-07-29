@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { PageHeader, Accordion, AccordionItem } from '../components/ui'
 import { Phone, HeartPulse, LifeBuoy, Thermometer, Droplets, Hand } from 'lucide-react'
+import DiagramFrame from '../components/DiagramFrame'
 
 /* ================= NUMERY ================= */
 
@@ -203,7 +204,8 @@ function Mob() {
     <div className="space-y-6">
       <div className="grid gap-6 lg:grid-cols-[1fr_360px]">
         {/* SCENA */}
-        <div className="card p-4">
+        <div className="card min-w-0 p-4">
+          <DiagramFrame minWidth={560}>
           <svg viewBox="0 0 640 380" className="w-full">
             <defs>
               <radialGradient id="mob-water" cx="50%" cy="45%" r="70%">
@@ -270,6 +272,7 @@ function Mob() {
               <line x1="0" y1="-10" x2="0" y2="12" stroke="#2b7fab" strokeWidth="2.5" />
             </g>
           </svg>
+          </DiagramFrame>
 
           {/* nawigacja krokowa */}
           <div className="mt-3 flex items-center justify-between">
@@ -359,7 +362,7 @@ export default function Ratownictwo() {
           <button
             key={id}
             onClick={() => setTab(id)}
-            className={`btn px-4 py-1.5 text-sm ${tab === id ? 'bg-brine-500 text-white' : 'text-brine-100'}`}
+            className={`btn tap px-4 py-2 text-sm ${tab === id ? 'bg-brine-500 text-white' : 'text-brine-100'}`}
           >
             <Icon className="h-4 w-4" />
             {label}

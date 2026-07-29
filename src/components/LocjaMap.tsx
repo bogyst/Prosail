@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { motion } from 'framer-motion'
 import Buoy, { type BodyShape, type TopMark, type Band, bandColor } from './Buoy'
 import Illustration from './Illustration'
+import DiagramFrame from './DiagramFrame'
 
 const R = bandColor('red')
 const G = bandColor('green')
@@ -235,7 +236,8 @@ export default function LocjaMap() {
   return (
     <div className="grid gap-6 lg:grid-cols-[1fr_320px]">
       {/* MAPA */}
-      <div className="card overflow-hidden p-0">
+      <div className="card min-w-0 overflow-hidden p-0">
+        <DiagramFrame minWidth={620}>
         <div className="relative" style={{ aspectRatio: `${W} / ${H}` }}>
           <svg viewBox={`0 0 ${W} ${H}`} className="absolute inset-0 h-full w-full">
             <defs>
@@ -388,11 +390,12 @@ export default function LocjaMap() {
               />
             </svg>
             {/* etykieta leży na ciemnej mapie — kolor stały, niezależny od motywu */}
-            <span className="mt-0.5 block rounded bg-black/60 px-1 text-center text-[9px] font-bold text-white">
+            <span className="mt-0.5 block rounded bg-black/60 px-1 text-center text-[11px] font-bold text-white">
               {storm === 0 ? 'spokój' : `${storm}/min`}
             </span>
           </button>
         </div>
+        </DiagramFrame>
       </div>
 
       {/* PANEL OPISU */}

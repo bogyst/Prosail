@@ -201,24 +201,24 @@ export default function Locja() {
       </PageHeader>
 
       {/* Przełącznik widoku */}
-      <div className="mb-6 inline-flex rounded-xl border border-white/10 bg-white/5 p-1">
+      <div className="mb-6 inline-flex flex-wrap rounded-xl border border-white/10 bg-white/5 p-1">
         <button
           onClick={() => setView('gallery')}
-          className={`btn px-4 py-1.5 text-sm ${view === 'gallery' ? 'bg-brine-500 text-white' : 'text-brine-100'}`}
+          className={`btn tap px-4 py-2 text-sm ${view === 'gallery' ? 'bg-brine-500 text-white' : 'text-brine-100'}`}
         >
           <LayoutGrid className="h-4 w-4" />
           Galeria znaków
         </button>
         <button
           onClick={() => setView('map')}
-          className={`btn px-4 py-1.5 text-sm ${view === 'map' ? 'bg-brine-500 text-white' : 'text-brine-100'}`}
+          className={`btn tap px-4 py-2 text-sm ${view === 'map' ? 'bg-brine-500 text-white' : 'text-brine-100'}`}
         >
           <Map className="h-4 w-4" />
           Znaki na mapie
         </button>
         <button
           onClick={() => setView('bridge')}
-          className={`btn px-4 py-1.5 text-sm ${view === 'bridge' ? 'bg-brine-500 text-white' : 'text-brine-100'}`}
+          className={`btn tap px-4 py-2 text-sm ${view === 'bridge' ? 'bg-brine-500 text-white' : 'text-brine-100'}`}
         >
           <Construction className="h-4 w-4" />
           Przejście pod mostem

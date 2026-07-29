@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { motion } from 'framer-motion'
 import { Play, RotateCcw } from 'lucide-react'
+import DiagramFrame from './DiagramFrame'
 
 /* ————————————————————————————————————————————————————————————
    Widok z góry: jacht zacumowany burtą do pomostu.
@@ -220,7 +221,7 @@ export default function DeckTopView() {
             onMouseEnter={() => setHoverKind(k)}
             onMouseLeave={() => setHoverKind(null)}
             onClick={() => setSelLine(LINES.find((l) => l.kind === k)!.id)}
-            className="chip gap-2 transition-transform hover:-translate-y-0.5"
+            className="chip tap gap-2 px-3 transition-transform hover:-translate-y-0.5"
             title={hint}
           >
             <span className="h-2.5 w-6 rounded-full" style={{ backgroundColor: COL[k] }} />
@@ -231,7 +232,8 @@ export default function DeckTopView() {
       </div>
 
       <div className="grid gap-8 lg:grid-cols-[1fr_320px]">
-        <div className="card self-start p-4">
+        <div className="card min-w-0 self-start p-4">
+          <DiagramFrame minWidth={640}>
           <svg viewBox="0 0 760 430" className="w-full">
             <defs>
               <linearGradient id="dv-water" x1="0" y1="0" x2="0" y2="1">
@@ -438,6 +440,7 @@ export default function DeckTopView() {
               />
             )}
           </svg>
+          </DiagramFrame>
 
           <p className="mt-3 px-1 text-xs text-brine-100/70">
             Kliknij linę albo element jachtu na rysunku. Przy każdej linie możesz uruchomić animację
@@ -459,7 +462,7 @@ export default function DeckTopView() {
                     onClick={() => (setSelLine(l.id), setSelFeat(null))}
                     onMouseEnter={() => setHoverKind(k)}
                     onMouseLeave={() => setHoverKind(null)}
-                    className={`flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left text-sm transition-colors ${
+                    className={`tap flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left text-sm transition-colors ${
                       selLine === l.id ? 'bg-brine-500/25 text-navy' : 'text-brine-100 hover:bg-white/5'
                     }`}
                   >
@@ -474,7 +477,7 @@ export default function DeckTopView() {
               <button
                 key={f.id}
                 onClick={() => (setSelFeat(f.id), setSelLine(null))}
-                className={`flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left text-sm transition-colors ${
+                className={`tap flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left text-sm transition-colors ${
                   selFeat === f.id ? 'bg-brine-500/25 text-navy' : 'text-brine-100 hover:bg-white/5'
                 }`}
               >

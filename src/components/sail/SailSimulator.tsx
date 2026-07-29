@@ -93,7 +93,7 @@ function Arrow({
       <line x1={x1} y1={y1} x2={hx} y2={hy} stroke={color} strokeWidth={width} strokeLinecap="round" strokeDasharray={dashed ? '6 6' : undefined} />
       <polygon points={`${x2},${y2} ${left.x},${left.y} ${right.x},${right.y}`} fill={color} />
       {label && (
-        <text x={x2} y={y2} dx={Math.cos(ang) * 12} dy={Math.sin(ang) * 12 + 4} fill={color} fontSize="11" fontWeight="700" textAnchor="middle">
+        <text x={x2} y={y2} dx={Math.cos(ang) * 12} dy={Math.sin(ang) * 12 + 4} fill={color} fontSize="13" fontWeight="700" textAnchor="middle">
           {label}
         </text>
       )}
@@ -187,7 +187,7 @@ export default function SailSimulator() {
               <polygon points={`${CX + dx},${52} ${CX + dx - 5},${43} ${CX + dx + 5},${43}`} fill="#7bbcd9" />
             </g>
           ))}
-          <text x={CX} y={14} textAnchor="middle" fontSize="11" fontWeight="700" fill="#7bbcd9">
+          <text x={CX} y={14} textAnchor="middle" fontSize="13" fontWeight="700" fill="#7bbcd9">
             WIATR ({Math.round(windKts)} kn)
           </text>
 
@@ -203,7 +203,7 @@ export default function SailSimulator() {
                 width={3.5}
                 head={10}
               />
-              <text x={CX + polar(appBearing, R + 4).x} y={CY + polar(appBearing, R + 4).y + 3} textAnchor="middle" fontSize="9.5" fontWeight="700" fill="#c9a15a">
+              <text x={CX + polar(appBearing, R + 4).x} y={CY + polar(appBearing, R + 4).y + 3} textAnchor="middle" fontSize="12" fontWeight="700" fill="#c9a15a">
                 pozorny
               </text>
             </>
@@ -344,7 +344,7 @@ export default function SailSimulator() {
                 ['Baksztag', 135],
                 ['Fordewind', 180],
               ].map(([name, a]) => (
-                <button key={name as string} onClick={() => setRelative(a as number)} className="btn-ghost px-3 py-1.5 text-xs">
+                <button key={name as string} onClick={() => setRelative(a as number)} className="btn-ghost tap px-3 py-2 text-xs">
                   {name}
                 </button>
               ))}

@@ -7,6 +7,7 @@ import DeckTopView from '../components/DeckTopView'
 import EngineView from '../components/EngineView'
 import Fittings from '../components/Fittings'
 import BudowaQuiz from '../components/BudowaQuiz'
+import DiagramFrame from '../components/DiagramFrame'
 import YachtDiagram, { PARTS, ACCENT, type Group } from '../components/YachtDiagram'
 import { Sailboat, Anchor, Lightbulb, Grid2x2, Cable, Cog, Link2, Target } from 'lucide-react'
 
@@ -62,7 +63,7 @@ export default function Budowa() {
           <button
             key={id}
             onClick={() => switchTab(id)}
-            className={`btn px-4 py-1.5 text-sm ${tab === id && !quiz ? 'bg-brine-500 text-white' : 'text-brine-100'}`}
+            className={`btn tap px-4 py-2 text-sm ${tab === id && !quiz ? 'bg-brine-500 text-white' : 'text-brine-100'}`}
           >
             <Icon className="h-4 w-4" />
             {label}
@@ -95,8 +96,10 @@ export default function Budowa() {
           {DRAWING_TABS.includes(tab) && (
             <div className="grid gap-8 lg:grid-cols-[1fr_330px]">
               {/* RYSUNEK */}
-              <div className="card self-start p-4">
-                <YachtDiagram uid="bud" group={group} active={active} onPick={(id) => setClicked(id)} />
+              <div className="card min-w-0 self-start p-4">
+                <DiagramFrame minWidth={500}>
+                  <YachtDiagram uid="bud" group={group} active={active} onPick={(id) => setClicked(id)} />
+                </DiagramFrame>
               </div>
 
               {/* PANEL */}
@@ -109,7 +112,7 @@ export default function Budowa() {
                       onClick={() => setClicked(p.id)}
                       onMouseEnter={() => setHover(p.id)}
                       onMouseLeave={() => setHover(null)}
-                      className={`flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left text-sm transition-colors ${
+                      className={`tap flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left text-sm transition-colors ${
                         active === p.id ? 'bg-brine-500/25 text-navy' : 'text-brine-100 hover:bg-white/5'
                       }`}
                     >

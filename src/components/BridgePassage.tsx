@@ -1,6 +1,7 @@
 import { type ReactNode } from 'react'
 import { motion } from 'framer-motion'
 import Illustration from './Illustration'
+import DiagramFrame from './DiagramFrame'
 
 const Y = '#f4c430'
 const R = '#d63a3f'
@@ -99,7 +100,8 @@ export default function BridgePassage() {
   return (
     <div>
       {/* schemat mostu */}
-      <div className="card mb-6 p-4">
+      <div className="card mb-6 min-w-0 p-4">
+        <DiagramFrame minWidth={600}>
         <svg viewBox="0 0 640 260" className="w-full">
           <defs>
             <linearGradient id="bp-water" x1="0" y1="0" x2="0" y2="1">
@@ -154,6 +156,7 @@ export default function BridgePassage() {
           </text>
           </g>
         </svg>
+        </DiagramFrame>
       </div>
 
       <p className="lead mb-5 max-w-3xl">

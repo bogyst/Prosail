@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Target, RotateCcw, X, Check, ArrowRight } from 'lucide-react'
+import DiagramFrame from './DiagramFrame'
 import YachtDiagram, { PARTS, OK, BAD, type Group, type Part } from './YachtDiagram'
 
 const ROUND = 8
@@ -117,8 +118,10 @@ export default function BudowaQuiz({ onClose }: { onClose: () => void }) {
 
   return (
     <div className="grid gap-8 lg:grid-cols-[1fr_330px]">
-      <div className="card self-start p-4">
-        <YachtDiagram uid="quiz" group={group} active={null} marks={marks} onPick={handlePick} showMarker={false} />
+      <div className="card min-w-0 self-start p-4">
+        <DiagramFrame minWidth={500}>
+          <YachtDiagram uid="quiz" group={group} active={null} marks={marks} onPick={handlePick} showMarker={false} />
+        </DiagramFrame>
       </div>
 
       <div className="space-y-4 lg:sticky lg:top-24 lg:self-start">

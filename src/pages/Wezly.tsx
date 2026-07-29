@@ -457,25 +457,34 @@ export default function Wezly() {
                 <button
                   onClick={() => setStep((s) => Math.max(0, s - 1))}
                   disabled={step === 0}
-                  className="btn-ghost px-3 py-1.5 text-sm disabled:opacity-30"
+                  aria-label="Poprzedni krok"
+                  className="btn-ghost tap px-4 py-2 text-sm disabled:opacity-30"
                 >
-                  <ChevronLeft className="h-4 w-4" />
+                  <ChevronLeft className="h-5 w-5" />
+                  <span className="sr-only sm:not-sr-only">Wstecz</span>
                 </button>
                 <div className="flex gap-1.5">
                   {sel.steps.map((_, i) => (
                     <button
                       key={i}
                       onClick={() => setStep(i)}
-                      className={`h-2.5 w-2.5 rounded-full transition-colors ${i === step ? 'bg-brine-400' : 'bg-white/15 hover:bg-white/30'}`}
-                    />
+                      aria-label={`Krok ${i + 1}`}
+                      className="grid h-11 w-8 place-items-center"
+                    >
+                      <span
+                        className={`block h-2.5 w-2.5 rounded-full transition-colors ${i === step ? 'bg-brine-400' : 'bg-white/15 hover:bg-white/30'}`}
+                      />
+                    </button>
                   ))}
                 </div>
                 <button
                   onClick={() => setStep((s) => Math.min(sel.steps.length - 1, s + 1))}
                   disabled={step === sel.steps.length - 1}
-                  className="btn-ghost px-3 py-1.5 text-sm disabled:opacity-30"
+                  aria-label="Następny krok"
+                  className="btn-ghost tap px-4 py-2 text-sm disabled:opacity-30"
                 >
-                  <ChevronRight className="h-4 w-4" />
+                  <span className="sr-only sm:not-sr-only">Dalej</span>
+                  <ChevronRight className="h-5 w-5" />
                 </button>
               </div>
 

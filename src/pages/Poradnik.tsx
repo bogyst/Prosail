@@ -148,7 +148,7 @@ function Checklista() {
                 <li key={i.id}>
                   <button
                     onClick={() => toggle(i.id)}
-                    className={`flex w-full items-start gap-3 rounded-lg px-2 py-2 text-left transition-colors hover:bg-sand-100 ${
+                    className={`tap flex w-full items-start gap-3 rounded-lg px-2 py-2.5 text-left transition-colors hover:bg-sand-100 ${
                       checked[i.id] ? 'opacity-60' : ''
                     }`}
                   >
@@ -280,7 +280,7 @@ export default function Poradnik() {
           <button
             key={id}
             onClick={() => setTab(id)}
-            className={`btn px-4 py-1.5 text-sm ${tab === id ? 'bg-brine-500 text-white' : 'text-brine-100'}`}
+            className={`btn tap px-4 py-2 text-sm ${tab === id ? 'bg-brine-500 text-white' : 'text-brine-100'}`}
           >
             <Icon className="h-4 w-4" />
             {label}

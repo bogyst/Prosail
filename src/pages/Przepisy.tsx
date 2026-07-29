@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { PageHeader, Term } from '../components/ui'
 import Illustration from '../components/Illustration'
+import DiagramFrame from '../components/DiagramFrame'
 import { ShieldCheck, Milestone, Volume2, Signpost, Award } from 'lucide-react'
 
 /* ===================== PRAWO DROGI ===================== */
@@ -106,7 +107,8 @@ function PrawoDrogi() {
   const giveWay = sc.boats.find((b) => b.status === 'give')
   return (
     <div className="grid gap-8 lg:grid-cols-[1fr_360px]">
-      <div className="card p-4">
+      <div className="card min-w-0 p-4">
+        <DiagramFrame minWidth={420}>
         <svg viewBox="0 0 440 400" className="w-full">
           <defs>
             <radialGradient id="water" cx="50%" cy="50%" r="70%">
@@ -130,11 +132,12 @@ function PrawoDrogi() {
             <circle cx="250" cy="0" r="6" fill="#f4952b" /><text x="262" y="4" fontSize="12" fill="#cfe6f0">obie ustępują</text>
           </g>
         </svg>
+        </DiagramFrame>
       </div>
       <div className="space-y-4">
         <div className="flex flex-wrap gap-2">
           {SCENARIOS.map((s) => (
-            <button key={s.id} onClick={() => setSc(s)} className={`rounded-xl px-3 py-1.5 text-sm ${sc.id === s.id ? 'bg-brine-500 text-white' : 'bg-white/5 text-brine-100 hover:bg-white/10'}`}>{s.title}</button>
+            <button key={s.id} onClick={() => setSc(s)} className={`tap rounded-xl px-3 py-2 text-sm ${sc.id === s.id ? 'bg-brine-500 text-white' : 'bg-white/5 text-brine-100 hover:bg-white/10'}`}>{s.title}</button>
           ))}
         </div>
         <motion.div key={sc.id} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} className="card p-6">
@@ -702,7 +705,7 @@ function ZnakiRuchu() {
       <div className="mb-8 flex flex-wrap gap-2">
         <button
           onClick={() => setFilter('all')}
-          className={`btn px-3 py-1.5 text-sm ${filter === 'all' ? 'bg-brine-500 text-white' : 'chip'}`}
+          className={`btn tap px-3 py-2 text-sm ${filter === 'all' ? 'bg-brine-500 text-white' : 'chip'}`}
         >
           Wszystkie ({SIGNS.length})
         </button>
@@ -710,7 +713,7 @@ function ZnakiRuchu() {
           <button
             key={g.id}
             onClick={() => setFilter(g.id)}
-            className={`btn px-3 py-1.5 text-sm ${filter === g.id ? 'bg-brine-500 text-white' : 'chip'}`}
+            className={`btn tap px-3 py-2 text-sm ${filter === g.id ? 'bg-brine-500 text-white' : 'chip'}`}
           >
             {g.code !== '—' && <span className="font-mono font-bold">{g.code}</span>}
             {g.name} ({count(g.id)})
@@ -1022,7 +1025,7 @@ export default function Przepisy() {
           <button
             key={id}
             onClick={() => setTab(id)}
-            className={`btn px-4 py-1.5 text-sm ${tab === id ? 'bg-brine-500 text-white' : 'text-brine-100'}`}
+            className={`btn tap px-4 py-2 text-sm ${tab === id ? 'bg-brine-500 text-white' : 'text-brine-100'}`}
           >
             <Icon className="h-4 w-4" />
             {label}

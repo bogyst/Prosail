@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
+import DiagramFrame from './DiagramFrame'
 
 /* ————————————————————————————————————————————————————————————
    Silnik zaburtowy — widok z boku, ustawiony tak jak na jachcie:
@@ -46,7 +47,8 @@ export default function EngineView() {
   return (
     <div className="grid gap-8 lg:grid-cols-[1fr_330px]">
       {/* SCHEMAT */}
-      <div className="card self-start p-4">
+      <div className="card min-w-0 self-start p-4">
+        <DiagramFrame minWidth={520}>
         <svg viewBox="0 0 600 430" className="w-full">
           <defs>
             <linearGradient id="eng-bg" x1="0" y1="0" x2="0" y2="1">
@@ -257,6 +259,7 @@ export default function EngineView() {
             style={{ transformOrigin: `${sel.ax}px ${sel.ay}px` }}
           />
         </svg>
+        </DiagramFrame>
       </div>
 
       {/* PANEL */}
@@ -266,7 +269,7 @@ export default function EngineView() {
             <button
               key={p.id}
               onClick={() => setSel(p)}
-              className={`flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left text-sm transition-colors ${
+              className={`tap flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left text-sm transition-colors ${
                 sel.id === p.id ? 'bg-brine-500/25 text-navy' : 'text-brine-100 hover:bg-white/5'
               }`}
             >

@@ -198,7 +198,7 @@ export default function NavLights() {
             <button
               key={l.id}
               onClick={() => setSel(l)}
-              className={`flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left text-sm transition-colors ${
+              className={`tap flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left text-sm transition-colors ${
                 sel.id === l.id ? 'bg-brine-500/25 text-navy' : 'text-brine-100 hover:bg-white/5'
               }`}
             >

@@ -191,17 +191,61 @@ body {
   background-color: rgba(255, 255, 255, 0.12);
 }
 
+/* ——— Szerokie schematy na telefonie ————————————————————————————
+   Poniżej progu `sm` rysunek zachowuje minimalną czytelną szerokość i
+   przesuwa się palcem w poziomie (patrz components/DiagramFrame.tsx).
+   Od `sm` w górę min-width znika i schemat wypełnia kartę. */
+.diagram-canvas {
+  min-width: var(--dg-min, 0px);
+}
+@media (min-width: 640px) {
+  .diagram-canvas {
+    min-width: 0;
+  }
+}
+
+/* Etykiety w przyciskach zakładek nie łamią się w słupek */
+.btn {
+  white-space: nowrap;
+}
+
+/* ——— Wygodne pola dotyku na telefonie ————————————————————————————
+   Palec potrzebuje ok. 44 px. Klasa `.tap` pilnuje tego minimum tylko na
+   małych ekranach — na desktopie przyciski zostają kompaktowe. */
+@media (max-width: 1023px) {
+  .tap {
+    min-height: 44px;
+  }
+  .tap-sq {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  /* samodzielne przyciski akcji — nigdy nie stoją w środku zdania */
+  .btn-primary,
+  .btn-ghost {
+    min-height: 44px;
+  }
+}
+
 /* Suwaki (range) */
 input[type='range'] {
   -webkit-appearance: none;
   appearance: none;
   height: 6px;
+  background-clip: content-box;
   border-radius: 9999px;
   background: linear-gradient(90deg, rgb(var(--c-active)), rgb(var(--c-accent-2)));
   outline: none;
   touch-action: none;
   -ms-touch-action: none;
 }
+@media (max-width: 1023px) {
+  input[type='range'] {
+    height: 34px;
+    padding: 14px 0;
+  }
+}
+
 input[type='range']::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;
